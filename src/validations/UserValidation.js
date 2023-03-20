@@ -15,18 +15,16 @@ export const userSchema = yup.object().shape({
   mobile: yup
     .string()
     .typeError("please provide mobile number")
-    .required()
-    .matches(/^\d{10}$/, "Phone number is not valid"),
+    .required('please provide mobile number')
+    .matches(/^\d{10}$/, "mobile number is not valid"),
 });
 
 export const userLoginSchema = yup.object().shape({
   mobile: yup
-    .number("number cannot be empty")
-    .positive()
-    .integer()
-    .min(10, "10 numbers needed")
-    .max(10)
-    .required(),
+    .string()
+    .typeError("please provide mobile number")
+    .required('please provide mobile number')
+    .matches(/^\d{10}$/, "mobile number is not valid")
 });
 
 export const otpSchema = yup.object().shape({

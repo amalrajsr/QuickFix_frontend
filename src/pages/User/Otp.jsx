@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../components/UI/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,9 +9,11 @@ import { addUser } from "../../store/slices/userSlice";
 import axios from "../../config/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ClipLoader from "react-spinners/ClipLoader";
 function Otp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading,setLoading]=useState(false)
   const {
     register,
     handleSubmit,
@@ -21,22 +23,26 @@ function Otp() {
   });
 
   const onHandleSubmit = async (otp) => {
+    setLoading(true)
     try {
       const { data } = await axios.post("/user/verify_otp", otp, {
         withCredentials: true,
       });
+      setLoading(false)
       if (data.token && data.user) {
         dispatch(addUser(data.user));
         localStorage.setItem("userToken", data.token);
         navigate("/", { state: { message: "successfully registered" } });
       }
     } catch (error) {
+      setLoading(false)
       toast.error(error.response?.data?.error.message, {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         draggable: true,
+        
         progress: undefined,
         theme: "light",
       });
@@ -62,11 +68,11 @@ function Otp() {
             />
             <p className="text-slate-400 mt-2">{errors.mobile?.message}</p>
             <div className="mt-6 p-2 text-center ">
-              <Button>Verify Otp</Button>{" "}
+            {loading ?<button disabled className='bg-dark rounded-lg hover:bg-gray-800 text-white py-2  px-6'><ClipLoader color="#ffff"  size={20} /></button>: <Button>Verify OTP</Button>} 
             </div>
-            <button className="font-bold text-center mt-3 text-bold">
+         {   <button  className=" font-bold text-center mt-3 text-bold">
               Resend OTP
-            </button>
+            </button>}
           </form>
         </div>
       </div>

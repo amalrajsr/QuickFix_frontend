@@ -19,7 +19,7 @@ function Navbar() {
   })
 
 const logout=()=>{
-
+  localStorage.removeItem('userToken')
   dispatch(removeUser())
 }
   return (
