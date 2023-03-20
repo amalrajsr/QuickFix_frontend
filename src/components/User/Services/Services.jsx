@@ -1,6 +1,6 @@
 import React from 'react'
 import SingleService from './SingleService'
-import plumbing from '../../../assets/plumbing.jpeg'
+import plumbing from '../../../assets/trending/plumbing.png'
 function Services() {
   return (
     <div className='bg-light p-8 my-12'>

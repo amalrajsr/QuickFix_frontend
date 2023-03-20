@@ -1,7 +1,7 @@
 import React from 'react'
-import image1 from  '../../../assets/trending/trending.png'
-import image2 from '../../../assets/trending/smart-tv-trending.png'
-import image3 from  '../../../assets/trending/fridge-trending.png'
+import image1 from  '../../../assets/trending/carpendry.png'
+import image2 from '../../../assets/trending/smart-tv.png'
+import image3 from  '../../../assets/trending/plumbing.png'
 import Trending from './Trending'
 
 function TrendingServices() {
