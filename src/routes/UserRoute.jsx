@@ -3,7 +3,7 @@ import Home from '../pages/User/Home'
 import Login from '../pages/User/Login'
 import Register from '../pages/User/Register'
 import Otp from '../pages/User/Otp'
-import {Navigate,BrowserRouter,Route,Routes} from 'react-router-dom'
+import {Route,Routes} from 'react-router-dom'
 import UserLayout from '../layouts/UserLayout'
 function UserRoute() {
   return (

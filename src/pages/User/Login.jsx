@@ -12,8 +12,6 @@ import { addUser } from '../../store/slices/userSlice'
 import { useNavigate } from 'react-router-dom'
 function Login() {
 
-
-
    const [otp,setOtp]=useState(false)
    const [loading,setLoading]=useState(false)
    const dispatch=useDispatch()
@@ -33,7 +31,7 @@ function Login() {
           setOtp(true)
         }
       }catch(error){
-        console.log(error);
+        setLoading(false)
         toast.error(error.response?.data?.error.message, {
           position: "top-right",
           autoClose: 1000,

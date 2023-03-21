@@ -65,7 +65,7 @@ const logout=()=>{
       {/* condtionally rendering profile options for logged in user  */}
      {
       profiletoggle && 
-      <div className='fixed w-[250px] md:w-[350px] flex flex-col right-0 h-screen bg-[#f9fbfa]' onMouseLeave={()=>setProfileToggle(false)}>
+      <div className='z-10 fixed w-[250px] md:w-[350px] flex flex-col right-0 h-screen bg-[#f9fbfa]' onMouseLeave={()=>setProfileToggle(false)}>
        <Link to='/profile' className='p-5 bg-[#0000] text-dark text-2xl'>Profile</Link >
         <Options/>
        <span className='p-5 hover:shadow-lg text-dark text-xl' onClick={logout}>Logout</span>

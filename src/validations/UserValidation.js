@@ -30,3 +30,8 @@ export const userLoginSchema = yup.object().shape({
 export const otpSchema = yup.object().shape({
   mobile: yup.number().typeError("please provide otp "),
 });
+
+export const adminSchema= yup.object().shape({
+  name:yup.string().required('name is required'),
+  password:yup.string().required('password is required')
+})
