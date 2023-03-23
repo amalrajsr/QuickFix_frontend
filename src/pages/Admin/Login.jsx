@@ -6,8 +6,10 @@ import { ToastContainer, toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import Button from '../../components/UI/Button';
 import axios from '../../config/axios'
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 function Login() {
+  const admin=localStorage.getItem('admin')
     const navigate=useNavigate()
     const [loading,setLoading]=useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -40,10 +42,10 @@ function Login() {
           
       }
     
-  return (
+  return admin?(<Navigate to={'/admin/dashboard'}/>): (
     <>
       <div className=' mt-20 mb-5  flex items-center justify-center p-10'>
-        <div className='bg-light h-full py-5 md:p-10 md:w-[375px] md:shadow-md  rounded-l-lg'>
+        <div className='bg-light h-full py-5 md:p-10 md:w-[430px] md:shadow-md  rounded-l-lg'>
           <h3 className='font-bold text-3xl text-center mt-5 my-2 '>Admin panel</h3>
           <form onSubmit={handleSubmit(onHandleSubmit)} className='my-auto mx-auto text-center '>
             <input type='text' name={'name'}  className='py-2 mt-5 focus:outline-slate-300 rounded-md px-10 mx-3' {...register('name')} />

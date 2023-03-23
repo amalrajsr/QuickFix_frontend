@@ -11,7 +11,7 @@ function TrendingServices() {
         <div className="flex flex-wrap gap-3 justify-evenly my-3">
         <Trending image={image1} title={'Electrician'}/>
         <Trending image={image2} title={'Smart TV'}/>
-        <Trending image={image3} title={'Washing Machine'}/>
+        <Trending image={image3} title={'Plumbing'}/>
         {/* <Trending image={image1} title={'Electrician'}/> */}
         </div>
     </div>

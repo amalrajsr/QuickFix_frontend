@@ -6,7 +6,7 @@ function Options(){
  return( 
     
     profileOptions.map((option)=>{
-        return  <Link className='p-5 hover:shadow-lg text-dark text-xl' to={option.path}>{option.name}</Link>
+        return  <Link className='p-5 hover:shadow-lg text-dark text-xl'key={option.name} to={option.path}>{option.name}</Link>
           })
 
  )

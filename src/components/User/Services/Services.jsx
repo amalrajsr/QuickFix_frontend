@@ -8,7 +8,7 @@ function Services() {
         <h3 className='text-3xl font-extrabold text-center md:text-justify text-dark'>Services</h3>
         <h5 className='text-dark  text-xl text-center md:text-justify my-2'>With all of our expert services and closings,we blend aesthetics and originality into our construction</h5>
       </div>
-        <div className='flex justify-evenly gap-3 flex-wrap'>
+        <div className='flex justify-evenly flex-wrap'>
         <SingleService image={plumbing} title={'plubming'}/>
         <SingleService image={plumbing} title={'plubming'}/>
         <SingleService image={plumbing} title={'plubming'}/>

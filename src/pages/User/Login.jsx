@@ -9,18 +9,20 @@ import "react-toastify/dist/ReactToastify.css"
 import axios from '../../config/axios.js'
 import { useDispatch } from 'react-redux'
 import { addUser } from '../../store/slices/userSlice'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 function Login() {
-
+  const user= localStorage.getItem("userToken");
    const [otp,setOtp]=useState(false)
    const [loading,setLoading]=useState(false)
    const dispatch=useDispatch()
    const navigate=useNavigate()
+   const location=useLocation()
    const schema= otp?otpSchema:userLoginSchema
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema)
   });
 
+  console.log(location)
   const onHandleSubmit= async(userData)=>{
     setLoading(true)
     if(!userData.otp){
@@ -45,12 +47,12 @@ function Login() {
   }else{
 
     try{
-      const {data}=await axios.post('user/verify_login_otp',userData)
+      const {data}=await axios.post('user/verify-login-otp',userData)
       setLoading(false)
       if(data.user && data.token){
-        localStorage.setItem('userToken',data.token)
+        localStorage.setItem('user',data.token)
         dispatch(addUser(data.user))
-        navigate('/')
+        navigate(location.state?.from ||'/')
       }
     }catch(error){
       
@@ -68,7 +70,8 @@ function Login() {
    
   }
   }
-  return (
+  return user?(<Navigate to={location.state?.from ||'/'}/>):(
+    
     <>
     <div className=' mt-20 mb-5  flex items-center justify-center p-10'>
         <div className='bg-light h-full py-5 md:p-10 md:w-[375px] md:shadow-md  rounded-l-lg'>

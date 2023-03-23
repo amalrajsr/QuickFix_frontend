@@ -19,13 +19,13 @@ function Navbar() {
   })
 
 const logout=()=>{
-  localStorage.removeItem('userToken')
+  localStorage.removeItem('user')
   dispatch(removeUser())
 }
   return (
     <>
 
-      <div className='shadow-md  w-full flex justify-between fixed  py-4 bg-light '>
+      <div className='shadow-md  w-full flex justify-between fixed z-20 py-4 bg-light '>
         <div className=' px-5 my-auto md:'>
           <NavLink to='/'>
             <img src={logo} alt="quick fix logo" width={150} height={50} /> 
@@ -43,7 +43,7 @@ const logout=()=>{
 
       {/* mobile screen navbar */}
       {toggle &&
-        <> <div className='md:hidden w-[230px] fixed right-0 h-screen bg-[#f9fbfa]' onMouseLeave={()=>setToggle(false)}>
+        <> <div className='md:hidden w-[230px] z-20 fixed right-0 h-screen bg-[#f9fbfa]' onMouseLeave={()=>setToggle(false)}>
          { <div className={`flex ${user.value?'justify-between':'justify-end'} my-9 px-5`} onClick={() => setToggle(!toggle)}>
             {user.value && <Link to='/profile' className='text-dark text-xl '>Profile</Link>}
                            <i className="fa-solid my-auto fa-xmark fa-xl"></i>
@@ -65,7 +65,7 @@ const logout=()=>{
       {/* condtionally rendering profile options for logged in user  */}
      {
       profiletoggle && 
-      <div className='z-10 fixed w-[250px] md:w-[350px] flex flex-col right-0 h-screen bg-[#f9fbfa]' onMouseLeave={()=>setProfileToggle(false)}>
+      <div className='z-30 fixed w-[250px] md:w-[350px] flex flex-col right-0 h-screen bg-[#f9fbfa]' onMouseLeave={()=>setProfileToggle(false)}>
        <Link to='/profile' className='p-5 bg-[#0000] text-dark text-2xl'>Profile</Link >
         <Options/>
        <span className='p-5 hover:shadow-lg text-dark text-xl' onClick={logout}>Logout</span>
