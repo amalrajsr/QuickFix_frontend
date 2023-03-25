@@ -38,9 +38,9 @@ export const adminSchema= yup.object().shape({
 
 export const serviceSchema= yup.object().shape({
   service:yup.string().required('name is required'),
-  image: yup
-  .mixed()
-  .required('Image is required'),
+  // image: yup
+  // .mixed()
+  // .required('Image is required'),
   installationCharge1Hour: yup
   .number()
   .typeError("field cant be empty")

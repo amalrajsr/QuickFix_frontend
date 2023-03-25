@@ -1,6 +1,8 @@
 import {BrowserRouter,Route,Routes} from 'react-router-dom'
 import User from "./routes/UserRoute";
 import Admin from './routes/AdminRoute'
+import { ToastContainer } from "react-toastify";
+
 function App() {
   return (
   < div className="flex flex-col min-h-screen">
@@ -10,8 +12,7 @@ function App() {
     <Route path={'/admin/*'} element={<Admin/>} />
   </Routes>
   </BrowserRouter>
-
-
+<ToastContainer/>
   </div>
   );
 }

@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import {useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { userSchema } from '../../validations/UserValidation'
-import { useNavigate } from 'react-router-dom'
-import { ToastContainer, toast } from "react-toastify";
+import {  useNavigate } from 'react-router-dom'
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import ClipLoader from "react-spinners/ClipLoader";
 import Button from '../../components/UI/Button';
-import axios from '../../config/axios'
+import { registerApi } from '../../apis/auth'
 function Register() {
+ 
   const navigate=useNavigate()
   const [error,setError]=useState(false)
   const [loading,setLoading]=useState(false)
@@ -20,10 +21,7 @@ function Register() {
     userData.mobile= +userData.mobile
     try {
       
-      const { data } = await axios.post('user/register',userData,{
-        withCredentials: true
-      }
-      )
+      const { data } = await registerApi(userData)
       setLoading(false)
       
        if(data.success){
@@ -49,7 +47,7 @@ function Register() {
     }
 
   }
-  return (
+  return  (
     <>
       <div className=' mt-20 mb-5  flex items-center justify-center p-10'>
         <div className="signup-container shadow-md md:shadow-none bg-light flex md:w-[750px]  w-[375px]">
@@ -77,7 +75,7 @@ function Register() {
           </div>
         </div>
       </div>
-      <ToastContainer/>
+    
     </>
   )
 }

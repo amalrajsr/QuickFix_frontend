@@ -30,7 +30,7 @@ function Sidebar() {
           <ul className="space-y-2">
           <li>
               <NavLink to={'/admin/dashboard'} className="flex items-center p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100   group">
-              <i class="fa-sharp fa-solid fa-house "></i>
+              <i className="fa-sharp fa-solid fa-house "></i>
                 <span className="ml-3 text-lg hidden md:block">Dashboard</span>
               </NavLink>
             </li>
@@ -47,7 +47,7 @@ function Sidebar() {
           <ul className="pt-4 mt-10 space-y-2 border-t border-gray-200 ">
             <li>
               <div onClick={handleLogout} className="flex items-center p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100   group">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <i className="fa-solid fa-arrow-right-from-bracket"></i>
                 <span className="ml-4 text-lg hidden md:block" >Logout</span>
               </div>
             </li>

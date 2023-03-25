@@ -1,22 +1,25 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 
 function useAtuhCheck(role) {
-
+  
+  const[auth,setAuth]=useState(false)
    let userType 
    role==='user'? userType='user':userType='admin'
 
-   console.log(userType);
-  const token= localStorage.getItem(userType) 
 
-  useEffect(()=>{
+  const token= localStorage.getItem(userType) 
+  
+// useEffect(()=>{
+//   isToken()
+// },[])
 
     // async function isToken(){
-    //   const user = localStorage.getItem("userToken");
+    //   
     //   // console.log(user);
     //     try {
-    //       const { data } = await axios.get(`/${role}/jwt`, {
+    //       const { data } = await axios.get(`/${userType}/jwt`, {
     //         headers: {
-    //           Authorization: `Bearer ${user}`,
+    //           Authorization: `Bearer ${token}`,
     //         },
     //       });
     //       if (data.success) {
@@ -28,9 +31,7 @@ function useAtuhCheck(role) {
     //     }
     //   };
  
-    // isToken()
-  
-  })
+    
   return {role,token}
 }
 

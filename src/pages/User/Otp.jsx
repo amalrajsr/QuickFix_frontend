@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import Button from "../../components/UI/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { otpSchema } from "../../validations/UserValidation";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../store/slices/userSlice";
 import axios from "../../config/axios";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
+import { registerOtpApi } from "../../apis/auth";
 function Otp() {
-  const adminToken=localStorage.getItem('admin')
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -26,17 +26,12 @@ function Otp() {
   const onHandleSubmit = async (otp) => {
     setLoading(true);
     try {
-      const { data } = await axios.post("/user/verify-otp", otp, {
-        headers: {
-          'Authorization':`Bearer ${adminToken}`,
-        
-        }
-      });
+      const { data } = await registerOtpApi(otp)
       setLoading(false);
       if (data.token && data.user) {
         dispatch(addUser(data.user));
-        localStorage.setItem("userToken", data.token);
-        navigate("/", { state: { message: "successfully registered" } });
+        localStorage.setItem("user", data.token);
+        navigate("/");
       }
     } catch (error) {
       setLoading(false);
@@ -74,7 +69,7 @@ function Otp() {
       });
     }
   };
-  return (
+  return(
     <>
       <div className="my-10  flex items-center justify-center p-20">
         <div className="bg-light flex flex-col item-center mx-10 p-14 ">
@@ -114,7 +109,7 @@ function Otp() {
           </button>
         </div>
       </div>
-      <ToastContainer />
+  
     </>
   );
 }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../config/axios";
-
+import { blockUserApi, getusersApi } from "../../apis/admin";
 function UserManagement() {
+  const token= localStorage.getItem('admin')
   const [users, setUsers] = useState([]);
   const [blockStatus, setBlockStatus] = useState(false);
   useEffect(() => {
@@ -9,12 +10,13 @@ function UserManagement() {
   }, [blockStatus]);
 
   const fetchUsers = async () => {
-    const { data } = await axios.get("/admin/users");
+    const { data } = await  getusersApi(token)
+  
     setUsers(data.users);
   };
 
   const blockUblockUser = async (id) => {
-    const { data } = await axios.patch("/admin/users", { id: id });
+    const { data } = await blockUserApi(id,token)
     data?.updated && setBlockStatus(!blockStatus);
   };
 
@@ -86,18 +88,8 @@ function UserManagement() {
             <li>
               <button className="block px-2 py-1 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
                 <span className="sr-only">Previous</span>
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
+                <svg className="w-5 h-5"  aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" >
+                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" ></path>
                 </svg>
               </button>
             </li>

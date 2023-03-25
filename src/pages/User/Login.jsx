@@ -3,15 +3,15 @@ import Button from '../../components/UI/Button'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { userLoginSchema ,otpSchema} from '../../validations/UserValidation'
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import "react-toastify/dist/ReactToastify.css"
 import axios from '../../config/axios.js'
 import { useDispatch } from 'react-redux'
 import { addUser } from '../../store/slices/userSlice'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import {  useLocation, useNavigate } from 'react-router-dom'
+import { loginApi,loginOtpApi } from '../../apis/auth'
 function Login() {
-  const user= localStorage.getItem("userToken");
    const [otp,setOtp]=useState(false)
    const [loading,setLoading]=useState(false)
    const dispatch=useDispatch()
@@ -22,12 +22,12 @@ function Login() {
     resolver: yupResolver(schema)
   });
 
-  console.log(location)
+
   const onHandleSubmit= async(userData)=>{
     setLoading(true)
     if(!userData.otp){
       try{
-        const {data}= await axios.post('user/login',userData)
+        const {data}= await loginApi(userData)
         setLoading(false)
         if(data.success){
           setOtp(true)
@@ -47,7 +47,7 @@ function Login() {
   }else{
 
     try{
-      const {data}=await axios.post('user/verify-login-otp',userData)
+      const {data}=await loginOtpApi(userData)
       setLoading(false)
       if(data.user && data.token){
         localStorage.setItem('user',data.token)
@@ -70,7 +70,7 @@ function Login() {
    
   }
   }
-  return user?(<Navigate to={location.state?.from ||'/'}/>):(
+  return (
     
     <>
     <div className=' mt-20 mb-5  flex items-center justify-center p-10'>
@@ -84,7 +84,7 @@ function Login() {
           </form>
         </div>
     </div>
-    <ToastContainer/>
+  
   </>
   )
 }

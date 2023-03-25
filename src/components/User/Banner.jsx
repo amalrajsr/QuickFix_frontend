@@ -1,6 +1,5 @@
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";
-
 function Banner() {
   const banner =
     "https://res.cloudinary.com/dsw9tifez/image/upload/v1679220718/quickfix/static/banner1_vohlaf.jpg";

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "../../config/axios";
+
 import { Outlet, useLocation } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import useAtuhCheck from "../../hooks/useAuthCheck";

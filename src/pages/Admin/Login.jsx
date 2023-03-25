@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { ToastContainer, toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import Button from '../../components/UI/Button';
-import axios from '../../config/axios'
+import { adminLoginApi } from '../../apis/auth';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -18,8 +18,9 @@ function Login() {
 
       const onHandleSubmit=async(adminData)=>{
          try{
+          
             setLoading(true)
-            const {data}=await axios.post('/admin/login',{adminData})
+            const {data}=await adminLoginApi(adminData)
             console.log(data);
             setLoading(false)
             if(data.admin && data.token){
