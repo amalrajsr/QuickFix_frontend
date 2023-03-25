@@ -6,7 +6,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
-import { addServiceApi } from "../../../apis/admin";
+import { addServiceApi, } from "../../../apis/admin";
 function Form({type}) {
   const adminToken=localStorage.getItem('admin')
   const [error, setError] = useState(false);
