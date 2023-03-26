@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { adminSchema } from '../../validations/UserValidation'
+import { adminSchema } from '../../validations/Validation'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ToastContainer, toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import Button from '../../components/UI/Button';
-import { adminLoginApi } from '../../apis/auth';
+import { adminLoginApi } from '../../apis/admin';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 function Login() {

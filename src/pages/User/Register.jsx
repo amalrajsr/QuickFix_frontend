@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import {useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { userSchema } from '../../validations/UserValidation'
-import {  useNavigate } from 'react-router-dom'
+import { userSchema } from '../../validations/Validation'
+import {  Navigate, useNavigate } from 'react-router-dom'
 import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import ClipLoader from "react-spinners/ClipLoader";
 import Button from '../../components/UI/Button';
-import { registerApi } from '../../apis/auth'
+import { registerApi } from '../../apis/user'
 function Register() {
- 
+  const token=localStorage.getItem('user')
   const navigate=useNavigate()
   const [error,setError]=useState(false)
   const [loading,setLoading]=useState(false)
@@ -47,12 +47,12 @@ function Register() {
     }
 
   }
-  return  (
+  return token? (<Navigate to={'/'}/>): (
     <>
       <div className=' mt-20 mb-5  flex items-center justify-center p-10'>
         <div className="signup-container shadow-md md:shadow-none bg-light flex md:w-[750px]  w-[375px]">
                    <div className='bg-light h-full p-10 w-full md:shadow-md md:w-2/4 rounded-l-lg'>
-{ error && <h3 className='font-bold text-xl text-center mt-5 my-2 '>{error}</h3> }
+            { error && <h3 className='font-bold text-xl text-center mt-5 my-2 '>{error}</h3> }
             <h3 className='font-bold text-3xl text-center mt-10 my-2 '>Get Started</h3>
             <form onSubmit={handleSubmit(onHandleSubmit)} className='my-auto mx-auto text-center '>
               <input type={'text'} name={'name'} placeholder={'Full Name'} className={' py-2 mt-5 focus:outline-slate-300 rounded-md px-10 '} {...register('fullname')} />

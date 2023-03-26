@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../config/axios";
+
 import { blockUserApi, getusersApi } from "../../apis/admin";
 function UserManagement() {
-  const token= localStorage.getItem('admin')
   const [users, setUsers] = useState([]);
   const [blockStatus, setBlockStatus] = useState(false);
   useEffect(() => {
     fetchUsers();
   }, [blockStatus]);
-
+console.log('sdfs');
   const fetchUsers = async () => {
-    const { data } = await  getusersApi(token)
-  
+    const { data } = await  getusersApi()
     setUsers(data.users);
   };
 
   const blockUblockUser = async (id) => {
-    const { data } = await blockUserApi(id,token)
+    const { data } = await blockUserApi(id)
     data?.updated && setBlockStatus(!blockStatus);
   };
 

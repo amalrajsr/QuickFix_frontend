@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import Button from '../../components/UI/Button'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { userLoginSchema ,otpSchema} from '../../validations/UserValidation'
+import { userLoginSchema ,otpSchema} from '../../validations/Validation'
 import { toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import "react-toastify/dist/ReactToastify.css"
-import axios from '../../config/axios.js'
 import { useDispatch } from 'react-redux'
 import { addUser } from '../../store/slices/userSlice'
-import {  useLocation, useNavigate } from 'react-router-dom'
-import { loginApi,loginOtpApi } from '../../apis/auth'
+import {  Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { loginApi,loginOtpApi } from '../../apis/user'
 function Login() {
+  const token=localStorage.getItem('user')
    const [otp,setOtp]=useState(false)
    const [loading,setLoading]=useState(false)
    const dispatch=useDispatch()
@@ -70,7 +70,7 @@ function Login() {
    
   }
   }
-  return (
+  return token? (<Navigate to={'/'}/>): (
     
     <>
     <div className=' mt-20 mb-5  flex items-center justify-center p-10'>

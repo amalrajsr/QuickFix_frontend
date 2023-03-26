@@ -1,88 +1,203 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { getServicesApi,deleteServiceApi } from '../../../apis/admin';
-
+import {getServicesApi, deleteServiceApi,} from "../../../apis/admin";
+import { ServiceContext } from "../../../context/serviceContext";
+import { MdOutlineEditNote } from "react-icons/md";
 import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
+import EditService from "./EditService";
+import { useDispatch } from "react-redux";
+import { addSerivces } from "../../../store/slices/serviceSlice";
+import { useNavigate } from "react-router-dom";
 function Table() {
-const token =localStorage.getItem('admin')
-const [service,setServices]=useState({services:[],loading:false,error:false})
-const [open, setOpen] = useState(false);
-const onOpenModal = () => setOpen(true);
-const onCloseModal = () => setOpen(false);
-useEffect(()=>{
-    fetchServices()
-},[])
- const fetchServices=async()=>{
-  setServices({...service,loading:true})
-  const data= await getServicesApi(token)
-  setServices({services:data.services,loading:false,error:false})
- }
 
- const blockService=async(id)=>{
-  const {data}=await deleteServiceApi(id,token)
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
+  const {updateTable}=  useContext(ServiceContext)
+  const [services, setServices] = useState([]); // state to hold services 
+  const [charge,setCharge]=useState(null) // for displaying service rate on modal
+  const [edit,setEdit]=useState(null) // hold service to be edited
+  const [toggle,setToggle]=useState(false)
 
-  console.log(data);
- }
-    const columns = [
-        {
-           name: "Service",
-           selector: (row) => row.service,
-         },
-         {
-          name:'Image',
-          cell: (row) => <img src={row.imageUrl} className='w-[50px]' alt={row.name} />
-         }
-        ,
-         {
-           name: "Charge",
-           cell: (row) => <><Modal open={open} onClose={onCloseModal}><div >
-           <h3 className="text-xl font-medium text-gray-600">Installation Charge</h3>
-             <div className="flex gap-10 mt-4">
-               <h3 className="text-lg font-medium"><span className='mx-2'>FirstHour:</span> {row.Charge.installationCharge1Hour}</h3>
-               <h3 className="text-lg font-medium"><span className='mx-2'> LatelyHours:</span>{row.Charge.installationCharge1Hour}</h3>
-             </div>
-              <h3 className="text-xl font-medium mt-4 text-gray-600">Repair Charge</h3>
-             <div className="flex gap-10 mt-4">
-               <h3 className="text-lg font-medium"><span className='mx-2'>FirstHour:</span> {row.Charge.repairCharge1Hour}</h3>
-               <h3 className="text-lg font-medium"><span className='mx-2'>LatelyHours:</span>{row.Charge.repairChargeLatelyHours}</h3>
-             </div>
-           </div></Modal><button onClick={onOpenModal} className='bg-blue-400 p-1 rounded-lg px-2'>View</button></>
-         },
-         {
-          name:null,
-          cell:(row)=> <button onClick={()=>blockService(row.id)}>block</button>
-         }
-       ]
-    
 
-       const data=service.services.map((data)=>{
+  // modal handler
+  const [open, setOpen] = useState(false);
+  const onOpenModal = (service) =>{ 
+    setCharge(service)
+    setOpen(true)
+  }
+  ;
+  const onCloseModal = () => setOpen(false);
+  useEffect(() => {
+    fetchServices();
+  }, [updateTable]);
 
-        return{
-          id:data._id,
-          service:data.service,
-          imageUrl:data.image,
-          Charge:{
-            installationCharge1Hour:data.installationCharge1Hour,
-            installationChargeLatelyHours:data.installationChargeLatelyHours,
-            repairCharge1Hour:data.repairCharge1Hour,
-            repairChargeLatelyHours:data.repairChargeLatelyHours
-          }
-        }
-       })
+  // api calls
+  const fetchServices = async () => {
+   
+    try{
+      const data = await getServicesApi();
+      if(data.services){
+      setServices(data.services);
+      dispatch(addSerivces(data.services)) // adding services to redux
+      }
+    }catch(error){
+      if(error.response?.data?.error?.tokenExpired){
+        localStorage.removeItem('admin')
+        navigate('/admin/login')
+      }
+    }
 
-       
+  };
+
+  async function blockService(id) {
+    try{
+
+      await deleteServiceApi(id);
+      fetchServices();
+    }catch(error){
+      if(error.response?.data?.error?.tokenExpired){
+        localStorage.removeItem('admin')
+        navigate('/admin/login')
+      }
+    }
+   
+  }
+
+const handleedit=(singleService)=>{
+  setToggle(!toggle)
+  setEdit(singleService)
+}
+// data table cloumns
+  const columns = [
+    {
+      name: "Service",
+      selector: (row) => row.service,
+    },
+    {
+      name: "Image",
+      cell: (row) => (
+        <img src={row.imageUrl} className="w-[50px]" alt={row.name} />
+      ),
+    },
+    {
+      name: "Charge",
+      cell: (row) => (
+        <>
+          <button
+            onClick={()=>onOpenModal(row.singleService)}
+            className="bg-blue-400 p-1 text-white rounded-lg px-2"
+          >
+            View
+          </button>
+        </>
+      ),
+    },
+    {
+      name: null,
+      cell: (row) => (
+        <button
+          className={`${
+            row.isDeleted ? "bg-green-400" : "bg-red-500"
+          } rounded-lg text-white px-3 py-1`}
+          onClick={() => blockService(row.id)}
+        >
+          {row.isDeleted ? "unlist" : "list"}
+        </button>
+      ),
+    },
+    {
+      name: null,
+      cell: (row) => (
+        <span className="p-1" onClick={()=>{handleedit(row.singleService) }}>
+        <i class="fa-regular fa-pen-to-square fa-md"></i>
+        </span>
+      ),
+    },
+  ];
+
+  // data table data
+  const data = services.map((data) => {
+    return {
+      singleService:data,
+      id: data._id,
+      service: data.service,
+      imageUrl: data.image,
+      Charge: {
+        installationCharge1Hour: data.installationCharge1Hour,
+        installationChargeLatelyHours: data.installationChargeLatelyHours,
+        repairCharge1Hour: data.repairCharge1Hour,
+        repairChargeLatelyHours: data.repairChargeLatelyHours,
+      },
+      isDeleted: data.isDeleted,
+    };
+  });
+
+  const customStyles = {
+    rows: {
+        style: {
+            minHeight: '72px', // override the row height
+            fontSize:'15px',            
+        },
+    },
+    headCells: {
+        style: {
+            fontWeight:'bold',
+            fontSize:'18px',
+            textColor:'gray',
+            backgroundColor:'#F9FAFB'
+        },
+    },
+    cells: {
+        style: {
+           
+        },
+    },
+};
+
   return (
-  
+    <>
+        <Modal open={open} onClose={onCloseModal}>
+            <div>
+              <h3 className="text-xl font-medium text-gray-600">
+                Installation Charge
+              </h3>
+              <div className="flex gap-10 mt-4">
+                <h3 className="text-lg font-medium">
+                  <span className="mx-2">FirstHour:</span>{" "}
+                  {charge?.installationCharge1Hour}
+                </h3>
+                <h3 className="text-lg font-medium">
+                  <span className="mx-2"> LatelyHours:</span>
+                  {charge?.installationCharge1Hour}
+                </h3>
+              </div>
+              <h3 className="text-xl font-medium mt-4 text-gray-600">
+                Repair Charge
+              </h3>
+              <div className="flex gap-10 mt-4">
+                <h3 className="text-lg font-medium">
+                  <span className="mx-2">FirstHour:</span>{" "}
+                  {charge?.repairCharge1Hour}
+                </h3>
+                <h3 className="text-lg font-medium">
+                  <span className="mx-2">LatelyHours:</span>
+                  {charge?.repairChargeLatelyHours}
+                </h3>
+              </div>
+            </div>
+          </Modal>
+   {toggle && <EditService toggle={toggle} data={edit}/>}
       <DataTable
-            columns={columns}
-            data={data}
-            fixedHeader
-            fixedHeaderScrollHeight="300px"
-            style={{ title: { fontSize: "48px" } }}
-          />
-    
-  )
+      
+        columns={columns}
+        data={data}
+        fixedHeader
+        fixedHeaderScrollHeight="450px"
+        customStyles={customStyles}
+      />
+    </>
+  );
 }
 
-export default Table
+export default Table;

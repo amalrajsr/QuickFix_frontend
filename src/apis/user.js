@@ -5,14 +5,15 @@ export const registerApi= (user)=>
 axios.post('user/register',user)
 
 export const registerOtpApi= (otp)=>
-axios.post('user/login',otp)
+axios.post('user/verify-otp',otp)
 
 export const loginApi= (user)=>
 axios.post('user/login',user)
 
 export const loginOtpApi=(user)=>
-axios.post('user/login',user)
+axios.post('user/verify-login-otp',user)
 
-//admin
-export const adminLoginApi=(adminData)=>
-axios.post('admin/login',adminData)
+export const fetchServiceApi= ()=>
+axios.get('user/services')
+
+

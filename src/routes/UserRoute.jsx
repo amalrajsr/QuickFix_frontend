@@ -7,7 +7,6 @@ import Profile from '../components/User/Profile'
 import {Route,Routes} from 'react-router-dom'
 import UserLayout from '../layouts/UserLayout'
 import ProtectedRoute from '../components/UI/ProtectedRoute'
-import Unprotected from '../components/UI/Unprotected'
 function UserRoute() {
   return (
     <>
@@ -15,12 +14,12 @@ function UserRoute() {
   <Routes>
     <Route path='/' element={<UserLayout/>}>
     <Route index element={<Home/>} />
-    {/* <Route element={<Unprotected type={'user'}/>}> */}
+  
     <Route path={'/register'} element={<Register/>} />
     <Route path={'/login'} element={<Login/>} />
     <Route path={"/otp"} element={<Otp/>}/>
     </Route>
-    {/* </Route> */}
+    
     <Route path={'*'} element={<h1>not found</h1>} />
     <Route  element={<ProtectedRoute  type={'user'}/>}>
       <Route path='/profile' element={<Profile/>}/>

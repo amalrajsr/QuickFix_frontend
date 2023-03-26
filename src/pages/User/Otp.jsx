@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import Button from "../../components/UI/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {  useNavigate } from "react-router-dom";
-import { otpSchema } from "../../validations/UserValidation";
+import {  Navigate, useNavigate } from "react-router-dom";
+import { otpSchema } from "../../validations/Validation";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../store/slices/userSlice";
 import axios from "../../config/axios";
 import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
-import { registerOtpApi } from "../../apis/auth";
+import { registerOtpApi } from "../../apis/user";
 function Otp() {
+  
+  const token=localStorage.getItem('user')
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -52,7 +54,7 @@ function Otp() {
     setLoading(true);
     console.log("resend");
     try {
-      const { data } = await axios.get("/user/resend-otp");
+    await axios.get("/user/resend-otp");
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -69,7 +71,7 @@ function Otp() {
       });
     }
   };
-  return(
+  return  token? (<Navigate to={'/'}/>):(
     <>
       <div className="my-10  flex items-center justify-center p-20">
         <div className="bg-light flex flex-col item-center mx-10 p-14 ">

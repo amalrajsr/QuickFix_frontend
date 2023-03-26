@@ -5,13 +5,11 @@ import UserManagement from '../pages/Admin/UserManagement'
 import ServiceMangement from '../pages/Admin/ServiceMangement'
 import { Route,Routes } from 'react-router-dom'
 import ProtectedRoute from '../components/UI/ProtectedRoute'
-import Unprotected from '../components/UI/Unprotected'
 function adminRoute() {
   return (
     <>
       <Routes>
-        <Route element={<Unprotected type={'admin'}/>}>
-        </Route>
+        
         <Route path='/login' element={<Login/>}/>
         <Route element={<ProtectedRoute/>} type={'admin'}>
       <Route path='/' element={<AdminLayout/>}>
