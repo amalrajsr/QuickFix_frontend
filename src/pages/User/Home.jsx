@@ -5,6 +5,7 @@ import Services from '../../components/User/Services/Services'
 function Home() {
   return (
     <>
+    
     <Banner/>
     <TrendingServices/>
     <Services/>

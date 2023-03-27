@@ -13,6 +13,8 @@ function EditService({ data,toggle }) {
   const [error, setError] = useState(false);
   const [serviceData, setserviceData] = useState(data); // state to hold the service to be edited
   const [preview, setPreview] = useState(null); // preview image
+  const [largePreview, setlargePreview] = useState(null); // preview image
+
   const [loading, setLoading] = useState(false); 
   const [open, setOpen] = useState(toggle?true:false);
   const onCloseModal = () => setOpen(false);
@@ -30,6 +32,21 @@ function EditService({ data,toggle }) {
       setError(false);
     }
   };
+      // function to validate Large Image
+      const handleLargeImageChange = (e) => {
+        const file = e.target.files[0];
+      console.log();
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/;
+        if (!allowedExtensions.exec(file.name)) {
+          setError(true);
+        } else {
+          setserviceData({ ...serviceData, largeImage: file });
+          setlargePreview(file);
+
+          setError(false);
+        }
+      };
+    
 
   // handling form submission
   const onHandleSubmit = async (e) => {
@@ -38,6 +55,7 @@ function EditService({ data,toggle }) {
     const service = new FormData();
     service.append("service", serviceData?.service);
     service.append("image", serviceData?.image);
+    service.append("largeImage", serviceData?.largeImage);
     service.append(
       "installationCharge1Hour",
       serviceData?.installationCharge1Hour
@@ -129,6 +147,26 @@ function EditService({ data,toggle }) {
             </p>
           )}
         </div>
+        <div className="flex flex-col mb-3">
+            <label className="mx-3">Large Image</label>
+            <input
+              type="file"
+              name="largeImage"
+              className="py-2
+          focus:outline-slate-300 bg-slate-100 rounded-md w-auto  mx-3"
+              accept="image/jpeg, image/png,image/jpg"
+              onChange={handleLargeImageChange}
+             
+            />
+            <img  src={largePreview ? URL.createObjectURL(largePreview) : serviceData.largeImage} alt="largeImage" className="w-[50px] mx-3"
+ />
+
+            {error && (
+              <p className="mx-3 text-slate-400">
+                Only jpg | jpeg | png are allowed
+              </p>
+            )}
+          </div>
 
         <div className="flex flex-col sm:flex-row mb-3">
           <div>

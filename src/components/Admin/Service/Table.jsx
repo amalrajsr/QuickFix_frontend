@@ -42,7 +42,7 @@ function Table() {
       dispatch(addSerivces(data.services)) // adding services to redux
       }
     }catch(error){
-      if(error.response?.data?.error?.tokenExpired){
+      if(error.response.data.error.tokenExpired){
         localStorage.removeItem('admin')
         navigate('/admin/login')
       }
@@ -79,6 +79,11 @@ const handleedit=(singleService)=>{
       cell: (row) => (
         <img src={row.imageUrl} className="w-[50px]" alt={row.name} />
       ),
+    },  {
+      name: "largeImage",
+      cell: (row) => (
+        <img src={row.largeImage} className="w-[100px] mx-0" alt={row.name} />
+      ),
     },
     {
       name: "Charge",
@@ -110,7 +115,7 @@ const handleedit=(singleService)=>{
       name: null,
       cell: (row) => (
         <span className="p-1" onClick={()=>{handleedit(row.singleService) }}>
-        <i class="fa-regular fa-pen-to-square fa-md"></i>
+        <i className="fa-regular fa-pen-to-square fa-md"></i>
         </span>
       ),
     },
@@ -123,6 +128,7 @@ const handleedit=(singleService)=>{
       id: data._id,
       service: data.service,
       imageUrl: data.image,
+      largeImage:data.largeImage,
       Charge: {
         installationCharge1Hour: data.installationCharge1Hour,
         installationChargeLatelyHours: data.installationChargeLatelyHours,

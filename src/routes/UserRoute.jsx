@@ -7,6 +7,7 @@ import Profile from '../components/User/Profile'
 import {Route,Routes} from 'react-router-dom'
 import UserLayout from '../layouts/UserLayout'
 import ProtectedRoute from '../components/UI/ProtectedRoute'
+import ViewService from '../components/User/Services/ViewService'
 function UserRoute() {
   return (
     <>
@@ -17,13 +18,13 @@ function UserRoute() {
   
     <Route path={'/register'} element={<Register/>} />
     <Route path={'/login'} element={<Login/>} />
-    <Route path={"/otp"} element={<Otp/>}/>
-    </Route>
-    
-    <Route path={'*'} element={<h1>not found</h1>} />
-    <Route  element={<ProtectedRoute  type={'user'}/>}>
+    <Route path={"/otp"} element={<Otp/>}/> 
+    <Route path='/services/:name' element={<ViewService/>}/>
+      <Route  element={<ProtectedRoute  type={'user'}/>}>
       <Route path='/profile' element={<Profile/>}/>
     </Route>
+    <Route path={'*'} element={<h1>not found</h1>} />
+    </Route> 
   </Routes>
     </>
   )

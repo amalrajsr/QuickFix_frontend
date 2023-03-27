@@ -15,6 +15,7 @@ function AddService() {
 
   const [error, setError] = useState(false);
   const [image, setImage] = useState(null);
+  const [largeImage, setlargeImage] = useState(null);
   const [loading, setLoading] = useState(false);
   // state to handle modal
   const [open, setOpen] = useState(false);
@@ -39,6 +40,7 @@ function AddService() {
     const service = new FormData();
     service.append("service", serviceData.service);
     service.append("file", image);
+     service.append("file", largeImage);
     service.append(
       "installationCharge1Hour",
       serviceData.installationCharge1Hour
@@ -96,15 +98,30 @@ function AddService() {
   // function to validate image
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-
     const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/;
     if (!allowedExtensions.exec(file.name)) {
       setError(true);
     } else {
-      setImage(file);
+    setImage(file)
+     
       setError(false);
     }
   };
+
+    // function to validate Large Image
+    const handleLargeImageChange = (e) => {
+      const file = e.target.files[0];
+    console.log();
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/;
+      if (!allowedExtensions.exec(file.name)) {
+        setError(true);
+      } else {
+      setlargeImage(file)
+       
+        setError(false);
+      }
+    };
+  
   return (
     <>
       
@@ -141,9 +158,30 @@ function AddService() {
           focus:outline-slate-300 bg-slate-100 rounded-md w-auto  mx-3"
               accept="image/jpeg, image/png,image/jpg"
               onChange={handleImageChange}
+              multiple
               required
             />
                     <img src={image?URL.createObjectURL(image): ''} className='w-[50px] mx-3' alt=" " />
+
+            {error && (
+              <p className="mx-3 text-slate-400">
+                Only jpg | jpeg | png are allowed
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col mb-3">
+            <label className="mx-3">Large Image</label>
+            <input
+              type="file"
+              name="largeImage"
+              className="py-2
+          focus:outline-slate-300 bg-slate-100 rounded-md w-auto  mx-3"
+              accept="image/jpeg, image/png,image/jpg"
+              onChange={handleLargeImageChange}
+              multiple
+              required
+            />
+                    <img src={largeImage?URL.createObjectURL(largeImage): ''} className='w-[50px] mx-3' alt=" " />
 
             {error && (
               <p className="mx-3 text-slate-400">

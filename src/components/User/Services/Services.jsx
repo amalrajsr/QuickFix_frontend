@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import SingleService from './SingleService'
-import plumbing from '../../../assets/trending/plumbing.png'
-import { useSelector } from 'react-redux'
 import { fetchServiceApi } from '../../../apis/user'
-
+import { addSerivces } from '../../../store/slices/serviceSlice'
+import { useDispatch } from 'react-redux'
 function Services() {
-   
-  const service= useSelector((state)=>{
-    return state.service
-  })
+   const dispatch=useDispatch()
   const [services,setServices]= useState([])  
   useEffect(()=>{
     fetchServices()
@@ -17,6 +13,7 @@ function Services() {
   const fetchServices=async()=>{
    const {data}=await fetchServiceApi()
    setServices(data.services)
+   dispatch(addSerivces(data.services))
   }
   return (
     <div className='bg-light p-8 my-12'>
