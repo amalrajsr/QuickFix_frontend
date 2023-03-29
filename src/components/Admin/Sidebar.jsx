@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { TbCategory } from "react-icons/tb";
 import { FaUser } from "react-icons/fa";
 import { GrUserWorker } from "react-icons/gr";
-import { MdOutlineRateReview } from "react-icons/md";
+import { MdOutlineRateReview ,MdOutlineLocationOn} from "react-icons/md";
 
 function Sidebar() {
   const navigate=useNavigate()
@@ -12,6 +12,7 @@ function Sidebar() {
     { name: "Experts", icon: <GrUserWorker /> ,path:'/admin/experts'},
     { name: "Services", icon: <TbCategory />,path:'/admin/services' },
     { name: "Reviews", icon: <MdOutlineRateReview /> ,path:'/admin/reviews'},
+    {name:'Locations',icon:<MdOutlineLocationOn/>,path:'/admin/location'}
   ];
    
   const handleLogout=async()=>{

@@ -34,6 +34,7 @@ function Register() {
     } catch (error) {
 
       setLoading(false)
+      console.log(error);
       toast.error(error.response?.data?.error.message, {
         position: "top-right",
         autoClose: 1000,
@@ -43,7 +44,7 @@ function Register() {
         progress: undefined,
         theme: "light",
       });
-      console.log(error);
+   
     }
 
   }

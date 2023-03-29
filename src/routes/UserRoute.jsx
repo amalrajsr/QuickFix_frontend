@@ -6,8 +6,9 @@ import Otp from '../pages/User/Otp'
 import Profile from '../components/User/Profile'
 import {Route,Routes} from 'react-router-dom'
 import UserLayout from '../layouts/UserLayout'
-import ProtectedRoute from '../components/UI/ProtectedRoute'
+import ProtectedRoute from '../utils/ProtectedRoute'
 import ViewService from '../components/User/Services/ViewService'
+import Booking from '../components/User/Booking'
 function UserRoute() {
   return (
     <>
@@ -22,6 +23,7 @@ function UserRoute() {
     <Route path='/services/:name' element={<ViewService/>}/>
       <Route  element={<ProtectedRoute  type={'user'}/>}>
       <Route path='/profile' element={<Profile/>}/>
+      <Route path='/booking' element={<Booking/>} />
     </Route>
     <Route path={'*'} element={<h1>not found</h1>} />
     </Route> 

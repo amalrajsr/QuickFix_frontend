@@ -11,7 +11,7 @@ export const loginApi= (user)=>
 axios.post('user/login',user)
 
 export const loginOtpApi=(user)=>
-axios.post('user/verify-login-otp',user)
+axios.post('user/verify-login-otp',user,{withCredentials:true})
 
 export const fetchServiceApi= ()=>
 axios.get('user/services')

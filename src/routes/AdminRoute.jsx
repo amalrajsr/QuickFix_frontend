@@ -4,14 +4,15 @@ import Login from '../pages/Admin/Login'
 import UserManagement from '../pages/Admin/UserManagement'
 import ServiceMangement from '../pages/Admin/ServiceMangement'
 import { Route,Routes } from 'react-router-dom'
-import ProtectedRoute from '../components/UI/ProtectedRoute'
+import ProtectedRoute from '../utils/ProtectedRoute'
 function adminRoute() {
   return (
     <>
       <Routes>
         
         <Route path='/login' element={<Login/>}/>
-        <Route element={<ProtectedRoute/>} type={'admin'}>
+
+      <Route element={<ProtectedRoute type={'admin'}/>} >
       <Route path='/' element={<AdminLayout/>}>
       <Route path='/users' element={<UserManagement/>}/>
       <Route path='/services' element={<ServiceMangement/>}/>

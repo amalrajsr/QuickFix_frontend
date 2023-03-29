@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import {getServicesApi, deleteServiceApi,} from "../../../apis/admin";
 import { ServiceContext } from "../../../context/serviceContext";
-import { MdOutlineEditNote } from "react-icons/md";
 import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import EditService from "./EditService";
 import { useDispatch } from "react-redux";
 import { addSerivces } from "../../../store/slices/serviceSlice";
 import { useNavigate } from "react-router-dom";
+import ServiceCharge from "./ServiceCharge";
 function Table() {
 
   const dispatch=useDispatch()
@@ -164,34 +164,7 @@ const handleedit=(singleService)=>{
   return (
     <>
         <Modal open={open} onClose={onCloseModal}>
-            <div>
-              <h3 className="text-xl font-medium text-gray-600">
-                Installation Charge
-              </h3>
-              <div className="flex gap-10 mt-4">
-                <h3 className="text-lg font-medium">
-                  <span className="mx-2">FirstHour:</span>{" "}
-                  {charge?.installationCharge1Hour}
-                </h3>
-                <h3 className="text-lg font-medium">
-                  <span className="mx-2"> LatelyHours:</span>
-                  {charge?.installationCharge1Hour}
-                </h3>
-              </div>
-              <h3 className="text-xl font-medium mt-4 text-gray-600">
-                Repair Charge
-              </h3>
-              <div className="flex gap-10 mt-4">
-                <h3 className="text-lg font-medium">
-                  <span className="mx-2">FirstHour:</span>{" "}
-                  {charge?.repairCharge1Hour}
-                </h3>
-                <h3 className="text-lg font-medium">
-                  <span className="mx-2">LatelyHours:</span>
-                  {charge?.repairChargeLatelyHours}
-                </h3>
-              </div>
-            </div>
+          <ServiceCharge charge={charge}/>
           </Modal>
    {toggle && <EditService toggle={toggle} data={edit}/>}
       <DataTable

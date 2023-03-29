@@ -37,10 +37,7 @@ export const adminSchema= yup.object().shape({
 })
 
 export const serviceSchema= yup.object().shape({
-  service:yup.string().required('name is required'),
-  // image: yup
-  // .mixed()
-  // .required('Image is required'),
+  service:yup.string().required('field cant be empty'),
   installationCharge1Hour: yup
   .number()
   .typeError("field cant be empty")
@@ -57,5 +54,57 @@ export const serviceSchema= yup.object().shape({
   .number()
   .typeError("field cant be empty")
   .required("field cant be empty"),
+
+})
+
+export const addressSchema=yup.object().shape({
+  fullname:yup
+  .string()
+  .trim()
+  .required("filed can't be empty")
+  .test(
+    "no-spaces",
+    "Name should not be empty spaces",
+    (value) => value.trim().length > 0
+  )
+  .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"),
+
+  mobile: yup
+  .string()
+  .typeError("field cant be empty")
+  .required('field cant be empty')
+  .matches(/^\d{10}$/, "mobile number is not valid"),
+
+  house:yup.string().trim()
+  .required("filed can't be empty")
+  .test(
+    "no-spaces",
+    "Name should not be empty spaces",
+    (value) => value.trim().length > 0
+  )
+  .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"),
+
+  landmark:yup.string().trim()
+  .required("filed can't be empty")
+  .test(
+    "no-spaces",
+    "Name should not be empty spaces",
+    (value) => value.trim().length > 0
+  )
+  .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"),
+
+  street:yup.string().trim()
+  .required("filed can't be empty")
+  .test(
+    "no-spaces",
+    "Name should not be empty spaces",
+    (value) => value.trim().length > 0
+  )
+  .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"),
+
+  zipcode: yup.string()
+  .matches(/^\d{6}$/, "zip code is not valid")
+  .typeError("field cant be empty")
+  .required('field cant be empty'),
 
 })
