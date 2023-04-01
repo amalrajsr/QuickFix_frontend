@@ -64,7 +64,7 @@ function ViewService() {
       </div>
    {/*  book now section */}
    <div className=" bg-white w-[250px] sm:w-[350px] md:w-1/3 h-[150px] flex md:flex-row flex-col justify-end shadow-xl mx-auto my-16">
-     <button className="bg-slate-200 w-40 md:text-lg hover:bg-slate-300 hover:shadow-md mx-auto md:h-1/3 md:my-auto rounded-lg p-2 px-3"     onClick={onOpenModal}>service charges</button>
+     <button className="bg-slate-200 w-40 md:text-lg hover:bg-slate-300 hover:shadow-md mx-auto md:h-1/3 md:my-auto rounded-lg p-2 px-3"  data-modal-target="staticModal" data-modal-toggle="staticModal"   onClick={onOpenModal}>service charges</button>
      <button className="bg-dark rounded-lg md:text-lg hover:shadow-md  md:h-1/3 md:my-auto w-40 mx-auto hover:bg-gray-700 text-white p-2 my-6 " onClick={handeBookNow}>book now</button>
    </div>
 
@@ -88,6 +88,8 @@ function ViewService() {
    <Modal open={open} onClose={()=>setOpen(false)}>
     <ServiceCharge charge={service[0]} />
     </Modal>
+
+
     </>
   );
 }

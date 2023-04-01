@@ -4,7 +4,6 @@ import { ServiceContext } from "../../context/serviceContext";
 import { useState } from "react";
 function ServiceMangement() {
   const [updateTable,setUpdateTable]=useState(false)
-  console.log(1);
   return (    
     <ServiceContext.Provider value={{updateTable,setUpdateTable}}>
       <div className="w-full  mx-3">

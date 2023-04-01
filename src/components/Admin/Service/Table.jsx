@@ -174,6 +174,7 @@ const handleedit=(singleService)=>{
         fixedHeader
         fixedHeaderScrollHeight="450px"
         customStyles={customStyles}
+        
       />
     </>
   );

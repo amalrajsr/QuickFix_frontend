@@ -3,9 +3,10 @@ import Button from '../UI/Button'
 import { FaAlignJustify } from 'react-icons/fa'
 import { useSelector,useDispatch } from 'react-redux'
 import { removeUser } from '../../store/slices/userSlice'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import Options from './Options'
 function Navbar() {
+  const navigate=useNavigate()
   //cloudinary logo link
   const logo='https://res.cloudinary.com/dsw9tifez/image/upload/v1679228278/quickfix/static/logo-dark_udx7tu.png'
 
@@ -21,11 +22,12 @@ function Navbar() {
 const logout=()=>{
   localStorage.removeItem('user')
   dispatch(removeUser())
+  navigate('/')
 }
   return (
     <>
 
-      <div className='shadow-md  w-full flex justify-between fixed z-20 py-4 bg-light '>
+      <div className='shadow-md  w-full flex justify-between fixed z-20 py-4 bg-white '>
         <div className=' px-5 my-auto md:'>
           <NavLink to='/'>
             <img src={logo} alt="quick fix logo" width={150} height={50} /> 

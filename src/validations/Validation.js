@@ -108,3 +108,19 @@ export const addressSchema=yup.object().shape({
   .required('field cant be empty'),
 
 })
+
+export const locationSchema=yup.object().shape({
+  place:yup.string().trim()
+  .required("filed can't be empty")
+  .test(
+    "no-spaces",
+    "Name should not be empty spaces",
+    (value) => value.trim().length > 0
+  )
+  .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"),
+
+  pincode:yup.string()
+  .matches(/^\d{6}$/, "zip code is not valid")
+  .typeError("field cant be empty")
+  .required('field cant be empty'),
+})

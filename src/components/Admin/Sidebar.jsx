@@ -12,7 +12,7 @@ function Sidebar() {
     { name: "Experts", icon: <GrUserWorker /> ,path:'/admin/experts'},
     { name: "Services", icon: <TbCategory />,path:'/admin/services' },
     { name: "Reviews", icon: <MdOutlineRateReview /> ,path:'/admin/reviews'},
-    {name:'Locations',icon:<MdOutlineLocationOn/>,path:'/admin/location'}
+    {name:'Locations',icon:<MdOutlineLocationOn/>,path:'/admin/locations'}
   ];
    
   const handleLogout=async()=>{

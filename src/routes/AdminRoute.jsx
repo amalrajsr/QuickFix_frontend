@@ -5,6 +5,7 @@ import UserManagement from '../pages/Admin/UserManagement'
 import ServiceMangement from '../pages/Admin/ServiceMangement'
 import { Route,Routes } from 'react-router-dom'
 import ProtectedRoute from '../utils/ProtectedRoute'
+import LocationMangement from '../pages/Admin/LocationMangement'
 function adminRoute() {
   return (
     <>
@@ -16,6 +17,7 @@ function adminRoute() {
       <Route path='/' element={<AdminLayout/>}>
       <Route path='/users' element={<UserManagement/>}/>
       <Route path='/services' element={<ServiceMangement/>}/>
+      <Route path='/locations' element={<LocationMangement/>}/>
       <Route path={'*'} element={<h1>not found</h1>} />
       </Route>
       </Route>
