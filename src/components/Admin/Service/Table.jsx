@@ -64,7 +64,7 @@ function Table() {
    
   }
 
-const handleedit=(singleService)=>{
+const handleEdit=(singleService)=>{
   setToggle(!toggle)
   setEdit(singleService)
 }
@@ -114,7 +114,7 @@ const handleedit=(singleService)=>{
     {
       name: null,
       cell: (row) => (
-        <span className="p-1" onClick={()=>{handleedit(row.singleService) }}>
+        <span className="p-1" onClick={()=>{handleEdit(row.singleService) }}>
         <i className="fa-regular fa-pen-to-square fa-md"></i>
         </span>
       ),

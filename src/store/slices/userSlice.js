@@ -7,11 +7,18 @@ const userSlice= createSlice({
         addUser(state,action){
             state.value=action.payload
         },
+        updateUser(state,action){
+            state.value.name=action.payload
+        },
+        updateImage(state,action){
+
+            state.value.avatar=action.payload
+        },
         removeUser(){
             return {}
         }
     }
     
 })
-export const {addUser,removeUser}= userSlice.actions
+export const {addUser,removeUser,updateImage,updateUser}= userSlice.actions
 export const userReducer=userSlice.reducer 

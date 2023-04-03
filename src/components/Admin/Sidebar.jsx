@@ -4,6 +4,7 @@ import { TbCategory } from "react-icons/tb";
 import { FaUser } from "react-icons/fa";
 import { GrUserWorker } from "react-icons/gr";
 import { MdOutlineRateReview ,MdOutlineLocationOn} from "react-icons/md";
+import {BsJournalBookmark} from 'react-icons/bs'
 
 function Sidebar() {
   const navigate=useNavigate()
@@ -11,8 +12,10 @@ function Sidebar() {
     { name: "Users", icon: <FaUser />,path:'/admin/users' },
     { name: "Experts", icon: <GrUserWorker /> ,path:'/admin/experts'},
     { name: "Services", icon: <TbCategory />,path:'/admin/services' },
+    {name:'Booking',icon:<BsJournalBookmark/>,path:'/admin/bookings'},
     { name: "Reviews", icon: <MdOutlineRateReview /> ,path:'/admin/reviews'},
-    {name:'Locations',icon:<MdOutlineLocationOn/>,path:'/admin/locations'}
+    {name:'Locations',icon:<MdOutlineLocationOn/>,path:'/admin/locations'},
+    
   ];
    
   const handleLogout=async()=>{

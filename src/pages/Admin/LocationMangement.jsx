@@ -6,7 +6,7 @@ function LocationMangement() {
   return (
     <div className="w-full  mx-3">
     <div className="mx-10 mt-5">
-      <span className="text-2xl">Service Management</span>
+      <span className="text-2xl">Location Management</span>
     </div>
     <div className=" w-3/4 mt-12 mx-10 overflow-x-auto">
       <div className="mx-1 flex  my-4">

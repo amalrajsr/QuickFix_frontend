@@ -51,3 +51,7 @@ export const fetchLocationApi = () => axios.get("/admin/locations", getToken("ra
 export const blockLocationApi=(id)=>axios.patch(`/admin/locations/${id}`,{},getToken("raw"))
 export const editLocationApi=(id,location)=>axios.put(`/admin/locations/${id}`,location,getToken("raw"));
 export const addLocationApi = (location) => axios.post("/admin/locations", location, getToken("raw"));
+
+// booking management
+
+export const fetchBookingApi=()=>axios.get('/admin/bookings',getToken('raw'))

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../../components/UI/Button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {  Navigate, useNavigate } from "react-router-dom";
+import {  Navigate, useLocation, useNavigate } from "react-router-dom";
 import { otpSchema } from "../../validations/Validation";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../store/slices/userSlice";
@@ -12,7 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { registerOtpApi } from "../../apis/user";
 function Otp() {
-  
+  const location=useLocation()
+  const user=location.state
   const token=localStorage.getItem('user')
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,7 +29,8 @@ function Otp() {
   const onHandleSubmit = async (otp) => {
     setLoading(true);
     try {
-      const { data } = await registerOtpApi(otp)
+     
+      const { data } = await registerOtpApi(user,otp)
       setLoading(false);
       if (data.token && data.user) {
         dispatch(addUser(data.user));

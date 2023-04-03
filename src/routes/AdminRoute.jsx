@@ -6,6 +6,7 @@ import ServiceMangement from '../pages/Admin/ServiceMangement'
 import { Route,Routes } from 'react-router-dom'
 import ProtectedRoute from '../utils/ProtectedRoute'
 import LocationMangement from '../pages/Admin/LocationMangement'
+import BookingManagement from '../pages/Admin/BookingManagement'
 function adminRoute() {
   return (
     <>
@@ -18,6 +19,7 @@ function adminRoute() {
       <Route path='/users' element={<UserManagement/>}/>
       <Route path='/services' element={<ServiceMangement/>}/>
       <Route path='/locations' element={<LocationMangement/>}/>
+      <Route path='/bookings' element={<BookingManagement/>}/>
       <Route path={'*'} element={<h1>not found</h1>} />
       </Route>
       </Route>

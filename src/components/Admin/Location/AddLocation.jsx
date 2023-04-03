@@ -81,10 +81,10 @@ function AddLocation({fetchlocation, setFetchlocation}) {
           data-modal-target="authentication-modal"
           data-modal-toggle="authentication-modal"
         >
-          add service
+          add location
         </button>
         <Modal open={open} onClose={() => setOpen(false)}>
-      <h3 className="text-center text-2xl my-3">Edit Service</h3>
+      <h3 className="text-center text-2xl my-3">add location</h3>
       <form onSubmit={handleSubmit}>
       <div>
             <label className="mx-3 block">Place</label>

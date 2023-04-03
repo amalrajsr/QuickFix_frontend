@@ -384,9 +384,9 @@ function Booking() {
             {/* estimated amount */}
             <div className="my-4 justify-evenly mx-auto w-1/2">
               <span className="text-lg  text-dark font-semibold">
-                Estimated Charge:{" "}
+                Estimated Charge:
               </span>
-              <span className="font-medium">{booking?.estimatedCharge}</span>
+              <span className="font-medium">₹{booking?.estimatedCharge}</span>
             </div>
           </div>
           {/* date and slot section */}

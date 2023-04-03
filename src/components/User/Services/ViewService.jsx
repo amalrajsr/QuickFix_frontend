@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate,useParams   } from "react-router-dom";
-import Modal from "react-responsive-modal";
-import "react-responsive-modal/styles.css";
+import Modal from "../../UI/Modal";
 import ServiceCharge from "../../Admin/Service/ServiceCharge";
 
 function ViewService() {

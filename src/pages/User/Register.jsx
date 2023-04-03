@@ -25,7 +25,7 @@ function Register() {
       setLoading(false)
       
        if(data.success){
-        navigate('/otp')
+        navigate('/otp',{state:userData})
        }
        if(data.error){
         setError(data.error.message)
@@ -56,8 +56,8 @@ function Register() {
             { error && <h3 className='font-bold text-xl text-center mt-5 my-2 '>{error}</h3> }
             <h3 className='font-bold text-3xl text-center mt-10 my-2 '>Get Started</h3>
             <form onSubmit={handleSubmit(onHandleSubmit)} className='my-auto mx-auto text-center '>
-              <input type={'text'} name={'name'} placeholder={'Full Name'} className={' py-2 mt-5 focus:outline-slate-300 rounded-md px-10 '} {...register('fullname')} />
-              <p className='text-slate-400'>{errors.fullname?.message}</p>
+              <input type={'text'} name={'name'} placeholder={'Full Name'} className={' py-2 mt-5 focus:outline-slate-300 rounded-md px-10 '} {...register('name')} />
+              <p className='text-slate-400'>{errors.name?.message}</p>
     
               <input type='number' name={'mobile'} placeholder={'Mobile'} className='py-2 mt-5 focus:outline-slate-300 rounded-md px-10 mx-3' {...register('mobile')} />
               <p className='text-slate-400'>{errors.mobile?.message}</p>

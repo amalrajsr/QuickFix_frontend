@@ -20,7 +20,7 @@ export const getToken = (type) => {
 // user
 export const registerApi= (user)=>axios.post('user/register',user)
 
-export const registerOtpApi= (otp)=>axios.post('user/verify-otp',otp)
+export const registerOtpApi= (user,otp)=>axios.post('user/verify-otp',{...user,otp:otp.otp})
 
 export const loginApi= (user)=>axios.post('user/login',user)
 
@@ -30,3 +30,8 @@ export const fetchServiceApi= ()=>axios.get('user/services')
 
 // booking
 export const addBookingApi=(booking)=> axios.post('user/bookings',booking,getToken('raw'))
+
+//profile
+export const updateProfileImage=(file,id)=>axios.put(`user/profile/${id}`,file,getToken('form'))
+
+export const updateProfile=(data,id)=>axios.patch(`user/profile/${id}`,data,getToken('raw'))

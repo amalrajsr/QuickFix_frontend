@@ -1,13 +1,14 @@
 import React from 'react'
 
-function button(props) {
+function Button(props) {
+
   return (
    <>
-   <button  className='bg-dark rounded-lg hover:bg-gray-800 text-white py-2  px-6'>
+   <button  className={`bg-dark rounded-lg hover:bg-gray-800 text-white ${props.customeStyle || '' } py-2  px-6`}>
     {props.children}
    </button>
    </>
   )
 }
 
-export default button
+export default Button

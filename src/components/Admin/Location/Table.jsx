@@ -171,7 +171,7 @@ function Table({fetchlocation, setfetchlocation}) {
   return (
     <>
       <Modal open={open} onClose={() => setOpen(false)}>
-      <h3 className="text-center text-2xl my-3">Edit Service</h3>
+      <h3 className="text-center text-2xl my-3">Edit Location</h3>
       <form onSubmit={handleSubmit}>
       <div>
             <label className="mx-3 block">Place</label>

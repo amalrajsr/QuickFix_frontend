@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const userSchema = yup.object().shape({
-  fullname: yup
+  name: yup
     .string()
     .trim()
     .required("Please provide fullname")
@@ -12,11 +12,11 @@ export const userSchema = yup.object().shape({
     )
     .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"),
   // email: yup.string().email().required('please provide email'),
-  mobile: yup
-    .string()
-    .typeError("field cant be empty")
-    .required('field cant be empty')
-    .matches(/^\d{10}$/, "mobile number is not valid"),
+  // mobile: yup
+  //   .string()
+  //   .typeError("field cant be empty")
+  //   .required('field cant be empty')
+  //   .matches(/^\d{10}$/, "mobile number is not valid"),
 });
 
 export const userLoginSchema = yup.object().shape({
