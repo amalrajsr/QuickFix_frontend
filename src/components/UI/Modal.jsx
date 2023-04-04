@@ -1,6 +1,6 @@
 import React  from "react";
 
-function Modall(props) {
+function Modal(props) {
 
   
 
@@ -19,4 +19,4 @@ function Modall(props) {
   
 }
 
-export default Modall
+export default Modal

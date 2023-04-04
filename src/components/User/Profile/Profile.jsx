@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Button from "../UI/Button";
+import Button from "../../UI/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { userSchema } from "../../validations/Validation";
+import { userSchema } from "../../../validations/Validation";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
-import { updateProfile, updateProfileImage } from "../../apis/user";
-import { updateImage, updateUser } from "../../store/slices/userSlice";
+import { updateProfile, updateProfileImage } from "../../../apis/user";
+import { updateImage, updateUser } from "../../../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
-import Modal from "../UI/Modal";
+import Modal from "../../UI/Modal";
 function Profile() {
   const navigate = useNavigate();
   // state to handle modal

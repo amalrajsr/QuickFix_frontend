@@ -22,17 +22,16 @@ function Table() {
     },[])
 
 
-    const columns=[    {
-        name: "Id",
-        selector: (row) => row.id,
-      },
+    const columns=[   
       {
         name: "User",
         selector: (row) => row.userName,
+        sortable:true
         
       },  {
         name: "Service",
         selector: (row) => row.service,
+        grow:2
         
       }, {
         name: "Slot",
@@ -43,7 +42,8 @@ function Table() {
         selector: (row) => row.type,
         
       },  {
-        name: 'Expert',
+        name: 'Assign Expert',
+        grow:2,
         cell: (row) => (
             <select className='border-[1px]  border-slate-300 focus:outline-slate-400 w-[200px]' name="cars" id="cars">
             <option  id='volvo' value="volvo"><span >Volvo</span></option>
@@ -71,6 +71,7 @@ function Table() {
                 fontSize:'15px',   
                 whiteSpace: 'normal',
                 wordWrap: 'break-word',
+                
                          
             },
         },
@@ -84,7 +85,7 @@ function Table() {
         },
         cells: {
             style: {
-               
+            
             },
         }, headRow: {
             style: {
@@ -103,7 +104,7 @@ function Table() {
     })
   return (
     <DataTable
-      
+ 
     columns={columns}
     data={data}
     fixedHeader

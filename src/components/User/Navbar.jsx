@@ -27,7 +27,7 @@ function Navbar() {
   };
   return (
     <>
-      <div className="shadow-md  w-full flex justify-between fixed z-20 py-4 bg-white ">
+      <div className="shadow-sm  w-full flex justify-between fixed z-20 py-4 bg-white ">
         <div className=" px-5 my-auto md:">
           <NavLink to="/">
             <img  src={logo} alt="quick fix logo" width={150} height={50} />
@@ -136,12 +136,12 @@ function Navbar() {
       {profiletoggle && (
         <div onMouseLeave={() => setProfileToggle(false)} class="fixed right-5 top-12 z-30 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
     <div onClick={() => setProfileToggle(false)} className="flex flex-col py-1" role="none">
-           <Link to="/profile" className="p-5 bg-[#0000] text-dark ">
+           <Link to="/profile" className="p-5 bg-[#0000] hover:shadow-md text-dark ">
            Profile
           </Link>
           <Options />
           <span
-            className="p-5 hover:shadow-lg text-dark"
+            className="p-5  text-dark"
             onClick={logout}
           >
             Logout

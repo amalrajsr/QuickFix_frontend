@@ -17,6 +17,7 @@ function Booking() {
   const [locations, setLocations] = useState([]);
   const service = location?.state?.data;
   const [error, setError] = useState({ zipcode: false, date: false });
+  const [blockSlot,setblockSlot]=useState({morning:true,afternoon:true,evening:true}) // state to remove slots based on current time
   const [address, setAddress] = useState(false);
   const [booking, setBooking] = useState({
     user: userData._id,
@@ -126,6 +127,7 @@ function Booking() {
 
   // handle user address form
   const onHandleSubmit = (userAddress) => {
+
     if (!locations.includes(parseInt(userAddress.zipcode))) {
       setError({ ...error, zipcode: true });
     } else {
@@ -133,8 +135,10 @@ function Booking() {
       setBooking({ ...booking, address: userAddress });
       setAddress(true);
     }
+    
   };
 
+  console.log(blockSlot)
   // function to handle zipcode
   const handelZipcode = (value) => {
     const pincode = parseInt(value);
@@ -150,14 +154,39 @@ function Booking() {
 
   // function to verify and update date
   const handleDate = (e) => {
+    console.log(e.target.value)
     const enteredDate = new Date(e.target.value);
     const currentDate = new Date();
-
-    if (currentDate < enteredDate) {
+ 
+    if (currentDate <= enteredDate) {
+      setblockSlot({morning:false,afternoon:false,evening:false})
       setError({ ...error, date: false });
       setBooking({ ...booking, date: enteredDate });
+
+     if(currentDate.getMonth()===enteredDate.getMonth()){
+      const hour=currentDate.getHours()
+    switch(true){
+      case(hour>11 && hour<14):
+      console.log(1)
+      setblockSlot({morning:true,afternoon:false,evening:false})
+      break;
+      case(hour>14 && hour<18):
+      console.log(2)
+      setblockSlot({morning:true,afternoon:true,evening:false})
+       break;
+       case(hour>18):
+       console.log(3)
+       setblockSlot({morning:true,afternoon:true,evening:true})
+        break;
+       default:
+        console.log(4)
+    }
+     }
+      
+
     } else {
       setError({ ...error, date: true });
+      setblockSlot({morning:true,afternoon:true,evening:true})
     }
   };
 
@@ -177,7 +206,7 @@ function Booking() {
         .then(({data}) => {
           setLoading(false)
           if(data.success){
-            toast.success("successfully added", {
+            toast.success("booking successfull", {
               position: "top-right",
               autoClose: 1000,
               hideProgressBar: false,
@@ -187,6 +216,21 @@ function Booking() {
               theme: "light",
             });
             reset()
+            setAddress(false)
+            setblockSlot({morning:false,afternoon:false,evening:false})
+            setBooking({
+              user: userData._id,
+              address: null,
+              service: service.service,
+              type: false,
+              duration: false,
+              estimatedCharge: 0,
+              date: new Date(),
+              slot: null,
+              detail: null,
+            })
+            
+            navigate('/bookings')
           }
         })
         .then((error) => {
@@ -396,7 +440,7 @@ function Booking() {
             </h1>
             <div>
               {error.date && (
-                <p className="mx-auto text-center md:text-start w-1/3 text-slate-400  text-md ">
+                <p className="mx-auto text-center  w-1/3 text-slate-400  text-md ">
                   Invalid date
                 </p>
               )}
@@ -412,7 +456,7 @@ function Booking() {
                 ${error.date ? "border-red-700" : "border-slate-300"}
                  rounded-lg md:px-10 md:mx-3 lg:ml-16  md:ml-3 `}
               />
-
+              { !blockSlot.morning &&
               <button
                 onClick={() => setBooking({ ...booking, slot: "morning" })}
                 className={`rounded-lg  border-[1px] ${
@@ -420,7 +464,8 @@ function Booking() {
                 } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
               >
                 Morning
-              </button>
+              </button>}
+              {!blockSlot.afternoon &&
               <button
                 onClick={() => setBooking({ ...booking, slot: "afternoon" })}
                 className={`rounded-lg  border-[1px] ${
@@ -428,7 +473,8 @@ function Booking() {
                 } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
               >
                 Afternoon
-              </button>
+              </button>}
+              {!blockSlot.evening &&
               <button
                 onClick={() => setBooking({ ...booking, slot: "evening" })}
                 className={`rounded-lg  border-[1px] ${
@@ -436,7 +482,7 @@ function Booking() {
                 } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
               >
                 Evening
-              </button>
+              </button>}
             </div>
             <div className="text-center md:text-center">
               <h1 className="text-lg  mt-3 mb-2 text-dark font-semibold">
