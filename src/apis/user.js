@@ -1,6 +1,6 @@
 import axios from "../config/axios"
 
-export const getToken = (type) => {
+ const getToken = (type) => {
     if (type === "form") {
       return {
         headers: {

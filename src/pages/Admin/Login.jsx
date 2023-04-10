@@ -6,16 +6,29 @@ import { ToastContainer, toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import Button from '../../components/UI/Button';
 import { adminLoginApi } from '../../apis/admin';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 function Login() {
   const admin=localStorage.getItem('admin')
     const navigate=useNavigate()
+    const location=useLocation()
     const [loading,setLoading]=useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(adminSchema)
       });
 
+        // cheking if any token expired message is passed thorugh useNavigate
+   if(location?.state?.tokenExpired){
+    toast.warn("Token expired Please login to continue", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+   }
       const onHandleSubmit=async(adminData)=>{
          try{
           
@@ -54,7 +67,6 @@ function Login() {
             <input type='password' name={'password'}  className='py-2 mt-5 focus:outline-slate-300 rounded-md px-10 mx-3' {...register('password')} />
             <p className='text-slate-400'>{errors.password?.message}</p>
             <div className='mt-6'>{loading ?<button disabled className='bg-dark rounded-lg hover:bg-gray-800 text-white py-2  px-6'><ClipLoader color="#ffff"  size={20} /></button>: <Button>Login</Button>} </div>
-
           </form>
         </div>
     </div>

@@ -10,16 +10,14 @@ function AddLocation({fetchlocation, setFetchlocation}) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); ;
   const [open, setOpen] = useState(false);
-  const [editLocation,setEditLocation]=useState({place:null,pincode:null})
+  const [addLocation,setAddLocation]=useState({place:null,pincode:null})
   const [error,setError]=useState({placeError:false,pincodeError:false})
   
-
-
   const handleSubmit=async(e)=>{
     e.preventDefault()
     setLoading(true);
     // const palceValidation=/^[a-zA-Z\s]+$/
-    // if(!palceValidation.exec(editLocation.place)){
+    // if(!palceValidation.exec(addLocation.place)){
     //     setError({...error,placeError:true})
     // }
     // // if((value) => value.trim().length > 0){
@@ -27,12 +25,12 @@ function AddLocation({fetchlocation, setFetchlocation}) {
     // // }
 
     // const pincodeValidation=/^\d{6}$/
-    // if(!pincodeValidation.exec(editLocation.place)){
+    // if(!pincodeValidation.exec(addLocation.place)){
     //     setError({...error,pincodeError:true})
     // }
     try{
   
-        const {data}=await addLocationApi(editLocation)
+        const {data}=await addLocationApi(addLocation)
           console.log(data)
          if(data.success){
           setLoading(false);
@@ -47,7 +45,6 @@ function AddLocation({fetchlocation, setFetchlocation}) {
             theme: "light",
           });
           setFetchlocation(!fetchlocation)
-          console.log(fetchlocation)
           setOpen(false)
          }
 
@@ -94,7 +91,7 @@ function AddLocation({fetchlocation, setFetchlocation}) {
               name="place"
               className="p-2  focus:outline-slate-300 bg-slate-100 rounded-md w-auto  mx-3"
           
-              onChange={(e)=>setEditLocation({...editLocation,place:e.target.value})}
+              onChange={(e)=>setAddLocation({...addLocation,place:e.target.value})}
             />
           {error.placeError &&  <p className="mx-3 text-slate-400">only alphabets are allowed</p>}
           </div>
@@ -105,13 +102,13 @@ function AddLocation({fetchlocation, setFetchlocation}) {
               type="number"
               name="pincode"
               className="p-2  focus:outline-slate-300 bg-slate-100 rounded-md w-auto  mx-3"
-              onChange={(e)=>setEditLocation({...editLocation,pincode:e.target.value})}
+              onChange={(e)=>setAddLocation({...addLocation,pincode:e.target.value})}
             />
           {error.pincodeError &&  <p className="mx-3 text-slate-400">should contain 6 digits</p>}
           </div>
           <div className="flex justify-center mt-5">
           <button className="bg-black text-white px-5 py-1 rounded-md ">
-            {loading ? <ClipLoader color="#ffff" size={20} /> : "edit"}
+            {loading ? <ClipLoader color="#ffff" size={20} /> : "add"}
           </button>
         </div>
       </form>

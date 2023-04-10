@@ -5,12 +5,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeUser } from "../../store/slices/userSlice";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Options from "./Options";
-function Navbar() {
+function Navbar({background}) {
   const navigate = useNavigate();
   //cloudinary logo link
-  const logo =
-    "https://res.cloudinary.com/dsw9tifez/image/upload/v1679228278/quickfix/static/logo-dark_udx7tu.png";
+  const logo = "https://res.cloudinary.com/dsw9tifez/image/upload/v1679228278/quickfix/static/logo-dark_udx7tu.png";
 
+   const text= background? 'text-white' :'text-dark'
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const [profiletoggle, setProfileToggle] = useState(false);
@@ -27,7 +27,7 @@ function Navbar() {
   };
   return (
     <>
-      <div className="shadow-sm  w-full flex justify-between fixed z-20 py-4 bg-white ">
+      <div className={`shadow-sm  w-full flex justify-between top-0 fixed z-20 py-2 ${background || 'bg-white'}  `}>
         <div className=" px-5 my-auto md:">
           <NavLink to="/">
             <img  src={logo} alt="quick fix logo" width={150} height={50} />
@@ -36,10 +36,9 @@ function Navbar() {
         <div className="hidden md:flex md:mx-20 gap-5 navbar-right">
           {user.value ? (
             <>
-             <button className="text-dark font-bold p-2 rounded-lg border-[2px] border-light">Become our Expert</button>
              <button
               id="dropdownDefaultButton" data-dropdown-toggle="dropdown" 
-                className="text-dark font-bold py-2 text-lg"
+                className={`${text} font-bold py-2 text-lg`}
                 
               >
                 {user.value.name}
@@ -52,8 +51,9 @@ function Navbar() {
             </>
           ) : (
             <>
+                         <Link to={'/expert/login'} className={`${text} font-bold p-2 rounded-lg border-[2px] border-light`}>Expert Login   </Link>
               <NavLink to="/login" className="flex items-center">
-                <h3 className="text-dark font-bold  text-lg">login</h3>
+                <h3 className={`${text} font-bold  text-lg`}>login</h3>
               </NavLink>
               <NavLink to="/register">
                 <Button>Register</Button>
@@ -134,7 +134,7 @@ function Navbar() {
 
       {/* condtionally rendering profile options for logged in user  */}
       {profiletoggle && (
-        <div onMouseLeave={() => setProfileToggle(false)} class="fixed right-5 top-12 z-30 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+        <div onMouseLeave={() => setProfileToggle(false)} class="fixed right-5 top-12 z-30 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
     <div onClick={() => setProfileToggle(false)} className="flex flex-col py-1" role="none">
            <Link to="/profile" className="p-5 bg-[#0000] hover:shadow-md text-dark ">
            Profile

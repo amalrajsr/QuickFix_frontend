@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 
-function Options(){
-    const profileOptions=[{name:'Bookings',path:'/bookings'},{name:'Payment',path:'/payment'}] //{name:'Address',path:'/address'}
+function Options({expert}){
+    const profileOptions=expert?[{name:'Profile',path:'/expert/profile'},{name:'Works',path:'/expert/works'}] :[{name:'Bookings',path:'/bookings'},{name:'Payment',path:'/payment'}] //{name:'Address',path:'/address'}
 
  return( 
     

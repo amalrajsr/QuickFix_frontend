@@ -21,8 +21,6 @@ function UserRoute() {
           <Route path={"/register"} element={<Register />} />
           <Route path={"/otp"} element={<Otp />} />
           <Route path="/services/:name" element={<ViewService />} />
-          <Route path="bookings" element={<ViewBooking/>} />
-
           <Route element={<ProtectedRoute type={"user"} />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/booking" element={<Booking />} />

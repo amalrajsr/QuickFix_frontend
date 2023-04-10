@@ -1,6 +1,6 @@
 import React from "react";
 
-function Footer() {
+function Footer({background}) {
   let footerContent = [
     "About Us",
     "Terms and Conditons",
@@ -11,7 +11,7 @@ function Footer() {
   const logo='https://res.cloudinary.com/dsw9tifez/image/upload/v1679228278/quickfix/static/logo-white_otf7yb.png'
   return (
     <>
-      <div className="bg-dark w-full mt-auto">
+      <div className={`${background|| 'bg-dark'} w-full mt-auto`}>
         <div className="my-10 flex justify-center w-full">
           <img src={logo} alt="quickfix logo" width={150} height={50} />
         </div>

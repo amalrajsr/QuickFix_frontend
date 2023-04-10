@@ -9,7 +9,7 @@ function ViewBooking() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.value);
   const [bookings, setBookings] = useState([]);
-  const [bookingStatus, setbookingStatus] = useState("pending");
+  const [bookingStatus, setbookingStatus] = useState("active");
   const [fetchBooking,setFetchBooking]=useState(false)
   useEffect(() => {
     viewBookings(user._id)
@@ -34,8 +34,8 @@ function ViewBooking() {
       <div className="flex justify-end h-2/3">
         <div className="w-full flex">
           {/* filter section */}
-          <div className="w-1/2 hidden md:flex  justify-center  ">
-            <div className="mt-12 w-1/2 ">
+          <div className="w-1/3 hidden md:flex  justify-center  ">
+            <div className="mt-8 w-1/2 ">
               <div className="flex md:flex-col  lg:flex-row justify-between">
                 <span>
                   Showing:
@@ -54,7 +54,7 @@ function ViewBooking() {
             </div>
           </div>
           {/* filter section ends*/}
-          <div className="w-full overflow-y-scroll md:w-2/3  ">
+          <div className="w-full overflow-y-scroll  md:w-2/3  ">
             <Button booking={'pending'} bookingStatus={bookingStatus} setbookingStatus={setbookingStatus}>PENDING</Button>
             <Button booking={'active'} bookingStatus={bookingStatus} setbookingStatus={setbookingStatus}>ACTIVE</Button>
             <Button booking={'completed'} bookingStatus={bookingStatus} setbookingStatus={setbookingStatus}>PAST</Button>

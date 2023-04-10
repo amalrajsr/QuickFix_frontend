@@ -1,5 +1,5 @@
 import Table from "../../components/Admin/Service/Table";
-import Service from "../../components/Admin/Service/AddService";
+import AddService from "../../components/Admin/Service/AddService";
 import { ServiceContext } from "../../context/serviceContext";
 import { useState } from "react";
 function ServiceMangement() {
@@ -18,7 +18,7 @@ function ServiceMangement() {
               className="block  p-2 pl-4 outline-none focus:outline-gray-300 text-sm text-gray-900  border-gray-300 rounded-lg w-40 md:w-60 bg-gray-50 "
               placeholder="Search here"
             />
-           <Service/>
+           <AddService/>
           </div>
           <Table/>
         </div>

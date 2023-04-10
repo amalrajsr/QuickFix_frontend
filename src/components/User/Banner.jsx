@@ -7,7 +7,7 @@ function Banner() {
     <>
       <div
         style={{ backgroundImage: `url(${banner})`, backgroundSize: "cover" }}
-        className={` mt-20 gap-5 flex flex-col h-[300px] items-center  w-full md:h-76  justify-center `}
+        className={` mt-16 gap-5 flex flex-col h-[300px] items-center  w-full md:h-76  justify-center `}
       >
           <span className="sm:text-xl md:text-2xl transition-all transform	delay-150	  hover:ease-in-out  text-slate-200 font-medium tracking-wide	hover:border-y-2 hover:border-indigo-500 hover:py-2 	">
             QuickFix is your one-stop solution for all your home needs. <br />

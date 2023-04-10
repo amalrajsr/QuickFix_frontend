@@ -138,7 +138,6 @@ function Booking() {
     
   };
 
-  console.log(blockSlot)
   // function to handle zipcode
   const handelZipcode = (value) => {
     const pincode = parseInt(value);
@@ -155,31 +154,39 @@ function Booking() {
   // function to verify and update date
   const handleDate = (e) => {
     console.log(e.target.value)
-    const enteredDate = new Date(e.target.value);
+     const enteredDate = new Date(e.target.value);
     const currentDate = new Date();
- 
-    if (currentDate <= enteredDate) {
+    
+    console.log(currentDate.getFullYear())
+    console.log(enteredDate.getFullYear())
+    if ( currentDate.getFullYear() <= enteredDate.getFullYear() && currentDate.getMonth()<=enteredDate.getMonth() && currentDate.getDate()<=enteredDate.getDate() ) {
       setblockSlot({morning:false,afternoon:false,evening:false})
       setError({ ...error, date: false });
       setBooking({ ...booking, date: enteredDate });
 
-     if(currentDate.getMonth()===enteredDate.getMonth()){
+     if(currentDate.getMonth()===enteredDate.getMonth() &&currentDate.getDate()===enteredDate.getDate()  ){
+      
       const hour=currentDate.getHours()
     switch(true){
+      case(hour<11):
+      setblockSlot({morning:false,afternoon:false,evening:false})
+      break;
       case(hour>11 && hour<14):
-      console.log(1)
       setblockSlot({morning:true,afternoon:false,evening:false})
       break;
       case(hour>14 && hour<18):
-      console.log(2)
       setblockSlot({morning:true,afternoon:true,evening:false})
        break;
        case(hour>18):
-       console.log(3)
+       setError({ ...error, date: true });
+       setBooking({ ...booking, date: null });
        setblockSlot({morning:true,afternoon:true,evening:true})
         break;
-       default:
-        console.log(4)
+        default:
+         setError({ ...error, date: true });
+        setBooking({ ...booking, date: null });
+        setblockSlot({morning:true,afternoon:true,evening:true})
+
     }
      }
       
@@ -225,7 +232,7 @@ function Booking() {
               type: false,
               duration: false,
               estimatedCharge: 0,
-              date: new Date(),
+              date: null,
               slot: null,
               detail: null,
             })
@@ -450,7 +457,6 @@ function Booking() {
                 type="date"
                 name="date"
                 onChange={handleDate}
-                value={booking.date.toISOString().slice(0, 10)}
                 placeholder="zip-code"
                 className={`py-1 my-auto focus:outline focus:outline-slate-400  border-[1px] 
                 ${error.date ? "border-red-700" : "border-slate-300"}

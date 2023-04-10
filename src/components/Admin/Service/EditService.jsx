@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
-import Modal from "react-responsive-modal";
-import "react-responsive-modal/styles.css";
+import Modal from '../../UI/Modal'
 import { editServiceApi } from "../../../apis/admin";
 import { ServiceContext } from "../../../context/serviceContext";
 import { useNavigate } from "react-router-dom";

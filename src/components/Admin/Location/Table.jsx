@@ -6,7 +6,8 @@ import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import { useNavigate } from "react-router-dom";
 import { blockLocationApi, editLocationApi, fetchLocationApi } from "../../../apis/admin";
-
+import { addlocations } from "../../../store/slices/locationSlice";
+import { useDispatch } from "react-redux";
 function Table({fetchlocation, setfetchlocation}) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); 
@@ -14,6 +15,7 @@ function Table({fetchlocation, setfetchlocation}) {
   const [open, setOpen] = useState(false);
   const [editLocation,setEditLocation]=useState({id:null,place:null,pincode:null})
   const [error,setError]=useState({placeError:false,pincodeError:false})
+  const dispatch=useDispatch()
   useEffect(() => {
     getLocations();
   }, [fetchlocation]);
@@ -23,6 +25,7 @@ function Table({fetchlocation, setfetchlocation}) {
 
       if (data.locations) {
         setLocations(data.locations);
+        dispatch(addlocations(data.locations))
       }
     } catch (error) {
       if (error.response?.data?.error?.tokenExpired) {

@@ -3,17 +3,18 @@
 @tailwind utilities;
 
 @layer base {
-    html {
-        padding: 0;
-        margin: 0;
-        font-family: 'Rubik', sans-serif;
-    }
-    input[type="number"]::-webkit-inner-spin-button,
-   input[type="number"]::-webkit-outer-spin-button {
+  html {
+    padding: 0;
+    margin: 0;
+    font-family: "Rubik", sans-serif;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
   }
-  }
-
-  html{
-    font-family: 'Rubik', sans-serif;
 }
+
+::-webkit-scrollbar{
+  display: none
+}
+

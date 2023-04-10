@@ -4,8 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { serviceSchema } from "../../../validations/Validation";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
-import Modal from "react-responsive-modal";
-import "react-responsive-modal/styles.css";
+import Modal from '../../UI/Modal'
 import { addServiceApi } from "../../../apis/admin";
 import { ServiceContext } from "../../../context/serviceContext";
 import { useNavigate } from "react-router-dom";
@@ -111,7 +110,6 @@ function AddService() {
     // function to validate Large Image
     const handleLargeImageChange = (e) => {
       const file = e.target.files[0];
-    console.log();
       const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/;
       if (!allowedExtensions.exec(file.name)) {
         setError(true);
