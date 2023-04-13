@@ -51,7 +51,6 @@ function Navbar({background}) {
             </>
           ) : (
             <>
-                         <Link to={'/expert/login'} className={`${text} font-bold p-2 rounded-lg border-[2px] border-light`}>Expert Login   </Link>
               <NavLink to="/login" className="flex items-center">
                 <h3 className={`${text} font-bold  text-lg`}>login</h3>
               </NavLink>

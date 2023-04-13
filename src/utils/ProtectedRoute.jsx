@@ -6,7 +6,7 @@ import axios from  '../config/axios'
 import { useDispatch } from "react-redux";
 import { removeUser } from "../store/slices/userSlice";
 import { removeExpert } from "../store/slices/expertSlice";
-function ProtectedRoute({type}) {
+function ProtectedRoute({type,redirect}) {
   const[auth,setAuth]=useState(null)
   const location=useLocation()
   const token= localStorage.getItem(type) 
@@ -14,6 +14,7 @@ function ProtectedRoute({type}) {
   const dispatch=useDispatch()
   useEffect(()=>{
   
+    if(token){
      axios.get(`/${type}/jwt`,{
      
         headers: {
@@ -29,17 +30,20 @@ function ProtectedRoute({type}) {
         if(error.response?.data?.error?.tokenExpired){
           localStorage.removeItem(type)
           type ==='user' ? dispatch(removeUser()): type==='expert' ? dispatch(removeExpert()) : 
-          type==='admin' ? navigate(`/admin/login`,{state: { tokenExpired:true}}) : navigate("/login",{state: { tokenExpired:true}})
+          navigate(redirect,{state: { tokenExpired:true}}) 
         }
        
         setAuth(false)
       })
+    }else{
+      setAuth(false)
+    }
   },[])
 
 if (auth===null) return
 
-      return type==='user'?(auth ? <Outlet /> : <Navigate state={{ from: location.pathname }} to={"/login"} /> ):
-             (auth ? <Outlet /> : <Navigate  to={"/admin/login"} />)
+      return (auth ? <Outlet /> : <Navigate state={{ from: location.pathname }} to={redirect} /> )
+  
 
 
  

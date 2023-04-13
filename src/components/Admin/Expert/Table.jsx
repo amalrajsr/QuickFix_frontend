@@ -103,6 +103,8 @@ function Table({fetchExperts}) {
           {row.isBlocked ? "unblock" : "block"}
         </button>
       ),
+      grow:3,
+
     },
 
   ];

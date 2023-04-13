@@ -15,7 +15,7 @@ function Home() {
           <div className="my-24 text-center">
             <h1 className="text-2xl  text-dark font-bold">Everyday life made easier</h1>
             <h3 className="my-4 text-lg font-semibold w-3/4 mx-auto text-dark">When life gets busy, you don’t have to tackle it alone. Get <br /> time back for what you love without breaking the bank.</h3>
-            <span className="my-3 inline-flex gap-3 text-lg font-semibold w-3/4 justify-center text-dark"><span className="mt-1"><GrStatusGood/></span> Choose your Expert by reviews, skills, and price</span>
+            <span className="my-3 inline-flex gap-3 text-lg font-semibold w-3/4 justify-center text-dark"><span className="mt-1"><GrStatusGood/></span> We provide quality service at affordable rates</span>
             <span className="my-3 inline-flex gap-3 text-lg font-semibold w-3/4 justify-center text-dark"><span className="mt-1"><GrStatusGood/></span> Schedule when it works for you — as early as today</span>
 
           </div>

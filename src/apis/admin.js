@@ -47,7 +47,7 @@ export const addLocationApi = (location) => axios.post("/admin/locations", locat
 
 // booking management
 export const fetchBookingApi=()=>axios.get('/admin/bookings',getToken('raw'))
-
+export const assignExpertApi=(bookingId,expertId)=>axios.patch(`/admin/bookings/${bookingId}`,{expert:expertId},getToken('raw'))
 
 //expert management
 export const fetchExpertApi=()=>axios.get('/admin/experts',getToken('raw'))

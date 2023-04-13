@@ -36,6 +36,7 @@ function Table({fetchlocation, setfetchlocation}) {
   };
 
   const blockLocation = async (id) => {
+ 
     try {
       const { data } = await blockLocationApi(id);
       getLocations();

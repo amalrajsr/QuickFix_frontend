@@ -1,11 +1,11 @@
 import React from 'react'
-import ExpertRegister from '../../components/Expert/ExpertLogin'
-function ExpertRegisterPage() {
+import ExpertLogin from '../../components/Expert/ExpertLogin'
+function ExpertLoginPage() {
   return (
     <>
-      <ExpertRegister/>
+      <ExpertLogin/>
     </>
   )
 }
 
-export default ExpertRegisterPage
+export default ExpertLoginPage

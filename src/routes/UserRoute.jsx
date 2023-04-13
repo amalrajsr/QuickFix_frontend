@@ -16,17 +16,15 @@ function UserRoute() {
       <Routes>
         <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />
-
           <Route path={"/login"} element={<Login />} />
           <Route path={"/register"} element={<Register />} />
           <Route path={"/otp"} element={<Otp />} />
           <Route path="/services/:name" element={<ViewService />} />
-          <Route element={<ProtectedRoute type={"user"} />}>
+          <Route element={<ProtectedRoute type={"user"} redirect={"/login"} />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/booking" element={<Booking />} />
-            <Route path="bookings" element={<ViewBooking/>} />
+            <Route path="/bookings" element={<ViewBooking />} />
           </Route>
-
           <Route path={"*"} element={<h1>not found</h1>} />
         </Route>
       </Routes>

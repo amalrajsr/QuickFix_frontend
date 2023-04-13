@@ -3,8 +3,19 @@ import { useSelector } from "react-redux";
 import { useNavigate,useParams   } from "react-router-dom";
 import Modal from "../../UI/Modal";
 import ServiceCharge from "../../Admin/Service/ServiceCharge";
+import axios from "axios";
+import { fetchExpertsByService } from "../../../apis/user";
 
 function ViewService() {
+  const [count,setCount]=useState({experts:0,workscompelted:0})
+  
+  useEffect(()=>{
+
+    fetchExpertsByService(service[0]._id,service[0].service).then(({data})=>{
+
+      setCount({experts:data.experts,workscompelted:data.works})
+    })
+  })
   
   // modal handler
   const [open, setOpen] = useState(false);
@@ -26,6 +37,7 @@ function ViewService() {
      }
   })
 
+  
   const howItWorks=[{message:'Place the Order',image:'https://housejoygroup.com/_nuxt/img/client-check.d836a01.svg'},{message:'Experts will be Assigned',image:'https://housejoygroup.com/_nuxt/img/clients-check.cb800a0.svg'},
   {message:'Our Expert will call you',image:'https://housejoygroup.com/_nuxt/img/expert-call.f7e1a7b.svg'},{message:'Our Experts at your place',image:'https://housejoygroup.com/_nuxt/img/expert-delivery.a249286.svg'},
   {message:'Complete the job',image:'https://housejoygroup.com/_nuxt/img/expert-support.3abc568.svg'}]
@@ -47,12 +59,12 @@ function ViewService() {
         <div className="flex justify-evenly mt-2">
         <div className=" bg-lightgreen w-[130px] sm:w-[150px] sm:h-[100px] mx-auto md:mx-3 flex flex-col justify-center  rounded-lg hover:shadow-xl">
           <h1 className="text-lg md:text-xl mx-auto text-center text-white ">Experts</h1>
-          <h1 className="text-lg md:text-xl font-semibold mx-auto text-center text-white">50+</h1>
+          <h1 className="text-lg md:text-xl font-semibold mx-auto text-center text-white">{count.experts<2? count.experts:`${count.experts-1}+`}</h1>
 
         </div>
         <div className=" bg-lightpink  w-[130px] sm:w-[150px] h-[80px] md:mx-3 sm:h-[100px] mx-auto  flex flex-col justify-center rounded-lg   hover:shadow-xl">
           <h1 className="text-lg md:text-xl mx-auto text-white">Jobs</h1>
-          <h1 className="text-lg md:text-xl font-semibold mx-auto text-center text-white">50+</h1>
+          <h1 className="text-lg md:text-xl font-semibold mx-auto text-center text-white">{count.workscompelted <2 ?count.workscompelted: `${count.workscompelted-1}+`}</h1>
           </div>
         </div>
         </div>
@@ -87,7 +99,7 @@ function ViewService() {
    <Modal open={open} onClose={()=>setOpen(false)}>
     <ServiceCharge charge={service[0]} />
     </Modal>
-
+  
 
     </>
   );

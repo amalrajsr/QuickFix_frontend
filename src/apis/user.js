@@ -38,6 +38,11 @@ export const updateProfileImage=(file,id)=>axios.put(`user/profile/${id}`,file,g
 
 export const updateProfile=(data,id)=>axios.patch(`user/profile/${id}`,data,getToken('raw'))
 
+//payment
+export const paymentApi=(bookingID)=>axios.post('user/payment',{id: bookingID},getToken('raw'))
+export const paymentSuccessApi=(data)=>axios.post('user/payment/success',data,getToken('raw'))
 
 
+//fetch no.of expert per service
+export const fetchExpertsByService=(serviceId,name)=>axios.get(`user/services/${serviceId}&${name}`,getToken('raw'))
 

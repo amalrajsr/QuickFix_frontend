@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { expertSchema } from "../../validations/Validation";
 import Button from "../UI/Button";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import { addExpert } from "../../store/slices/expertSlice";
 function ExpertLogin() {
+  const token= localStorage.getItem('expert')
   const navigate = useNavigate();
   const dispatch=useDispatch()
   const [showPass,setshowPass]=useState(false)
@@ -33,6 +34,7 @@ function ExpertLogin() {
 
       const {data}= await expertLoginApi(expert)
        setLoading(false)
+       console.log(data)
       if(data.token && data.expert){
         localStorage.setItem('expert',data.token)
         dispatch(addExpert(data.expert))
@@ -53,7 +55,7 @@ function ExpertLogin() {
   };
   const banner =
     "https://res.cloudinary.com/dsw9tifez/image/upload/v1680704435/hero_landing-fdeb7ef8f1a4361ec76f75d007d79546_o0hv9r.jpg";
-  return (
+    return token? (<Navigate to={'/expert/dashboard'}/>): (
     <div className=" mt-20 mb-5  flex items-center  justify-center p-10">
       <div className="border-[1px] rounded-lg  md:h-[400px] border-slate-300 signup-container shadow-md md:shadow-none bg-light flex md:w-[800px]  w-[375px]">
         <div className="bg-white shadow-lg h-full p-10 w-full  md:shadow-md md:w-2/4 rounded-l-lg">
