@@ -48,13 +48,20 @@ function Table({ bookingStatus }) {
           });
         }
       } catch (error) {
-        console.log(error);
+        toast.error(error.response?.data?.error.message, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         setLoading(false);
       }
     }
   };
 
-  console.log(bookings);
 
   const columns = [
     bookingStatus === "active" && {
@@ -78,7 +85,7 @@ function Table({ bookingStatus }) {
     {
       name: "Type",
       selector: (row) => row.type,
-      grow:2
+      grow:3
     },
     {
       name: "Estimated Charge",
@@ -86,9 +93,9 @@ function Table({ bookingStatus }) {
       grow: 4,
     },
 
-    bookingStatus === "pending" && {
-      name: "Assign Expert",
-      grow: 3,
+    ( bookingStatus==='pending' || bookingStatus==='active' ) && {
+      name: bookingStatus==='pending'? "Assign Expert": "Change Expert",
+      grow: 4,
 
       cell: (row) => (
         <select
@@ -98,7 +105,7 @@ function Table({ bookingStatus }) {
           value={expert}
           onChange={(e) => setExpert(e.target.value)}
         >
-          <option value="">Select an expert</option>
+          <option value="">{bookingStatus==='active'? row.expert[0]?.name :'Select an expert'}</option>
           {experts?.map((expert) => {
             return (
               !expert?.isBlocked &&
@@ -116,14 +123,14 @@ function Table({ bookingStatus }) {
     bookingStatus === "active" && {
       name: "Total",
       selector: (row) => <span>₹ {row.totalCharge}</span> ,
-      grow: 2,
+      grow: 3,
     },
     bookingStatus==='active' &&{
       name: "Payment",
       selector: (row) => <span>{row.payment ?'completed':'pending'}</span>,
       grow: 2,
     },
-    bookingStatus==='pending' &&
+  ( bookingStatus==='pending' || bookingStatus==='active' )&&
      {
       name: null,
       cell: (row) => (
@@ -157,7 +164,6 @@ function Table({ bookingStatus }) {
     );
   });
 
-  console.log(data)
 
   const customStyles = {
     width: "750px",

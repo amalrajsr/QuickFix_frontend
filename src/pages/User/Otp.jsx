@@ -10,7 +10,7 @@ import axios from "../../config/axios";
 import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
-import { registerOtpApi } from "../../apis/user";
+import { registerOtpApi, resendOtpApi } from "../../apis/user";
 function Otp() {
   const location=useLocation()
   const user=location.state
@@ -18,6 +18,7 @@ function Otp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [resend,setResend]=useState(false)
   const {
     register,
     handleSubmit,
@@ -52,27 +53,30 @@ function Otp() {
     }
   };
 
-  const resendOtp = async () => {
-    setLoading(true);
-    console.log("resend");
-    try {
-    await axios.get("/user/resend-otp");
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-      toast.error(error.response?.data?.error.message, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
+  const resendOtp=async()=>{
 
-        progress: undefined,
-        theme: "light",
-      });
+    try{
+      setResend(true)
+      const {data}= await resendOtpApi(user)
+       if(data.success){
+        toast.success(`new otp has send to ${user.mobile}`, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+       }
+       setTimeout(()=>{
+        setResend(false)
+       },15000)
+    }catch(error){
+      console.log(error)
     }
-  };
+   
+      }
   return  token? (<Navigate to={'/'}/>):(
     <>
       <div className="my-10  flex items-center justify-center p-20">
@@ -106,7 +110,8 @@ function Otp() {
             </div>
           </form>
           <button
-            className=" font-bold text-center mt-3 text-bold"
+          disabled={resend}
+            className={`${resend?'text-gray-400':'text-dark'} font-bold text-center mt-3 text-bold`}
             onClick={resendOtp}
           >
             Resend OTP

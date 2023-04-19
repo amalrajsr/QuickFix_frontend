@@ -13,9 +13,7 @@ function adminRoute() {
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route
-          element={<ProtectedRoute type={"admin"} redirect={"/admin/login"} />}
-        >
+        <Route element={<ProtectedRoute type={"admin"} redirect={"/admin/login"} />}>
           <Route path="/" element={<AdminLayout />}>
             <Route path="/users" element={<UserManagement />} />
             <Route path="/services" element={<ServiceMangement />} />
@@ -23,7 +21,7 @@ function adminRoute() {
             <Route path="/bookings" element={<BookingManagement />} />
             <Route path="/experts" element={<ExpetManagement />} />
           </Route>
-            <Route path={"*"} element={<h1>not found</h1>} />
+          <Route path={"*"} element={<h1>not found</h1>} />
         </Route>
       </Routes>
     </>

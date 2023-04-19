@@ -64,14 +64,8 @@ function Register() {
               <div className='mt-6'>{loading ?<button disabled className='bg-dark rounded-lg hover:bg-gray-800 text-white py-2  px-6'><ClipLoader color="#ffff"  size={20} /></button>: <Button>Register</Button>} </div>
             </form>
             <div className='md:hidden'>
-              <h3 className='text-lg text-dark text-center'>Want to become our Expert ?</h3>
-              <h5 className='text-md text-center mt-1 font-bold'>Register here</h5>
-            </div>
-          </div>
-          <div className='bg-[#fdfcfc] hidden md:flex md:justify-center items-center	 shadow-lg 	  w-2/4 rounded-r-lg  '>
-            <div>
-              <h3 className='text-2xl mt-2 text-dark'>Want to become our Expert ?</h3>
-              <h5 className='text-md text-center mt-1 font-bold'>Register here</h5>
+              {/* <h3 className='text-lg text-dark text-center'>Want to become our Expert ?</h3>
+              <h5 className='text-md text-center mt-1 font-bold'>Register here</h5> */}
             </div>
           </div>
         </div>

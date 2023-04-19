@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   cancelBooking,
   paymentApi,
@@ -13,6 +13,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
   const user = useSelector((state) => state.user.value);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
   const handleCancel = (id) => {
     setLoading(true);
     cancelBooking(id)
@@ -85,6 +86,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
               razorpayOrderId: response.razorpay_order_id,
               razorpaySignature: response.razorpay_signature,
               bookingId: booking?._id,
+              service:booking?.service
             };
 
             try{

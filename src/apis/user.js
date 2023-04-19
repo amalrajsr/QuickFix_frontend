@@ -26,7 +26,11 @@ export const loginApi= (user)=>axios.post('user/login',user)
 
 export const loginOtpApi=(user)=>axios.post('user/verify-login-otp',user)
 
+export const resendOtpApi=(user)=>axios.post('user/resend-otp',user)
+
 export const fetchServiceApi= ()=>axios.get('user/services')
+
+export const trendingServicesApi=()=>axios.get('user/trending-services')
 
 // booking
 export const addBookingApi=(booking)=> axios.post('user/bookings',booking,getToken('raw'))

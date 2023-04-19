@@ -9,15 +9,16 @@ import "react-toastify/dist/ReactToastify.css"
 import { useDispatch } from 'react-redux'
 import { addUser } from '../../store/slices/userSlice'
 import {  Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { loginApi,loginOtpApi } from '../../apis/user'
+import { loginApi,loginOtpApi, resendOtpApi } from '../../apis/user'
 function Login() {
   const token=localStorage.getItem('user')
    const [otp,setOtp]=useState(false)
+   const [resend,setResend]=useState(false)
    const [loading,setLoading]=useState(false)
    const dispatch=useDispatch()
    const navigate=useNavigate()
    const location=useLocation()
-
+   const [user,setUser]=useState({})
    // cheking if any token expired message is passed thorugh useNavigate
    useEffect(()=>{
     if(location.state?.tokenExpired){
@@ -29,11 +30,13 @@ function Login() {
         draggable: true,
         progress: undefined,
         theme: "light",
+        toastId: '007'
       });
      }
    },[])
    
   
+   // changing schema based on condition
    const schema= otp?otpSchema:userLoginSchema
 
    // from validation using useFrom and yup
@@ -43,6 +46,7 @@ function Login() {
 
 
   const onHandleSubmit= async(userData)=>{
+    setUser(userData)
     setLoading(true)
     if(!userData.otp){
       try{
@@ -91,10 +95,35 @@ function Login() {
    
   }
   }
+
+  const resendOtp=async()=>{
+
+    try{
+      setResend(true)
+      const {data}= await resendOtpApi(user)
+       if(data.success){
+        toast.success(`new otp has send to ${user.mobile}`, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+       }
+       setTimeout(()=>{
+        setResend(false)
+       },15000)
+    }catch(error){
+      console.log(error)
+    }
+   
+      }
   return token? (<Navigate to={'/'}/>): (
     
     <>
-    <div className=' mt-20 mb-5  flex items-center justify-center p-10'>
+    <div className=' mt-32  mb-10  flex items-center justify-center '>
         <div className='bg-light h-full py-5 md:p-10 md:w-[375px] md:shadow-md  rounded-l-lg'>
           <h3 className='font-bold text-3xl text-center mt-5 my-2 '>Login here</h3>
           <form onSubmit={handleSubmit(onHandleSubmit)} className='my-auto mx-auto text-center '>
@@ -103,6 +132,7 @@ function Login() {
             <p className='text-slate-400'>{errors.mobile?.message}</p>
             <div className='mt-6'>{loading ?<button disabled className='bg-dark rounded-lg hover:bg-gray-800 text-white py-2  px-6'><ClipLoader color="#ffff"  size={20} /></button>: <Button>{otp ?'Verify OTP':'Send OTP'}</Button>} </div>
           </form>
+        {otp && <div className='mt-6'><button disabled={resend} onClick={resendOtp} className={`${resend ?'text-gray-400':'text-dark' } font-bold text-center block mx-auto `}>resend OTP</button></div> }
         </div>
     </div>
   
