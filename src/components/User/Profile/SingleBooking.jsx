@@ -1,34 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   cancelBooking,
+  fetchReviewApi,
   paymentApi,
   paymentSuccessApi,
 } from "../../../apis/user";
-import { toast } from "react-toastify";
+import fireToast from "../../../utils/fireToast";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useSelector } from "react-redux";
+import Modal from "../../UI/Modal";
+import PastBooking from "./PastBooking";
+import Review from "./Review";
+import confirmToast from "../../../utils/confirmToast";
 
 function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
   const user = useSelector((state) => state.user.value);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+  const [open, setOpen] = useState(false);
+  const [reviewModal, setReviewModal] = useState(false);
+  const [review, setReview] = useState({exist:false,message:'',id:null});
   const handleCancel = (id) => {
     setLoading(true);
     cancelBooking(id)
       .then(({ data }) => {
         setLoading(false);
         if (data.success) {
-          toast.success("booking cancelled", {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          fireToast("success", "booking cancelled");
           setFetchBooking(!fetchBooking);
         }
       })
@@ -38,20 +37,12 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
           navigate("/");
         }
         setLoading(false);
-        toast.error(error.response?.data?.error.message, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        fireToast("error", error.response?.data?.error.message);
       });
   };
 
   // razorpay payment
- async function loadScript(src) {
+  async function loadScript(src) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
       script.src = src;
@@ -66,6 +57,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
   }
 
   const handlePayment = async () => {
+
     try {
       await loadScript("https://checkout.razorpay.com/v1/checkout.js");
 
@@ -86,17 +78,15 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
               razorpayOrderId: response.razorpay_order_id,
               razorpaySignature: response.razorpay_signature,
               bookingId: booking?._id,
-              service:booking?.service
+              service: booking?.service,
             };
 
-            try{
-            const result = await paymentSuccessApi(paymentData);
-            if (result.data.success) {
-              setFetchBooking(!fetchBooking);
-            }
-          }catch(error){
-          }
-
+            try {
+              const result = await paymentSuccessApi(paymentData);
+              if (result.data.success) {
+                setFetchBooking(!fetchBooking);
+              }
+            } catch (error) {}
           },
           prefill: {
             name: user?.name,
@@ -107,29 +97,59 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
 
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
-      } catch (error) {
-
-      }
+      } catch (error) {}
     } catch (error) {
-     console.log(error)
+      console.log(error);
     }
   };
-  
 
+  // for chekcing whether user has added review or not
+  useEffect(() => {
+    fetchReviewApi(booking?._id).then(({ data }) => {
+      console.log(data)
+      if (data.success && data.result) {
+        setReview({exist:true,message:data.result.review,id:data.result._id});
+      }
+    })
+  }, []);
   return booking.status === "completed" ? (
-    <div key={booking?._id} className="w-full  mt-4 ">
-      <div className="  bg-white border-[1px]  border-slate-300 shadow-lg rounded-lg mt-2 mx-6">
-        <div className="flex justify-between my-3 mx-4">
-          <span className="text-lightgray ">service: {booking?.service}</span>
-          <button className="text-white h-[30px] px-2 font-medium bg-dark rounded-lg border-[2px] border-light">
-            Add review
-          </button>
-          <button className="text-white h-[30px] px-2 font-medium bg-dark rounded-lg border-[2px] border-light">
-            View Detail
-          </button>
+    <>
+      <div key={booking?._id} className="w-full  mt-4 ">
+        <div className="  bg-white border-[1px]  border-slate-300 shadow-lg rounded-lg mt-2 mx-6">
+          <div className="flex justify-between my-3 mx-4">
+            <span className="text-lightgray ">service: {booking?.service}</span>
+            <button
+              onClick={() => setReviewModal(true)}
+              className="text-white h-[30px] px-2 font-medium bg-dark rounded-lg border-[2px] border-light"
+            >
+            {review.exist? 'View review': '  Add review'}
+            </button>
+            <button
+              onClick={() => setOpen(true)}
+              className="text-white h-[30px] px-2 font-medium bg-dark rounded-lg border-[2px] border-light"
+            >
+              View Detail
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      <Modal
+        heading={"Booking Detail"}
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <PastBooking booking={booking} />
+      </Modal>
+
+      <Modal
+        heading={"Your Feedback Matters, Review And Help Us Improve"}
+        open={reviewModal}
+        onClose={() => setReviewModal(false)}
+      >
+        <Review fetchBooking={fetchBooking} setFetchBooking={setFetchBooking} reviewMessage={review.message} reviewId={review.id} booking={booking} closeModal={setReviewModal} />
+      </Modal>
+    </>
   ) : (
     <div
       key={booking?._id}
@@ -141,8 +161,8 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
           <button
             onClick={() =>
               !loading && booking.totalCharge
-                 ? handlePayment()
-                : handleCancel(booking?._id)
+                ? handlePayment()
+                : confirmToast(()=>handleCancel(booking?._id)) 
             }
             className="text-white h-[30px] px-2 font-medium bg-dark rounded-lg border-[2px] border-light"
           >

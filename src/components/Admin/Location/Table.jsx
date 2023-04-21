@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { blockLocationApi, editLocationApi, fetchLocationApi } from "../../../apis/admin";
 import { addlocations } from "../../../store/slices/locationSlice";
 import { useDispatch } from "react-redux";
+import confirmToast from "../../../utils/confirmToast";
 function Table({fetchlocation, setfetchlocation}) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); 
@@ -127,7 +128,7 @@ function Table({fetchlocation, setfetchlocation}) {
           className={`${
             row.isBlocked ? "bg-green-400" : "bg-red-500"
           } rounded-lg text-white px-3 py-1`}
-          onClick={() => blockLocation(row.id)}
+          onClick={() =>confirmToast(()=>blockLocation(row.id)) }
         >
           {row.isBlocked ? "unlist" : "list"}
         </button>

@@ -1,6 +1,6 @@
 import axios from "../config/axios"
 
- const getToken = (type) => {
+ const getToken = (type,queryData) => {
     if (type === "form") {
       return {
         headers: {
@@ -8,11 +8,18 @@ import axios from "../config/axios"
           "Content-Type": "multipart/form-data",
         },
       };
-    } else {
+    } else if(type==='raw') {
       return {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("user")}`,
         },
+      };
+    }else{
+      return {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("user")}`,
+        },
+        params:queryData
       };
     }
   };
@@ -49,4 +56,13 @@ export const paymentSuccessApi=(data)=>axios.post('user/payment/success',data,ge
 
 //fetch no.of expert per service
 export const fetchExpertsByService=(serviceId,name)=>axios.get(`user/services/${serviceId}&${name}`,getToken('raw'))
+
+//review
+export const addReviewApi=(review)=>axios.post('user/reviews',review,getToken('raw'))
+export const fetchReviewApi=(bookingID)=>axios.get(`user/reviews/${bookingID}`,getToken('raw'))
+export const updateReviewApi=(reviewID,review)=>axios.patch(`user/reviews/${reviewID}`,{review:review},getToken('raw'))
+export const deleteReviewApi=(reviewID)=>axios.delete(`user/reviews/${reviewID}`,getToken('raw'))
+export const fetchReviewsByServiceApi=(serviceId)=>axios.get(`user/reviews`,getToken('query',{serviceId}))
+
+
 

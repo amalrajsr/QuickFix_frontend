@@ -1,5 +1,5 @@
 import React from "react";
-
+import ClipLoader from "react-spinners/ClipLoader";
 function Button(props) {
 
   return props.booking ? (
@@ -20,7 +20,7 @@ function Button(props) {
           props.customeStyle || ""
         } py-2 bg-dark px-6`}
       >
-        {props.children}
+       {props?.loading ? <ClipLoader color="#ffff" size={20} />: props.children}
       </button>
     </>
   );

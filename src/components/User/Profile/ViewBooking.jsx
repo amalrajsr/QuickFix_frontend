@@ -12,7 +12,7 @@ function ViewBooking({expert}) {
   const navigate = useNavigate();
   const role = useSelector((state) =>expert?state.expert.value: state.user.value);
   const [bookings, setBookings] = useState([]);
-  const [bookingStatus, setbookingStatus] = useState("active");
+  const [bookingStatus, setbookingStatus] = useState("pending");
   const [fetchBooking,setFetchBooking]=useState(false)
   useEffect(() => {
     if(!expert){

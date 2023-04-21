@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
                 draggable: true,
                 progress: undefined,
                 theme: "light",
+                
               })
           )
           

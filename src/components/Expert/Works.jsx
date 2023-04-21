@@ -82,6 +82,10 @@ function Works({ booking,fetchBooking,setFetchBooking }) {
           )}
         </span>
       </div>
+      <div className="mx-3 my-2 flex justify-end">
+      <button className="break-normal text-white bg-dark rounded-md px-2 inline-flex gap-2  text-right">Cash in hand</button>
+
+      </div>
     </div>
   );
 }

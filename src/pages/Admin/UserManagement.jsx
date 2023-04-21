@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { blockUserApi, getusersApi } from "../../apis/admin";
+import confirmToast from "../../utils/confirmToast";
 function UserManagement() {
   const [users, setUsers] = useState([]);
   const [blockStatus, setBlockStatus] = useState(false);
@@ -68,7 +69,7 @@ console.log('sdfs');
                       className={`${
                         user.isBlocked ? "bg-green-400" : "bg-red-500"
                       } rounded-lg text-white px-3 py-1`}
-                      onClick={() => blockUblockUser(user._id)}
+                      onClick={() => confirmToast(()=> blockUblockUser(user._id))}
                     >
                       {user.isBlocked ? "unblock" : "block"}
                     </button>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import { useDispatch } from "react-redux";
 import { addExperts } from "../../../store/slices/expertsSlice";
+import confirmToast from "../../../utils/confirmToast";
 
 function Table({fetchExperts}) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function Table({fetchExperts}) {
     fetchExpertApi()
       .then(({ data }) => {
         setExperts(data.result);
-        dispatch(addExperts(data.result))
+        // dispatch(addExperts(data.result))
       })
       .catch((error) => {
         console.log(error);
@@ -98,7 +99,7 @@ function Table({fetchExperts}) {
           className={`${
             row.isBlocked ? "bg-green-400" : "bg-red-500"
           } rounded-lg text-white px-3 py-1`}
-          onClick={() => blockExpert(row.id)}
+          onClick={() => confirmToast(()=>blockExpert(row.id))}
         >
           {row.isBlocked ? "unblock" : "block"}
         </button>

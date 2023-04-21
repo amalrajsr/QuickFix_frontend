@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { addSerivces } from "../../../store/slices/serviceSlice";
 import { useNavigate } from "react-router-dom";
 import ServiceCharge from "./ServiceCharge";
+import confirmToast from "../../../utils/confirmToast";
 function Table() {
 
   const dispatch=useDispatch()
@@ -105,7 +106,7 @@ const handleEdit=(singleService)=>{
           className={`${
             row.isDeleted ? "bg-green-400" : "bg-red-500"
           } rounded-lg text-white px-3 py-1`}
-          onClick={() => blockService(row.id)}
+          onClick={() =>confirmToast(()=>blockService(row.id)) }
         >
           {row.isDeleted ? "unlist" : "list"}
         </button>
