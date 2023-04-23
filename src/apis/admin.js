@@ -7,12 +7,16 @@ import axios from "../config/axios";
         Authorization: `Bearer ${localStorage.getItem("admin")}`,
         "Content-Type": "multipart/form-data",
       },
+      params:{role:'admin'}
+
     };
   } else {
     return {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("admin")}`,
       },
+      params:{role:'admin'}
+
     };
   }
 };
@@ -53,3 +57,11 @@ export const assignExpertApi=(bookingId,expertId)=>axios.patch(`/admin/bookings/
 export const fetchExpertApi=()=>axios.get('/admin/experts',getToken('raw'))
 export const blockUnblockExpertApi=(id)=>axios.patch(`/admin/experts/${id}`,{},getToken("raw"))
 export const addExpert=(expert)=>axios.post('/admin/experts',expert,getToken('raw'))
+
+//review
+export const fetchReviewsApi=()=>axios.get('/admin/reviews',getToken('raw'))
+export const deleteReviewApi = (id) => axios.delete(`/admin/reviews/${id}`, getToken("raw"));
+
+//dashboard
+export const fetchDashboardDetails=()=>axios.get('/admin/dashboardDetails',getToken("raw"))
+export const fetchCount=()=>axios.get('/admin/getCount',getToken("raw"))

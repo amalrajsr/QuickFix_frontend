@@ -7,18 +7,19 @@ import axios from "../config/axios"
           Authorization: `Bearer ${localStorage.getItem("user")}`,
           "Content-Type": "multipart/form-data",
         },
+        params:{role:'user'}
+
       };
     } else if(type==='raw') {
       return {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("user")}`,
         },
+        params:{role:'user'}
       };
     }else{
       return {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("user")}`,
-        },
+
         params:queryData
       };
     }

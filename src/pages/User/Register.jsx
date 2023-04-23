@@ -48,6 +48,8 @@ function Register() {
     }
 
   }
+  const banner= "https://res.cloudinary.com/dsw9tifez/image/upload/v1680704435/hero_landing-fdeb7ef8f1a4361ec76f75d007d79546_o0hv9r.jpg";
+
   return token? (<Navigate to={'/'}/>): (
     <>
       <div className=' mt-20 mb-5  flex items-center justify-center p-10'>
@@ -68,6 +70,10 @@ function Register() {
               <h5 className='text-md text-center mt-1 font-bold'>Register here</h5> */}
             </div>
           </div>
+          <div
+          style={{ backgroundImage: `url(${banner})`, backgroundSize: "cover" }}
+          className="bg-[#fdfcfc] hidden md:flex md:justify-center items-center	 shadow-lg 	  w-2/4 rounded-r-lg  "
+        ></div>
         </div>
       </div>
     

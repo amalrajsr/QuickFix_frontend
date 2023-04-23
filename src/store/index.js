@@ -6,6 +6,7 @@ import { serviceReducer } from "./slices/serviceSlice";
 import { locationReducer } from "./slices/locationSlice";
 import { expertReducer } from "./slices/expertSlice";
 import { expertsReducer } from "./slices/expertsSlice";
+
 const persistConfig={
     key:'root',
     version:1,

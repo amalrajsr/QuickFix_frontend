@@ -109,7 +109,6 @@ function Table({fetchExperts}) {
     },
 
   ];
-
   const data = experts?.map((expert) => {
     return {
       expert: expert,
@@ -118,7 +117,7 @@ function Table({fetchExperts}) {
       email: expert?.email,
       mobile: expert?.mobile,
       service:expert?.serviceDetails[0].service,
-      city:expert?.city,
+      city:expert?.city[0].place,
       status: expert?.status,
       isBlocked: expert.isBlocked,
     };

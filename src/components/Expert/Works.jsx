@@ -1,34 +1,42 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { ClipLoader } from "react-spinners";
 import { BsFillTelephoneForwardFill } from "react-icons/bs";
-import { updatePaymentApi } from "../../apis/expert";
-function Works({ booking,fetchBooking,setFetchBooking }) {
+import { updatePaymentApi, updatePaymentStatusApi } from "../../apis/expert";
+import confirmToast from "../../utils/confirmToast";
+import fireToast from "../../utils/fireToast";
+function Works({ booking, fetchBooking, setFetchBooking }) {
   const [loading, setLoading] = useState(false);
   const [payment, setPayment] = useState();
-  const updatePayment = async(bookinId) => {
-    try{
-
-      const {data}=await  updatePaymentApi(bookinId,{totalCharge:+payment})
-      if(data.success){
-        toast.success("updated successfully", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        setFetchBooking(!fetchBooking)
-
+  const updatePayment = async (bookinId) => {
+    try {
+      const { data } = await updatePaymentApi(bookinId, {
+        totalCharge: +payment,
+      });
+      if (data.success) {
+        fireToast("success", "updated successfully");
+        setFetchBooking(!fetchBooking);
       }
-
-    }catch(error){
-      console.log(error)
+    } catch (error) {
+      fireToast("error", error.response?.data?.error.message);
     }
   };
 
+  // function to update payment status
+  const updatePaymentStatus = async () => {
+    try {
+      setLoading(true);
+      const { data } = await updatePaymentStatusApi(booking?._id);
+      setLoading(false);
+
+      if (data.success) {
+        fireToast("success", "updated successfully");
+        setFetchBooking(!fetchBooking);
+      }
+    } catch (error) {
+      setLoading(false);
+      fireToast("error", error.response?.data?.error.message);
+    }
+  };
   return (
     <div
       key={booking?._id}
@@ -83,8 +91,14 @@ function Works({ booking,fetchBooking,setFetchBooking }) {
         </span>
       </div>
       <div className="mx-3 my-2 flex justify-end">
-      <button className="break-normal text-white bg-dark rounded-md px-2 inline-flex gap-2  text-right">Cash in hand</button>
-
+        {booking.status !== "completed" && (
+          <button
+            onClick={() => confirmToast(() => updatePaymentStatus())}
+            className="break-normal text-white bg-dark rounded-md px-2 inline-flex gap-2  text-right"
+          >
+            Cash in hand
+          </button>
+        )}
       </div>
     </div>
   );

@@ -6,19 +6,18 @@ import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { expertSchema } from "../../validations/Validation";
 import Button from "../UI/Button";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { expertLoginApi } from "../../apis/expert";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"
+import "react-toastify/dist/ReactToastify.css";
 import { addExpert } from "../../store/slices/expertSlice";
+import fireToast from "../../utils/fireToast";
+import {HiArrowLongRight} from 'react-icons/hi2'
 function ExpertLogin() {
-  const token= localStorage.getItem('expert')
+  const token = localStorage.getItem("expert");
   const navigate = useNavigate();
-  const dispatch=useDispatch()
-  const [showPass,setshowPass]=useState(false)
+  const dispatch = useDispatch();
+  const [showPass, setshowPass] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const services = useSelector((state) => state.service.value); // fetching services from redux
 
   const {
     register,
@@ -28,39 +27,32 @@ function ExpertLogin() {
     resolver: yupResolver(expertSchema),
   });
 
-  const onHandleSubmit = async(expert) => {
-    setLoading(true)
-    try{
-
-      const {data}= await expertLoginApi(expert)
-       setLoading(false)
-       console.log(data)
-      if(data.token && data.expert){
-        localStorage.setItem('expert',data.token)
-        dispatch(addExpert(data.expert))
-        navigate('/expert/dashboard')
+  const onHandleSubmit = async (expert) => {
+    setLoading(true);
+    try {
+      const { data } = await expertLoginApi(expert);
+      setLoading(false);
+      console.log(data);
+      if (data.token && data.expert) {
+        localStorage.setItem("expert", data.token);
+        dispatch(addExpert(data.expert));
+        navigate("/expert/profile");
       }
-    }catch(error){
-      setLoading(false)
-      toast.error(error.response?.data?.error.message, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+    } catch (error) {
+      setLoading(false);
+      fireToast("error", error.response?.data?.error.message);
     }
   };
   const banner =
     "https://res.cloudinary.com/dsw9tifez/image/upload/v1680704435/hero_landing-fdeb7ef8f1a4361ec76f75d007d79546_o0hv9r.jpg";
-    return token? (<Navigate to={'/expert/dashboard'}/>): (
+  return token ? (
+    <Navigate to={"/expert/profile"} />
+  ) : (
     <div className=" mt-20 mb-5  flex items-center  justify-center p-10">
       <div className="border-[1px] rounded-lg  md:h-[400px] border-slate-300 signup-container shadow-md md:shadow-none bg-light flex md:w-[800px]  w-[375px]">
         <div className="bg-white shadow-lg h-full p-10 w-full  md:shadow-md md:w-2/4 rounded-l-lg">
           <h3 className="font-semibold text-2xl text-center mt-2 mb-3 my-2 ">
-           Expert Login
+            Expert Login
           </h3>
           <form
             onSubmit={handleSubmit(onHandleSubmit)}
@@ -81,12 +73,12 @@ function ExpertLogin() {
               />
             </div>
             <p className="text-slate-400">{errors.email?.message}</p>
-            <div >
+            <div>
               <label className="text-start w-full mt-2 block" htmlFor="">
                 Password
               </label>
               <input
-                type={showPass?'text' :'password'}
+                type={showPass ? "text" : "password"}
                 name={"password"}
                 placeholder={"password"}
                 className={
@@ -95,13 +87,20 @@ function ExpertLogin() {
                 {...register("password")}
               />
             </div>
-            <div className=" mt-1 flex gap-6">
-             <div ><input onChange={()=>setshowPass(!showPass)} type="checkbox" className="ml-1"/><span className="hidden sm:inline">show</span> </div> 
-            <p className="text-slate-400">{errors.password?.message}</p>
-
+            <div className="mt-1  flex gap-6">
+              <div>
+                <input
+                  onChange={() => setshowPass(!showPass)}
+                  type="checkbox"
+                  className="ml-1"
+                />
+                <span className="hidden sm:inline">show</span>{" "}
+              </div>
+              <p className="text-slate-400">{errors.password?.message}</p>
+              
             </div>
 
-            <div className="mt-6">
+            <div className="mt-3">
               {loading ? (
                 <button
                   disabled
@@ -110,8 +109,12 @@ function ExpertLogin() {
                   <ClipLoader color="#ffff" size={20} />
                 </button>
               ) : (
-                <Button customeStyle={'bg-expertblue'}>Login</Button>
+                <Button customeStyle={"bg-expertblue"}>Login</Button>
               )}
+
+<p onClick={(()=>navigate('/expert/forgot-password'))} className="flex justify-center mt-3 cursor-pointer text-dark">
+                <HiArrowLongRight className="mt-1 mr-1 " /> Forgot Password
+              </p>
             </div>
           </form>
         </div>

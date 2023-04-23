@@ -1,5 +1,26 @@
 import * as yup from "yup";
 
+export const forgotPasswordSchema=yup.object().shape({
+  NewPass:yup.string().min(6, 'atleast 6 characters needed').matches(/^\S*$/, 'Password cannot contain spaces'),
+  ReNewPass:yup.string().matches(/^\S*$/, 'Password cannot contain spaces').required('field cannot be empty')
+
+})
+
+export const passwordSchema=yup.object().shape({
+  currentPass:yup.string().matches(/^\S*$/, 'Password cannot contain spaces').required('field cannot be empty'),
+  NewPass:yup.string().min(6, 'atleast 6 characters needed').matches(/^\S*$/, 'Password cannot contain spaces'),
+  ReNewPass:yup.string().matches(/^\S*$/, 'Password cannot contain spaces').required('field cannot be empty')
+
+})
+
+export const expertForgotPasschema=yup.object().shape({
+  mobile: yup
+    .string()
+    .typeError("mobile is required")
+    .required('mobile is required')
+    .matches(/^\d{10}$/, "mobile number is not valid")
+});
+
 export const expertSchema=yup.object().shape({
 
     email: yup.string().email().required('please provide email').matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,'invalid email'),

@@ -14,18 +14,21 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../../UI/Modal";
 import { updateExpertProfileApi } from "../../../apis/expert";
 import { updateExpert } from "../../../store/slices/expertSlice";
+import fireToast from "../../../utils/fireToast";
+import {HiArrowLongRight} from 'react-icons/hi2'
+import ResetPassword from "../../Expert/ResetPassword";
 function Profile({ expert }) {
   const navigate = useNavigate();
   // state to handle modal
   const [open, setOpen] = useState(false);
-  const [isActive, setIsActive] = useState(true); // state to handle expert status
+  const [passwordModal,setpasswordModal]=useState(false)
+
   const onCloseModal = () => {
     setProfileImage(null);
     setOpen(false);
     setError(false);
   };
-  const expertImage =
-    "https://res.cloudinary.com/dsw9tifez/image/upload/v1680511516/quickfix/static/profile_eil3c6.jpg";
+  const expertImage = "https://res.cloudinary.com/dsw9tifez/image/upload/v1680511516/quickfix/static/profile_eil3c6.jpg";
 
   // dispatch for updating redux
   const dispatch = useDispatch();
@@ -39,7 +42,7 @@ function Profile({ expert }) {
   );
 
   useEffect(() => {
-    setUser({ name: userData.name }); //mobile: data.mobile
+    setUser({ name: userData?.name }); //mobile: data.mobile
   }, []);
 
   const handleSubmit = (e) => {
@@ -55,15 +58,8 @@ function Profile({ expert }) {
           if (data.success) {
           
            expert? dispatch(updateExpert(user.name)): dispatch(updateUser(user.name));
-            toast.success("successfully updated", {
-              position: "top-right",
-              autoClose: 1000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+           fireToast('success',"successfully updated")
+         
           }
         } catch (error) {
           if (error.response?.data?.error?.tokenExpired) {
@@ -73,27 +69,11 @@ function Profile({ expert }) {
               state: { tokenExpired: true },
             });
           }
-          toast.error(error.response?.data?.error.message, {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          fireToast('error',error.response?.data?.error.message)
         }
       })
       .catch((error) => {
-        toast.error(error?.message, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        fireToast('error',error?.message)
         setLoading(false);
       });
   };
@@ -120,20 +100,12 @@ function Profile({ expert }) {
         .then(({ data }) => {
           setLoading(false);
           onCloseModal();
-          toast.success("successfully updated", {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          fireToast('success','successfully updated')
           dispatch(updateImage(data.image));
           setProfileImage(null);
         })
         .catch((error) => {
-          console.log(error);
+       
           if (error.response?.data?.error?.tokenExpired) {
             localStorage.removeItem("user");
             dispatch(removeUser());
@@ -142,21 +114,13 @@ function Profile({ expert }) {
             });
           }
           setLoading(false);
-          toast.error(error.response?.data?.error.message, {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          fireToast('error',error.response?.data?.error.message)
+
         });
     } else {
       setError({ status: true, message: "please select an image" });
     }
   };
-  console.log(userData)
   return (
     <>
       <div
@@ -178,18 +142,18 @@ function Profile({ expert }) {
                   onClick={onOpenModal}
                 />
                 <h1 className="text-center mt-3 font-medium text-lg">
-                  Welcome Back, {userData.name}
+                  Welcome Back, {userData?.name}
                 </h1>
                 {expert ? (
                   <>
                     {" "}
                     <h1 className="text-center mt-2 font-medium text-md">
-                      City: {userData.city}
+                      City: {userData?.city}
                     </h1>
                     <h1 className="text-center mt-2 font-medium text-md">
-                      Service: {userData.service}{" "}
+                      Service: {userData?.service}{" "}
                       <span className="text-gray-500">|</span> Total works:
-                      {userData.works.length}
+                      {userData?.works?.length}
                     </h1>
                   </>
                 ) : (
@@ -251,20 +215,21 @@ function Profile({ expert }) {
                       />
                     </div>
                   )}
-                  {loading ? (
-                    <span className="px-4  text-white bg-dark rounded shadow-xl">
-                      <ClipLoader color="#ffff" size={20} />
-                    </span>
-                  ) : (
-                    <Button customeStyle={`h-1/2 my-6`}>update</Button>
-                  )}
+                
+                    <Button loading={loading} customeStyle={`my-2 mt-3`}>update</Button>
+                
+                {expert && <p onClick={()=>setpasswordModal(true)}  className="flex justify-end cursor-pointer text-slate-500" > <HiArrowLongRight className="mt-1 mr-1 "/> Reset Password</p>}
                 </form>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Modal heading={'Reset Password'} open={passwordModal} onClose={()=>setpasswordModal(false)}>
+          <ResetPassword setpasswordModal={setpasswordModal}/>
+        </Modal>
       {!expert && (
+        <>  
         <Modal open={open} onClose={loading ? onOpenModal : onCloseModal}>
           <div class="flex justify-center mt-8 w-full h-full">
             <div class="rounded-lg shadow-xl bg-gray-50 ">
@@ -332,6 +297,8 @@ function Profile({ expert }) {
             </div>
           </div>
         </Modal>
+        
+        </>
       )}
     </>
   );

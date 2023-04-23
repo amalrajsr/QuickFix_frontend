@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { assignExpertApi, fetchBookingApi } from "../../../apis/admin";
+import { assignExpertApi, fetchBookingApi, fetchExpertApi } from "../../../apis/admin";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
-import { useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
+import fireToast from "../../../utils/fireToast";
 function Table({ bookingStatus }) {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState(null);
   const [fetchBooking,setFetchBooking]=useState(false)
   const [expert, setExpert] = useState(""); // state to handle expert
+  const [experts,setExperts]=useState([]) // state to store experts 
   const navigate = useNavigate();
-  const experts = useSelector((state) => state.experts.value);
+
+  useEffect(()=>{
+    fetchExpertApi().then(({data})=>{
+      if(data.result){
+        setExperts(data.result)
+      }
+    })
+  },[])
 
   useEffect(() => {
     fetchBookingApi()
@@ -37,26 +44,12 @@ function Table({ bookingStatus }) {
         setLoading(false);
         if (data.success) {
           setFetchBooking(!fetchBooking)
-          toast.success("updated successfully", {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          fireToast('success',"updated successfully")
+         
         }
       } catch (error) {
-        toast.error(error.response?.data?.error.message, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        fireToast('error',error.response?.data?.error.message)
+    
         setLoading(false);
       }
     }
@@ -109,7 +102,7 @@ function Table({ bookingStatus }) {
           {experts?.map((expert) => {
             return (
               !expert?.isBlocked &&
-              expert.serviceDetails[0].service === row.service && (
+              expert.serviceDetails[0].service === row.service && expert.city[0].pincode === row.address?.zipcode && (
                 <option key={expert?._id} id={expert?._id} value={expert?._id}>
                   {expert?.name}
                 </option>
@@ -159,7 +152,8 @@ function Table({ bookingStatus }) {
         _id: booking._id,
         totalCharge: booking?.totalCharge,
         payment: booking?.payment,
-        status:booking.status
+        status:booking.status,
+        
       }
     );
   });

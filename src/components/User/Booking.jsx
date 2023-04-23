@@ -8,7 +8,7 @@ import { addBookingApi } from "../../apis/user";
 import { useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
-
+import fireToast from '../../utils/fireToast'
 function Booking() {
   const userData = useSelector((state) => state.user.value);
   const [loading,setLoading]=useState(false)
@@ -37,6 +37,7 @@ function Booking() {
     }
     fetchLocationApi()
       .then(({ data }) => {
+        console.log(data)
         data.locations.forEach((location) => {
           for (let i in location) {
             if (i === "pincode") {
@@ -212,16 +213,9 @@ function Booking() {
       addBookingApi(booking)
         .then(({data}) => {
           setLoading(false)
+          
           if(data.success){
-            toast.success("booking successfull", {
-              position: "top-right",
-              autoClose: 1000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            fireToast('success',"booking successfull")
             reset()
             setAddress(false)
             setblockSlot({morning:false,afternoon:false,evening:false})

@@ -11,7 +11,7 @@ function Modal(props) {
             X
           </button>
         </div>
-          <h3 className="font-semibold text-center mb-3 text-dark">{props?.heading}</h3>
+          <h3 className="font-semibold text-center mb-3 text-lg text-dark">{props?.heading}</h3>
         {props.children}
       </div>
     </div>

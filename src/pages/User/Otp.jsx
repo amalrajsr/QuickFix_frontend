@@ -11,6 +11,7 @@ import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { registerOtpApi, resendOtpApi } from "../../apis/user";
+import fireToast from "../../utils/fireToast";
 function Otp() {
   const location=useLocation()
   const user=location.state
@@ -40,16 +41,7 @@ function Otp() {
       }
     } catch (error) {
       setLoading(false);
-      toast.error(error.response?.data?.error.message, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-
-        progress: undefined,
-        theme: "light",
-      });
+      fireToast('error',error.response?.data?.error.message)
     }
   };
 
@@ -59,15 +51,7 @@ function Otp() {
       setResend(true)
       const {data}= await resendOtpApi(user)
        if(data.success){
-        toast.success(`new otp has send to ${user.mobile}`, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        fireToast('success',`new otp has send to ${user.mobile}`)
        }
        setTimeout(()=>{
         setResend(false)

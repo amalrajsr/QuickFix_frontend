@@ -6,17 +6,21 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { expertRegisterSchema } from "../../../validations/Validation";
 import { useSelector } from "react-redux";
 import { addExpert } from "../../../apis/admin";
-import { toast } from "react-toastify";
-function AddExpert({fetchExperts,setfetchExperts}) {
+import fireToast from "../../../utils/fireToast";
+import { useNavigate } from "react-router-dom";
+function AddExpert({ fetchExperts, setfetchExperts }) {
+
+  const navigate=useNavigate()
   // state to handle modal
   const [open, setOpen] = useState(false);
   const onCloseModal = () => {
-    reset()
-    setOpen(false)};
+    reset();
+    setOpen(false);
+  };
   const onOpenModal = () => setOpen(true);
   const [loading, setLoading] = useState(false);
   const services = useSelector((state) => state.service.value); // fetching services from redux
-  const locations=useSelector((state) => state.location.value); // fetching locations from redux
+  const locations = useSelector((state) => state.location.value); // fetching locations from redux
   // form validation using useForm
   const {
     register,
@@ -27,44 +31,29 @@ function AddExpert({fetchExperts,setfetchExperts}) {
     resolver: yupResolver(expertRegisterSchema),
   });
 
-  const onHandleSubmit =async (expertData) => {
-    
-    console.log(expertData)
-    setLoading(true)
-    
-    try{
-     const {data}=await addExpert(expertData)
-      setLoading(false)
-      if(data.success && data.result){
-                 onCloseModal()
-                 reset()
-                 setfetchExperts(!fetchExperts)
-          toast.success("Added successfully", {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+  const onHandleSubmit = async (expertData) => {
+    console.log(expertData);
+    setLoading(true);
 
+    try {
+      const { data } = await addExpert(expertData);
+      setLoading(false);
+      if (data.success && data.result) {
+        onCloseModal();
+        reset();
+        setfetchExperts(!fetchExperts);
+        fireToast("success", "Added successfully");
       }
-
-    }catch(error){
-      setLoading(false)
-      toast.error(error.response?.data?.error.message, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });    }
-    
+    } catch (error) {
+      setLoading(false);
+      fireToast("error", error.response?.data?.error.message);
+      console.log(error.response)
+      if(error.response?.data?.error.tokenExpired){
+        localStorage.removeItem('admin')
+        navigate('/admin/login')
+      }
+    }
   };
-console.log(errors)
   return (
     <>
       <button
@@ -76,7 +65,7 @@ console.log(errors)
         add expert
       </button>
 
-      <Modal open={open} onClose={loading?onOpenModal: onCloseModal}>
+      <Modal open={open} onClose={loading ? onOpenModal : onCloseModal}>
         <h3 className="text-center text-2xl">Add expert</h3>
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <div className="flex flex-col mb-3">
@@ -117,13 +106,17 @@ console.log(errors)
               {...register("service")}
               id="service"
               name="service"
-              onChange={(e)=>console.log(e.target.value)}
+              onChange={(e) => console.log(e.target.value)}
               className=" py-2  w-auto mx-2  border-slate-300 focus:outline-slate-300   text-gray-700 bg-white border rounded-md "
             >
               {services.map((service) => {
                 return (
                   !service.isDeleted && (
-                    <option key={service._id} id={service._id} value={service._id}>
+                    <option
+                      key={service._id}
+                      id={service._id}
+                      value={service._id}
+                    >
                       {service.service}
                     </option>
                   )
@@ -144,7 +137,7 @@ console.log(errors)
               {locations.map((location) => {
                 return (
                   !location.isBlocked && (
-                    <option key={location._id} value={location.place}>
+                    <option key={location._id} value={location._id}>
                       {location.place}
                     </option>
                   )
@@ -156,7 +149,6 @@ console.log(errors)
 
           <div className="flex justify-center mt-5">
             <button
-           
               disabled={loading}
               className="bg-black text-white px-5 py-1 rounded-md "
             >

@@ -149,7 +149,7 @@ function ViewService() {
       </div>
 {/* review section */}
 {reviews.length>0 &&
-<section class="text-gray-600 body-font">
+<section class="text-gray-600 body-font rounded-xl">
   <div class="container px-5 mb-10 mx-auto">
     <h1 class="text-3xl font-medium title-font text-dark mb-12 text-center">Customer Stories</h1>
     <div class="flex flex-wrap -m-4">
