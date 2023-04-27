@@ -10,6 +10,7 @@ import BookingManagement from "../pages/Admin/BookingManagement";
 import ExpetManagement from "../pages/Admin/ExpetManagement";
 import ReviewManagement from "../pages/Admin/ReviewManagement";
 import DashboardPage from "../pages/Admin/DashboardPage";
+import ChatPage from "../pages/Admin/ChatPage";
 function adminRoute() {
   return (
     <>
@@ -24,6 +25,7 @@ function adminRoute() {
             <Route path="/bookings" element={<BookingManagement />} />
             <Route path="/experts" element={<ExpetManagement />} />
             <Route path="/reviews" element={<ReviewManagement />} />
+            <Route path="/chat" element={<ChatPage/>} />
           </Route>
           <Route path={"*"} element={<h1>not found</h1>} />
         </Route>

@@ -24,7 +24,7 @@ function TrendingServices() {
         {trending.map((trending) => {
           return (
             <Trending
-              key={trending._id}
+              id={trending._id}
               image={trending?.image}
               title={trending?.service}
             />

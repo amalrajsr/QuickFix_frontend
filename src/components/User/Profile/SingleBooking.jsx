@@ -55,6 +55,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
       document.body.appendChild(script);
     });
   }
+  console.log(process.env.REACT_APP_RAZOR_API_KEY)
 
   const handlePayment = async () => {
 
@@ -106,12 +107,13 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
   // for chekcing whether user has added review or not
   useEffect(() => {
     fetchReviewApi(booking?._id).then(({ data }) => {
-      console.log(data)
+     
       if (data.success && data.result) {
         setReview({exist:true,message:data.result.review,id:data.result._id});
       }
     })
   }, []);
+
   return booking.status === "completed" ? (
     <>
       <div key={booking?._id} className="w-full  mt-4 ">

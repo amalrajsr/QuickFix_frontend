@@ -5,6 +5,7 @@ import DataTable from "react-data-table-component";
 import { useDispatch } from "react-redux";
 import { addExperts } from "../../../store/slices/expertsSlice";
 import confirmToast from "../../../utils/confirmToast";
+import fireToast from "../../../utils/fireToast";
 
 function Table({fetchExperts}) {
   const navigate = useNavigate();
@@ -30,11 +31,15 @@ function Table({fetchExperts}) {
   };
 
   const blockExpert = async (id) => {
+    try{
     const { data } = await blockUnblockExpertApi(id);
 
     if (data.success) {
       getExperts();
     }
+  }catch(error){
+    fireToast('error',error.response?.data?.error?.message)
+  }
   };
 
   const customStyles = {
@@ -68,7 +73,7 @@ function Table({fetchExperts}) {
     {
       name: "email",
       selector: (row) => row.email,
-      grow:3
+      grow:4
     },
     {
       name: "mobile",
@@ -85,12 +90,9 @@ function Table({fetchExperts}) {
     {
       name: "city",
       selector: (row) => row.city,
+      grow:2
      
 
-    },
-    {
-      name: "status",
-      selector: (row) => <span>{row.status ? "online" : "offline"}</span>,
     },
     {
       name: null,
@@ -118,7 +120,6 @@ function Table({fetchExperts}) {
       mobile: expert?.mobile,
       service:expert?.serviceDetails[0].service,
       city:expert?.city[0].place,
-      status: expert?.status,
       isBlocked: expert.isBlocked,
     };
   });

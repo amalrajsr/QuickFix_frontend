@@ -32,7 +32,7 @@ function ExpertLogin() {
     try {
       const { data } = await expertLoginApi(expert);
       setLoading(false);
-      console.log(data);
+     
       if (data.token && data.expert) {
         localStorage.setItem("expert", data.token);
         dispatch(addExpert(data.expert));

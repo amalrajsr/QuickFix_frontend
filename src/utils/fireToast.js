@@ -2,7 +2,8 @@
 import { toast } from "react-toastify";
 
  function fireToast(type,msg) {
-  
+    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+
  switch(type){
     case('error'):{
         return (
@@ -14,6 +15,7 @@ import { toast } from "react-toastify";
                 draggable: true,
                 progress: undefined,
                 theme: "light",
+                toastId:randomNumber
                 
               })
           )
@@ -29,6 +31,8 @@ import { toast } from "react-toastify";
                 draggable: true,
                 progress: undefined,
                 theme: "light",
+                toastId:randomNumber
+
               })
           )
     }
@@ -42,6 +46,8 @@ import { toast } from "react-toastify";
                 draggable: true,
                 progress: undefined,
                 theme: "light",
+                toastId:randomNumber
+
               })
           )
     }

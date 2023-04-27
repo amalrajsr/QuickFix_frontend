@@ -49,6 +49,20 @@ export const expertRegisterSchema=yup.object().shape({
 
 })
 
+
+// profile update schema for user and expert
+export const profileUpdateSchema= yup.object().shape({
+  name: yup
+    .string()
+    .trim()
+    .required("Please provide fullname")
+    .test(
+      "no-spaces",
+      "Name should not be empty spaces",
+      (value) => value.trim().length > 0
+    )
+    .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"), 
+});
 export const userSchema = yup.object().shape({
   name: yup
     .string()
@@ -60,11 +74,11 @@ export const userSchema = yup.object().shape({
       (value) => value.trim().length > 0
     )
     .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"), 
-    //  mobile: yup
-    // .string()
-    // .typeError("mobile is required")
-    // .required('mobile is required')
-    // .matches(/^\d{10}$/, "mobile number is not valid"),
+     mobile: yup
+    .string()
+    .typeError("mobile is required")
+    .required('mobile is required')
+    .matches(/^\d{10}$/, "mobile number is not valid"),
 
 });
 

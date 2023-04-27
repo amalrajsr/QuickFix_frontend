@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../UI/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { userSchema } from "../../../validations/Validation";
+import { profileUpdateSchema } from "../../../validations/Validation";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { updateProfile, updateProfileImage } from "../../../apis/user";
@@ -47,9 +47,10 @@ function Profile({ expert }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    userSchema
+    profileUpdateSchema
       .validate(user)
       .then(async (valid) => {
+
         try {
           const { data } = expert
             ? await updateExpertProfileApi(userData._id, user)
@@ -64,7 +65,7 @@ function Profile({ expert }) {
         } catch (error) {
           if (error.response?.data?.error?.tokenExpired) {
             dispatch(removeUser());
-            localStorage.removeItem("user");
+            localStorage.removeItem(expert ? 'expert' : "user");
             navigate("/login", {
               state: { tokenExpired: true },
             });
@@ -73,6 +74,7 @@ function Profile({ expert }) {
         }
       })
       .catch((error) => {
+        
         fireToast('error',error?.message)
         setLoading(false);
       });

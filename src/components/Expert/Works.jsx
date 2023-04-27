@@ -21,7 +21,7 @@ function Works({ booking, fetchBooking, setFetchBooking }) {
     }
   };
 
-  // function to update payment status
+  // function to update payment status if user choose cod option
   const updatePaymentStatus = async () => {
     try {
       setLoading(true);

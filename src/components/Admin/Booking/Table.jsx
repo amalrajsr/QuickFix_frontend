@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { assignExpertApi, fetchBookingApi, fetchExpertApi } from "../../../apis/admin";
+import {
+  assignExpertApi,
+  changeExpertApi,
+  fetchBookingApi,
+  fetchExpertApi,
+} from "../../../apis/admin";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -7,18 +12,18 @@ import fireToast from "../../../utils/fireToast";
 function Table({ bookingStatus }) {
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState(null);
-  const [fetchBooking,setFetchBooking]=useState(false)
+  const [fetchBooking, setFetchBooking] = useState(false);
   const [expert, setExpert] = useState(""); // state to handle expert
-  const [experts,setExperts]=useState([]) // state to store experts 
+  const [experts, setExperts] = useState([]); // state to store experts
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    fetchExpertApi().then(({data})=>{
-      if(data.result){
-        setExperts(data.result)
+  useEffect(() => {
+    fetchExpertApi().then(({ data }) => {
+      if (data.result) {
+        setExperts(data.result);
       }
-    })
-  },[])
+    });
+  }, []);
 
   useEffect(() => {
     fetchBookingApi()
@@ -40,24 +45,40 @@ function Table({ bookingStatus }) {
       setLoading(true);
       try {
         const { data } = await assignExpertApi(bookingId, expert);
-        
+
         setLoading(false);
         if (data.success) {
-          setFetchBooking(!fetchBooking)
-          fireToast('success',"updated successfully")
-         
+          setFetchBooking(!fetchBooking);
+          fireToast("success", "updated successfully");
         }
       } catch (error) {
-        fireToast('error',error.response?.data?.error.message)
-    
+        fireToast("error", error.response?.data?.error.message);
+
         setLoading(false);
       }
     }
   };
 
+  const changeExpert =async(e,bookingId,oldExpert)=>{
+  
+      try {
+        setLoading(true);
+        const { data } = await changeExpertApi(bookingId, {newExpert:e.target.value,oldExpert});
 
+        setLoading(false);
+        if (data.success) {
+          setFetchBooking(!fetchBooking);
+          fireToast("success", "updated successfully");
+        }
+      } catch (error) {
+        fireToast("error", error.response?.data?.error.message);
+
+        setLoading(false);
+      }
+    
+  }
   const columns = [
-    bookingStatus === "active" && {
+     ['active','completed'].includes(bookingStatus)  && {
       name: "Expert",
       selector: (row) => row.expert[0]?.name,
     },
@@ -78,16 +99,16 @@ function Table({ bookingStatus }) {
     {
       name: "Type",
       selector: (row) => row.type,
-      grow:3
+      grow: 3,
     },
     {
       name: "Estimated Charge",
-      selector: (row) => <span>₹ {row.estimatedCharge}</span> ,
+      selector: (row) => <span>₹ {row.estimatedCharge}</span>,
       grow: 4,
     },
 
-    ( bookingStatus==='pending' || bookingStatus==='active' ) && {
-      name: bookingStatus==='pending'? "Assign Expert": "Change Expert",
+    (bookingStatus === "pending" || bookingStatus === "active") && {
+      name: bookingStatus === "pending" ? "Assign Expert" : "Change Expert",
       grow: 4,
 
       cell: (row) => (
@@ -96,13 +117,19 @@ function Table({ bookingStatus }) {
           name="expert"
           id="expert"
           value={expert}
-          onChange={(e) => setExpert(e.target.value)}
+          onChange={(e) =>bookingStatus==='active'? changeExpert(e,row._id,row.expert[0]?._id): setExpert(e.target.value)}
         >
-          <option value="">{bookingStatus==='active'? row.expert[0]?.name :'Select an expert'}</option>
+          <option value="">
+            {bookingStatus === "active"
+              ? row.expert[0]?.name
+              : "Select an expert"}
+          </option>
           {experts?.map((expert) => {
             return (
+            
               !expert?.isBlocked &&
-              expert.serviceDetails[0].service === row.service && expert.city[0].pincode === row.address?.zipcode && (
+              expert.serviceDetails[0].service === row.service &&
+              expert.city[0].pincode === row.address?.zipcode && (
                 <option key={expert?._id} id={expert?._id} value={expert?._id}>
                   {expert?.name}
                 </option>
@@ -112,19 +139,18 @@ function Table({ bookingStatus }) {
         </select>
       ),
     },
-    
-    bookingStatus === "active" && {
-      name: "Total",
-      selector: (row) => <span>₹ {row.totalCharge}</span> ,
+
+    ['active','completed'].includes(bookingStatus) && {
+      name: "Total Charge",
+      selector: (row) => <span>₹ {row?.totalCharge}</span>,
       grow: 3,
     },
-    bookingStatus==='active' &&{
+    bookingStatus === "active" && {
       name: "Payment",
-      selector: (row) => <span>{row.payment ?'completed':'pending'}</span>,
+      selector: (row) => <span>{row.payment ? "completed" : "pending"}</span>,
       grow: 2,
     },
-  ( bookingStatus==='pending' || bookingStatus==='active' )&&
-     {
+    bookingStatus === "pending" && {
       name: null,
       cell: (row) => (
         <button
@@ -136,8 +162,7 @@ function Table({ bookingStatus }) {
         </button>
       ),
       grow: 3,
-    }
-
+    },
   ];
   const data = bookings?.filter((booking) => {
     return (
@@ -152,12 +177,10 @@ function Table({ bookingStatus }) {
         _id: booking._id,
         totalCharge: booking?.totalCharge,
         payment: booking?.payment,
-        status:booking.status,
-        
+        status: booking.status,
       }
     );
   });
-
 
   const customStyles = {
     width: "750px",

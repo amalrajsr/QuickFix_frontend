@@ -4,7 +4,7 @@ import { TbCategory } from "react-icons/tb";
 import { FaUser } from "react-icons/fa";
 import { GrUserWorker } from "react-icons/gr";
 import { MdOutlineRateReview ,MdOutlineLocationOn} from "react-icons/md";
-import {BsJournalBookmark} from 'react-icons/bs'
+import {BsJournalBookmark ,BsChatLeftDots} from 'react-icons/bs'
 
 function Sidebar() {
   const navigate=useNavigate()
@@ -15,6 +15,7 @@ function Sidebar() {
     {name:'Booking',icon:<BsJournalBookmark/>,path:'/admin/bookings'},
     { name: "Reviews", icon: <MdOutlineRateReview /> ,path:'/admin/reviews'},
     {name:'Locations',icon:<MdOutlineLocationOn/>,path:'/admin/locations'},
+    {name:'chat',icon:<BsChatLeftDots className="text-sm"/>,path:'/admin/chat'},
     
   ];
    

@@ -16,7 +16,7 @@ export const updateExpertProfileApi=(expertId,data)=>axios.patch(`expert/profile
 //work section
 export const viewWorksApi=(expertId)=>axios.get(`expert/works/${expertId}`,getToken())
 export const updatePaymentApi=(bookingId,payment)=>axios.patch(`expert/works/${bookingId}`,payment,getToken())
-export const updatePaymentStatusApi=(bookingId)=>axios.put(`expert/works/${bookingId}`,getToken())
+export const updatePaymentStatusApi=(bookingId)=>axios.put(`expert/works/${bookingId}`,{},getToken())
 //password reset
 export const resetPasswordApi=(expertId,password)=>axios.patch(`expert/reset-password/${expertId}`,password,getToken())
 

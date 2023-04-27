@@ -74,7 +74,6 @@ function ViewService() {
       }
     })
   },[])
-  console.log(reviews)
   return (
     <>
       {/* banner section */}
