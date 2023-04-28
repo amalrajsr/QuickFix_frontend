@@ -1,5 +1,17 @@
 import * as yup from "yup";
 
+export const chatSchema=yup.object().shape({
+  message:yup
+  .string()
+  .trim()
+  .required('')
+  .test(
+    "no-spaces",
+    "Name should not be empty spaces",
+    (value) => value.trim().length > 0
+  )
+})
+
 export const forgotPasswordSchema=yup.object().shape({
   NewPass:yup.string().min(6, 'atleast 6 characters needed').matches(/^\S*$/, 'Password cannot contain spaces'),
   ReNewPass:yup.string().matches(/^\S*$/, 'Password cannot contain spaces').required('field cannot be empty')

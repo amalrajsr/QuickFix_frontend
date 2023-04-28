@@ -7,17 +7,30 @@ import { io } from "socket.io-client";
 
 function ChatModal({ open }) {
   const [currentChat, setcurrentChat] = useState("");
+  const [arrivalMessage, setArrivalMessage] = useState(null);
   const [conversations, setConversations] = useState([]);
-  const [fetchConversation, setFetchConversations] = useState(false);
   const user = useSelector((state) => state.user.value);
   const scrollref = useRef();
   const inputRef = useRef();
   const socket = useRef();
-  console.log("hello world");
+
   // creating web socket connection
   useEffect(() => {
-    console.log("use effect");
     socket.current = io(SOCKET_URL);
+    socket.current?.on("getMessage", ({ senderId, message,sender }) => {
+      setArrivalMessage({
+        senderId,
+        message,
+        sender,
+        date: Date.now(),
+      });
+    });
+  }, []);
+
+
+  useEffect(() => {
+    socket.current.emit("addUsers", {userId:user._id,role:'user'});
+    socket.current.on("getUsers", (data) => {});
   }, []);
 
   useEffect(() => {
@@ -30,11 +43,17 @@ function ChatModal({ open }) {
       .catch((error) => {
         console.log(error);
       });
-  }, [fetchConversation]);
+  }, []);
 
+  // socket call for sending message
   const sendMessage = () => {
-    socket.current?.emit("send-message", {user:user._id,message:currentChat});
+    socket.current?.emit("send-message", {
+      userId: user._id,
+      message: currentChat,
+      sender:'user'
+    });
 
+    //api for saving messages in database
     sendConverstaionsApi("user", user?._id, {
       sender: "user",
       message: currentChat,
@@ -42,7 +61,6 @@ function ChatModal({ open }) {
       .then(({ data }) => {
         if (data.updated) {
           setcurrentChat("");
-          setFetchConversations(!fetchConversation);
         }
       })
       .catch((error) => {
@@ -56,6 +74,10 @@ function ChatModal({ open }) {
     scrollref.current?.scrollIntoView({ behavior: "smooth" });
   }, [conversations, open]);
 
+  //to update conversation array
+  useEffect(()=>{
+   arrivalMessage && setConversations((prev)=>[...prev,{sender:arrivalMessage.sender,message:arrivalMessage.message}])
+  },[arrivalMessage])
   if (!open) return null;
   return (
     <div className="chat-container z-20 rounded-lg fixed bottom-24 right-3 md:right-10 md:w-[380px] bg-[#F9FAFB]  shadow-sm  items-center">
@@ -69,7 +91,7 @@ function ChatModal({ open }) {
         <ul className="space-y-2 overflow-y-scroll">
           {conversations.map((conversation) => {
             return (
-              <div key={conversation._id}>
+              <div key={conversation?._id}>
                 <li
                   ref={scrollref}
                   className={`flex  ${
@@ -79,7 +101,7 @@ function ChatModal({ open }) {
                   }`}
                 >
                   <div className=" mx-2 relative max-w-xl px-4 my-2 bg-light py-2 text-gray-700 rounded ">
-                    <span className="block">{conversation.message}</span>
+                    <span className="block max-w-[200px] break-words">{conversation.message}</span>
                   </div>
                 </li>
               </div>

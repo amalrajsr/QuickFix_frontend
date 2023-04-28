@@ -3,7 +3,6 @@ import Button from "../../UI/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { profileUpdateSchema } from "../../../validations/Validation";
 import ClipLoader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
 import { updateProfile, updateProfileImage } from "../../../apis/user";
 import {
   updateImage,
@@ -13,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Modal from "../../UI/Modal";
 import { updateExpertProfileApi } from "../../../apis/expert";
-import { updateExpert } from "../../../store/slices/expertSlice";
+import { removeExpert, updateExpert } from "../../../store/slices/expertSlice";
 import fireToast from "../../../utils/fireToast";
 import {HiArrowLongRight} from 'react-icons/hi2'
 import ResetPassword from "../../Expert/ResetPassword";
@@ -64,9 +63,9 @@ function Profile({ expert }) {
           }
         } catch (error) {
           if (error.response?.data?.error?.tokenExpired) {
-            dispatch(removeUser());
+          expert ?dispatch(removeExpert()) :  dispatch(removeUser());
             localStorage.removeItem(expert ? 'expert' : "user");
-            navigate("/login", {
+            navigate(expert ? '/expert/login': "/login", {
               state: { tokenExpired: true },
             });
           }

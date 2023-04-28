@@ -1,29 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { fetchCount } from "../../../apis/admin";
-function PIeChart({ type }) {
-  const [details, setDetails] = useState(null);
-  useEffect(() => {
-    fetchCount().then(({data})=>{
-      if(data.success && data.result){
-        setDetails(data.result)
-      }
-    })
-  }, []);
+function PIeChart({bookingDetails}) {
 
-  const whichDetail= type==='service' ? details?.serviceDetails : details?.bookingDetails
-  
+
   ChartJS.register(ArcElement, Tooltip, Legend);
   const data = {
-    // labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-    labels: whichDetail?.map((data)=>{
-      return data._id || data.service
+    labels: bookingDetails?.map((data)=>{
+      return data._id 
     }),
     datasets: [
       {
-        data: whichDetail?.map((data)=>{
-          return data.count || data.bookings
+        data:  bookingDetails?.map((data)=>{
+          return data.count 
         }),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",

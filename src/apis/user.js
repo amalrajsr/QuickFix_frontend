@@ -61,7 +61,7 @@ export const fetchExpertsByService=(serviceId,name)=>axios.get(`user/services/${
 //review
 export const addReviewApi=(review)=>axios.post('user/reviews',review,getToken('raw'))
 export const fetchReviewApi=(bookingID)=>axios.get(`user/reviews/${bookingID}`,getToken('raw'))
-export const updateReviewApi=(reviewID,review)=>axios.patch(`user/reviews/${reviewID}`,{review:review},getToken('raw'))
+export const updateReviewApi=(reviewID,data)=>axios.patch(`user/reviews/${reviewID}`,data,getToken('raw'))
 export const deleteReviewApi=(reviewID)=>axios.delete(`user/reviews/${reviewID}`,getToken('raw'))
 export const fetchReviewsByServiceApi=(serviceId)=>axios.get(`user/reviews`,getToken('query',{serviceId}))
 

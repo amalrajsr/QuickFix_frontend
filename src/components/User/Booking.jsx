@@ -8,16 +8,20 @@ import { addBookingApi } from "../../apis/user";
 import { useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
-import fireToast from '../../utils/fireToast'
+import fireToast from "../../utils/fireToast";
 function Booking() {
   const userData = useSelector((state) => state.user.value);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const [locations, setLocations] = useState([]);
   const service = location?.state?.data;
   const [error, setError] = useState({ zipcode: false, date: false });
-  const [blockSlot,setblockSlot]=useState({morning:true,afternoon:true,evening:true}) // state to remove slots based on current time
+  const [blockSlot, setblockSlot] = useState({
+    morning: true,
+    afternoon: true,
+    evening: true,
+  }); // state to remove slots based on current time
   const [address, setAddress] = useState(false);
   const [booking, setBooking] = useState({
     user: userData._id,
@@ -37,7 +41,7 @@ function Booking() {
     }
     fetchLocationApi()
       .then(({ data }) => {
-        console.log(data)
+        console.log(data);
         data.locations.forEach((location) => {
           for (let i in location) {
             if (i === "pincode") {
@@ -128,7 +132,6 @@ function Booking() {
 
   // handle user address form
   const onHandleSubmit = (userAddress) => {
-
     if (!locations.includes(parseInt(userAddress.zipcode))) {
       setError({ ...error, zipcode: true });
     } else {
@@ -136,7 +139,6 @@ function Booking() {
       setBooking({ ...booking, address: userAddress });
       setAddress(true);
     }
-    
   };
 
   // function to handle zipcode
@@ -154,47 +156,50 @@ function Booking() {
 
   // function to verify and update date
   const handleDate = (e) => {
-    console.log(e.target.value)
-     const enteredDate = new Date(e.target.value);
+    console.log(e.target.value);
+    const enteredDate = new Date(e.target.value);
     const currentDate = new Date();
-    
-    console.log(currentDate.getFullYear())
-    console.log(enteredDate.getFullYear())
-    if ( currentDate.getFullYear() <= enteredDate.getFullYear() && currentDate.getMonth()<=enteredDate.getMonth() && currentDate.getDate()<=enteredDate.getDate() ) {
-      setblockSlot({morning:false,afternoon:false,evening:false})
+
+    console.log(currentDate.getFullYear());
+    console.log(enteredDate.getFullYear());
+    if (
+      currentDate.getFullYear() <= enteredDate.getFullYear() &&
+      currentDate.getMonth() <= enteredDate.getMonth() &&
+      currentDate.getDate() <= enteredDate.getDate()
+    ) {
+      setblockSlot({ morning: false, afternoon: false, evening: false });
       setError({ ...error, date: false });
       setBooking({ ...booking, date: enteredDate });
 
-     if(currentDate.getMonth()===enteredDate.getMonth() &&currentDate.getDate()===enteredDate.getDate()  ){
-      
-      const hour=currentDate.getHours()
-    switch(true){
-      case(hour<11):
-      setblockSlot({morning:false,afternoon:false,evening:false})
-      break;
-      case(hour>11 && hour<14):
-      setblockSlot({morning:true,afternoon:false,evening:false})
-      break;
-      case(hour>14 && hour<18):
-      setblockSlot({morning:true,afternoon:true,evening:false})
-       break;
-       case(hour>18):
-       setError({ ...error, date: true });
-       setBooking({ ...booking, date: null });
-       setblockSlot({morning:true,afternoon:true,evening:true})
-        break;
-        default:
-         setError({ ...error, date: true });
-        setBooking({ ...booking, date: null });
-        setblockSlot({morning:true,afternoon:true,evening:true})
-
-    }
-     }
-      
-
+      if (
+        currentDate.getMonth() === enteredDate.getMonth() &&
+        currentDate.getDate() === enteredDate.getDate()
+      ) {
+        const hour = currentDate.getHours();
+        switch (true) {
+          case hour < 11:
+            setblockSlot({ morning: false, afternoon: false, evening: false });
+            break;
+          case hour > 11 && hour < 14:
+            setblockSlot({ morning: true, afternoon: false, evening: false });
+            break;
+          case hour > 14 && hour < 18:
+            setblockSlot({ morning: true, afternoon: true, evening: false });
+            break;
+          case hour > 18:
+            setError({ ...error, date: true });
+            setBooking({ ...booking, date: null });
+            setblockSlot({ morning: true, afternoon: true, evening: true });
+            break;
+          default:
+            setError({ ...error, date: true });
+            setBooking({ ...booking, date: null });
+            setblockSlot({ morning: true, afternoon: true, evening: true });
+        }
+      }
     } else {
       setError({ ...error, date: true });
-      setblockSlot({morning:true,afternoon:true,evening:true})
+      setblockSlot({ morning: true, afternoon: true, evening: true });
     }
   };
 
@@ -209,16 +214,16 @@ function Booking() {
       booking.type &&
       booking.slot
     ) {
-      setLoading(true)
+      setLoading(true);
       addBookingApi(booking)
-        .then(({data}) => {
-          setLoading(false)
-          
-          if(data.success){
-            fireToast('success',"booking successfull")
-            reset()
-            setAddress(false)
-            setblockSlot({morning:false,afternoon:false,evening:false})
+        .then(({ data }) => {
+          setLoading(false);
+
+          if (data.success) {
+            fireToast("success", "booking successfull");
+            reset();
+            setAddress(false);
+            setblockSlot({ morning: false, afternoon: false, evening: false });
             setBooking({
               user: userData._id,
               address: null,
@@ -229,13 +234,13 @@ function Booking() {
               date: null,
               slot: null,
               detail: null,
-            })
-            
-            navigate('/bookings')
+            });
+
+            navigate("/bookings");
           }
         })
         .then((error) => {
-          setLoading(false)
+          setLoading(false);
           console.log(error);
         });
     }
@@ -456,33 +461,38 @@ function Booking() {
                 ${error.date ? "border-red-700" : "border-slate-300"}
                  rounded-lg md:px-10 md:mx-3 lg:ml-16  md:ml-3 `}
               />
-              { !blockSlot.morning &&
-              <button
-                onClick={() => setBooking({ ...booking, slot: "morning" })}
-                className={`rounded-lg  border-[1px] ${
-                  booking.slot === "morning" ? "bg-slate-300" : "bg-slate-200"
-                } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
-              >
-                Morning
-              </button>}
-              {!blockSlot.afternoon &&
-              <button
-                onClick={() => setBooking({ ...booking, slot: "afternoon" })}
-                className={`rounded-lg  border-[1px] ${
-                  booking.slot === "afternoon" ? "bg-slate-300" : "bg-slate-200"
-                } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
-              >
-                Afternoon
-              </button>}
-              {!blockSlot.evening &&
-              <button
-                onClick={() => setBooking({ ...booking, slot: "evening" })}
-                className={`rounded-lg  border-[1px] ${
-                  booking.slot === "evening" ? "bg-slate-300" : "bg-slate-200"
-                } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
-              >
-                Evening
-              </button>}
+              {!blockSlot.morning && (
+                <button
+                  onClick={() => setBooking({ ...booking, slot: "morning" })}
+                  className={`rounded-lg  border-[1px] ${
+                    booking.slot === "morning" ? "bg-slate-300" : "bg-slate-200"
+                  } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
+                >
+                  Morning
+                </button>
+              )}
+              {!blockSlot.afternoon && (
+                <button
+                  onClick={() => setBooking({ ...booking, slot: "afternoon" })}
+                  className={`rounded-lg  border-[1px] ${
+                    booking.slot === "afternoon"
+                      ? "bg-slate-300"
+                      : "bg-slate-200"
+                  } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
+                >
+                  Afternoon
+                </button>
+              )}
+              {!blockSlot.evening && (
+                <button
+                  onClick={() => setBooking({ ...booking, slot: "evening" })}
+                  className={`rounded-lg  border-[1px] ${
+                    booking.slot === "evening" ? "bg-slate-300" : "bg-slate-200"
+                  } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
+                >
+                  Evening
+                </button>
+              )}
             </div>
             <div className="text-center md:text-center">
               <h1 className="text-lg  mt-3 mb-2 text-dark font-semibold">
@@ -498,11 +508,11 @@ function Booking() {
             </div>
             <div className="w-full md:-3/4 flex my-2 justify-center">
               <button
-              disabled={loading}
-                 onClick={handleBooking}
+                disabled={loading}
+                onClick={handleBooking}
                 className="rounded-lg border-[1px] mx-auto bg-dark text-white border-slate-300 hover:bg-slate-800 px-3 my-2 h-1/2 md:my-auto  py-1"
               >
-              {loading ? <ClipLoader color="#ffff" size={20} /> : " Book Now"}
+                {loading ? <ClipLoader color="#ffff" size={20} /> : " Book Now"}
               </button>
             </div>
           </div>

@@ -1,19 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { fetchDashboardDetails } from "../../../apis/admin";
+import React from "react";
 
-function Dashboard() {
-  const [total, setTotal] = useState({
-    totalRevenue: 0,
-    totalCompletedBookings: 0,
-    totalUsers: 0,
-  });
-  useEffect(() => {
-    fetchDashboardDetails().then(({ data }) => {
-      if (data.success && data.result) {
-        setTotal(data.result);
-      }
-    });
-  }, []);
+function Dashboard({total}) {
+ 
   return (
     <>
       <section className="text-gray-600  body-font">
@@ -22,17 +10,17 @@ function Dashboard() {
             {[
               {
                 heading: "Toal Revenue",
-                value: total.totalRevenue,
+                value: total?.totalRevenue,
                 background: "bg-[#76BBD0]",
               },
               {
                 heading: "Toal Bookings",
-                value: total.totalCompletedBookings,
+                value: total?.totalCompletedBookings,
                 background: "bg-[#9FA757]",
               },
               {
                 heading: "Toal Users",
-                value: total.totalUsers,
+                value: total?.totalUsers,
                 background: "bg-[#649484]",
               },
             ].map((data,i) => {

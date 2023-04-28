@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "../../UI/Button";
 import { AiFillDelete } from "react-icons/ai";
+import ReactStars from "react-rating-stars-component";
 import {
   addReviewApi,
   deleteReviewApi,
@@ -8,11 +9,22 @@ import {
 } from "../../../apis/user";
 import fireToast from "../../../utils/fireToast";
 import confirmToast from "../../../utils/confirmToast";
-function Review({ booking, closeModal, reviewMessage, reviewId,fetchBooking,setFetchBooking }) {
+function Review({
+  reload,
+  setReload,
+  booking,
+  closeModal,
+  reviewMessage,
+  reviewId,
+  serviceRating,
+  fetchBooking,
+  setFetchBooking,
+}) {
   const [review, setReview] = useState({
     message: reviewMessage || "",
     error: false,
   });
+  const [rating, setRating] = useState(serviceRating || 0);
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,17 +35,23 @@ function Review({ booking, closeModal, reviewMessage, reviewId,fetchBooking,setF
       try {
         setLoading(true);
         const { data } = reviewId
-          ? await updateReviewApi(reviewId, review.message)
+          ? !(review.message === reviewMessage && rating === serviceRating) && // not to update review if user hasn't changed anything
+            (await updateReviewApi(reviewId, {
+              review: review.message,
+              rating: rating,
+            }))
           : await addReviewApi({
               user: booking.user,
               service: booking.service,
               review: review.message,
+              rating: rating,
               booking: booking._id,
             });
 
         setLoading(false);
         if (data.success) {
-          setFetchBooking(!fetchBooking)
+          setFetchBooking(!fetchBooking);
+          setReload(!reload);
           fireToast(
             "success",
             reviewId
@@ -55,17 +73,24 @@ function Review({ booking, closeModal, reviewMessage, reviewId,fetchBooking,setF
     try {
       const { data } = await deleteReviewApi(reviewId);
       if (data.success) {
-        fireToast("success",'review deleted successfully');
-        setFetchBooking(!fetchBooking)
-
+        fireToast("success", "review deleted successfully");
+        setFetchBooking(!fetchBooking);
       }
     } catch (error) {
       fireToast("error", error.response?.data?.error.message);
     }
   };
+
   return (
     <>
       <form className="my-2" onSubmit={handleSubmit}>
+        <ReactStars
+          count={5}
+          onChange={(newRating) => setRating(newRating)}
+          size={24}
+          activeColor="#ffd700"
+          value={rating}
+        />
         <textarea
           rows={5}
           value={review.message}
@@ -86,7 +111,10 @@ function Review({ booking, closeModal, reviewMessage, reviewId,fetchBooking,setF
             {reviewMessage ? "Update review" : " Add review"}
           </Button>
           {reviewMessage && (
-            <p className="flex justify-end" onClick={()=>confirmToast(deleteReview) }>
+            <p
+              className="flex justify-end"
+              onClick={() => confirmToast(deleteReview)}
+            >
               <AiFillDelete className="text-red-700 my-auto text-2xl " />
             </p>
           )}

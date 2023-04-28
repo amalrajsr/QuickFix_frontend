@@ -10,6 +10,7 @@ import ProtectedRoute from "../utils/ProtectedRoute";
 import ViewService from "../components/User/Services/ViewService";
 import Booking from "../components/User/Booking";
 import ViewBooking from "../components/User/Profile/ViewBooking";
+import PaymentSuccessPage from "../components/User/PaymentSuccessPage";
 function UserRoute() {
   return (
     <>
@@ -24,6 +25,7 @@ function UserRoute() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/bookings" element={<ViewBooking />} />
+            <Route path="/payment/success" element={<PaymentSuccessPage/>} />
           </Route>
           <Route path={"*"} element={<h1>not found</h1>} />
         </Route>

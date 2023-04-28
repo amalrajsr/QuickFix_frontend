@@ -47,7 +47,6 @@ function AddExpert({ fetchExperts, setfetchExperts }) {
     } catch (error) {
       setLoading(false);
       fireToast("error", error.response?.data?.error.message);
-      console.log(error.response)
       if(error.response?.data?.error.tokenExpired){
         localStorage.removeItem('admin')
         navigate('/admin/login')
@@ -106,7 +105,6 @@ function AddExpert({ fetchExperts, setfetchExperts }) {
               {...register("service")}
               id="service"
               name="service"
-              onChange={(e) => console.log(e.target.value)}
               className=" py-2  w-auto mx-2  border-slate-300 focus:outline-slate-300   text-gray-700 bg-white border rounded-md "
             >
               {services.map((service) => {

@@ -20,7 +20,8 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [reviewModal, setReviewModal] = useState(false);
-  const [review, setReview] = useState({exist:false,message:'',id:null});
+  const [review, setReview] = useState({exist:false,message:'',id:null,rating:0});
+ const [reload,setReload]=useState(false)
   const handleCancel = (id) => {
     setLoading(true);
     cancelBooking(id)
@@ -55,7 +56,6 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
       document.body.appendChild(script);
     });
   }
-  console.log(process.env.REACT_APP_RAZOR_API_KEY)
 
   const handlePayment = async () => {
 
@@ -64,7 +64,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
 
       try {
         const { data } = await paymentApi(booking?._id);
-
+        
         const options = {
           key: process.env.REACT_APP_RAZOR_API_KEY,
           currency: data.order.currency,
@@ -73,6 +73,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
           name: "QuickFix",
 
           handler: async function (response) {
+          console.log(response)
             const paymentData = {
               orderCreationId: data.order.id,
               razorpayPaymentId: response.razorpay_payment_id,
@@ -85,9 +86,13 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
             try {
               const result = await paymentSuccessApi(paymentData);
               if (result.data.success) {
+                navigate('/payment/success')
                 setFetchBooking(!fetchBooking);
               }
-            } catch (error) {}
+            } catch (error) {
+              console.log(1)
+
+            }
           },
           prefill: {
             name: user?.name,
@@ -98,21 +103,22 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
 
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
-      } catch (error) {}
+      } catch (error) {
+        console.log(2)
+      }
     } catch (error) {
-      console.log(error);
+      console.log(3);
     }
   };
 
   // for chekcing whether user has added review or not
   useEffect(() => {
     fetchReviewApi(booking?._id).then(({ data }) => {
-     
       if (data.success && data.result) {
-        setReview({exist:true,message:data.result.review,id:data.result._id});
+        setReview({exist:true,message:data.result.review,id:data.result._id,rating:data.result.rating});
       }
     })
-  }, []);
+  }, [reload]);
 
   return booking.status === "completed" ? (
     <>
@@ -149,7 +155,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
         open={reviewModal}
         onClose={() => setReviewModal(false)}
       >
-        <Review fetchBooking={fetchBooking} setFetchBooking={setFetchBooking} reviewMessage={review.message} reviewId={review.id} booking={booking} closeModal={setReviewModal} />
+        <Review reload={reload} setReload={setReload} fetchBooking={fetchBooking} setFetchBooking={setFetchBooking} serviceRating={review.rating} reviewMessage={review.message} reviewId={review.id} booking={booking} closeModal={setReviewModal} />
       </Modal>
     </>
   ) : (

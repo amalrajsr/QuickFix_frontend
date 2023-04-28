@@ -95,6 +95,7 @@ function Login() {
             className="my-auto mx-auto text-center "
           >
             <input
+            disabled={otp}
               type="number"
               name={"mobile"}
               placeholder={"mobile number"}
