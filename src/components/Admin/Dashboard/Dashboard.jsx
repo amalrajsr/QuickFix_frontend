@@ -10,7 +10,7 @@ function Dashboard({total}) {
             {[
               {
                 heading: "Toal Revenue",
-                value: total?.totalRevenue,
+                value: total?.totalRevenue || 0,
                 background: "bg-[#76BBD0]",
               },
               {

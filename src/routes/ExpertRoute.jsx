@@ -6,6 +6,7 @@ import WorksPage from "../pages/Expert/WorksPage";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import ForgotPasswordOtpPage from "../pages/Expert/ForgotPasswordOtpPage";
 import ResetPasswordPage from "../pages/Expert/ResetPasswordPage";
+import PageNotfound from "../components/UI/PageNotfound";
 
 function ExpertRoute() {
   return (
@@ -18,6 +19,7 @@ function ExpertRoute() {
         <Route path="/profile" element={<Profile/>} />
         <Route path="/works" element={<WorksPage/>} />
         </Route>
+        <Route path={"*"} element={<PageNotfound redirect={'/'}/>} />
         </Route>
     </Routes>
 

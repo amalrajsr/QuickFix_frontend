@@ -3,6 +3,7 @@ import Button from "../../UI/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { profileUpdateSchema } from "../../../validations/Validation";
 import ClipLoader from "react-spinners/ClipLoader";
+import { VscVerifiedFilled } from "react-icons/vsc";
 import { updateProfile, updateProfileImage } from "../../../apis/user";
 import {
   updateImage,
@@ -14,20 +15,21 @@ import Modal from "../../UI/Modal";
 import { updateExpertProfileApi } from "../../../apis/expert";
 import { removeExpert, updateExpert } from "../../../store/slices/expertSlice";
 import fireToast from "../../../utils/fireToast";
-import {HiArrowLongRight} from 'react-icons/hi2'
+import { HiArrowLongRight } from "react-icons/hi2";
 import ResetPassword from "../../Expert/ResetPassword";
 function Profile({ expert }) {
   const navigate = useNavigate();
   // state to handle modal
   const [open, setOpen] = useState(false);
-  const [passwordModal,setpasswordModal]=useState(false)
+  const [passwordModal, setpasswordModal] = useState(false);
 
   const onCloseModal = () => {
     setProfileImage(null);
     setOpen(false);
     setError(false);
   };
-  const expertImage = "https://res.cloudinary.com/dsw9tifez/image/upload/v1680511516/quickfix/static/profile_eil3c6.jpg";
+  const expertImage =
+    "https://res.cloudinary.com/dsw9tifez/image/upload/v1680511516/quickfix/static/profile_eil3c6.jpg";
 
   // dispatch for updating redux
   const dispatch = useDispatch();
@@ -49,32 +51,30 @@ function Profile({ expert }) {
     profileUpdateSchema
       .validate(user)
       .then(async (valid) => {
-
         try {
           const { data } = expert
             ? await updateExpertProfileApi(userData._id, user)
             : await updateProfile(user, userData._id);
 
           if (data.success) {
-          
-           expert? dispatch(updateExpert(user.name)): dispatch(updateUser(user.name));
-           fireToast('success',"successfully updated")
-         
+            expert
+              ? dispatch(updateExpert(user.name))
+              : dispatch(updateUser(user.name));
+            fireToast("success", "successfully updated");
           }
         } catch (error) {
           if (error.response?.data?.error?.tokenExpired) {
-          expert ?dispatch(removeExpert()) :  dispatch(removeUser());
-            localStorage.removeItem(expert ? 'expert' : "user");
-            navigate(expert ? '/expert/login': "/login", {
+            expert ? dispatch(removeExpert()) : dispatch(removeUser());
+            localStorage.removeItem(expert ? "expert" : "user");
+            navigate(expert ? "/expert/login" : "/login", {
               state: { tokenExpired: true },
             });
           }
-          fireToast('error',error.response?.data?.error.message)
+          fireToast("error", error.response?.data?.error.message);
         }
       })
       .catch((error) => {
-        
-        fireToast('error',error?.message)
+        fireToast("error", error?.message);
         setLoading(false);
       });
   };
@@ -101,12 +101,11 @@ function Profile({ expert }) {
         .then(({ data }) => {
           setLoading(false);
           onCloseModal();
-          fireToast('success','successfully updated')
+          fireToast("success", "successfully updated");
           dispatch(updateImage(data.image));
           setProfileImage(null);
         })
         .catch((error) => {
-       
           if (error.response?.data?.error?.tokenExpired) {
             localStorage.removeItem("user");
             dispatch(removeUser());
@@ -115,8 +114,7 @@ function Profile({ expert }) {
             });
           }
           setLoading(false);
-          fireToast('error',error.response?.data?.error.message)
-
+          fireToast("error", error.response?.data?.error.message);
         });
     } else {
       setError({ status: true, message: "please select an image" });
@@ -135,7 +133,6 @@ function Profile({ expert }) {
             {/* profile image section */}
             <div className=" w-full md:w-1/2   mt-4  md:flex item-center justify-center   ">
               <div className="h-11/12 w-3/4 md:w-1/2 mt-2  mx-auto border bg-white  rounded-sm">
-              
                 <img
                   className="rounded-full w-[175px] h-[175px] mt-2 mx-auto z-10 "
                   src={expert ? expertImage : userData.avatar}
@@ -160,8 +157,7 @@ function Profile({ expert }) {
                 ) : (
                   <>
                     <h1 className="text-center mt-2 font-medium text-md">
-                      bookings: {userData.booking?.length}{" "}
-                      <span className="text-gray-500">|</span> reviews: 0
+                     Total Bookings: {userData.booking?.length}{" "}
                     </h1>
                     <p className="text-center mt-6 mb-2">
                       <button
@@ -192,113 +188,132 @@ function Profile({ expert }) {
                       onChange={(e) =>
                         setUser({ ...user, name: e.target.value })
                       }
-                      className="py-2  border-[1px] border-slate-300 focus:outline-slate-300 rounded-md px-10 "
+                      className="py-2 focus:border-0 focus:outline-none  border-[1px] border-slate-300 focus:outline-slate-300 rounded-md px-10 "
                     />
                   </div>
                   <div className="flex flex-col ">
                     <label htmlFor="">Mobile</label>
-                    <input
-                      value={userData?.mobile || user.mobile || ""}
-                      // onChange={(e) => setUser({ ...user, mobile: e.target.value })}
-                      type="text"
-                      disabled
-                      className="py-2  border-[1px] border-slate-300 focus:outline-slate-300 rounded-md px-10 "
-                    />
+                    <div className="border-[1px] flex border-slate-300 rounded-md focus:outline-slate-300">
+                      <input
+                        value={userData?.mobile || user.mobile || ""}
+                        // onChange={(e) => setUser({ ...user, mobile: e.target.value })}
+                        type="text"
+                        disabled
+                        className="py-2 focus:border-0 focus:outline-none  rounded-md px-10 "
+                      />{" "}
+                      <VscVerifiedFilled className="my-auto mx-auto text-green-700 text-2xl" />
+                    </div>
                   </div>
                   {expert && (
                     <div className="flex flex-col ">
                       <label htmlFor="">Email</label>
-                      <input
-                        value={userData?.email}
-                        type="email"
-                        disabled
-                        className="py-2  border-[1px] border-slate-300 focus:outline-slate-300 rounded-md px-10 "
-                      />
+                      <div className="border-[1px] flex border-slate-300 rounded-md focus:outline-slate-300">
+                        <input
+                          value={userData?.email}
+                          type="email"
+                          disabled
+                          className="py-2  focus:border-0 focus:outline-none rounded-md px-10 "
+                        />
+                        <VscVerifiedFilled className="my-auto mx-auto text-green-700 text-2xl" />
+                      </div>
                     </div>
                   )}
-                
-                    <Button loading={loading} customeStyle={`my-2 mt-3`}>update</Button>
-                
-                {expert && <p onClick={()=>setpasswordModal(true)}  className="flex justify-end cursor-pointer text-slate-500" > <HiArrowLongRight className="mt-1 mr-1 "/> Reset Password</p>}
+
+                  <Button loading={loading} customeStyle={`my-2 mt-3`}>
+                    update
+                  </Button>
+
+                  {expert && (
+                    <p
+                      onClick={() => setpasswordModal(true)}
+                      className="flex justify-end cursor-pointer text-slate-500"
+                    >
+                      {" "}
+                      <HiArrowLongRight className="mt-1 mr-1 " /> Reset Password
+                    </p>
+                  )}
                 </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Modal heading={'Reset Password'} open={passwordModal} onClose={()=>setpasswordModal(false)}>
-          <ResetPassword setpasswordModal={setpasswordModal}/>
-        </Modal>
+      <Modal
+        heading={"Reset Password"}
+        open={passwordModal}
+        onClose={() => setpasswordModal(false)}
+      >
+        <ResetPassword setpasswordModal={setpasswordModal} />
+      </Modal>
       {!expert && (
-        <>  
-        <Modal open={open} onClose={loading ? onOpenModal : onCloseModal}>
-          <div class="flex justify-center mt-8 w-full h-full">
-            <div class="rounded-lg shadow-xl bg-gray-50 ">
-              <div class="m-4">
-                <label class="inline-block mb-2 text-gray-500">
-                  Profile Image
-                </label>
-                {error.status && (
-                  <p className="mx-3 text-red-600">{error.message}</p>
-                )}
-                <div class="flex items-center justify-center w-full">
-                  <label
-                    class={`flex flex-col w-full h-32 border-4 border-dashed ${
-                      error.status && "border-red-600"
-                    } hover:bg-gray-100 hover:border-gray-300`}
-                  >
-                    <div class="flex flex-col items-center justify-center pt-7">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-12 h-12 text-gray-400 group-hover:text-gray-600"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <p class="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">
-                        Select a photo
-                      </p>
-                    </div>
-                    <input
-                      onChange={handleImage}
-                      type="file"
-                      class="opacity-0"
-                    />
+        <>
+          <Modal open={open} onClose={loading ? onOpenModal : onCloseModal}>
+            <div class="flex justify-center mt-8 w-full h-full">
+              <div class="rounded-lg shadow-xl bg-gray-50 ">
+                <div class="m-4">
+                  <label class="inline-block mb-2 text-gray-500">
+                    Profile Image
                   </label>
+                  {error.status && (
+                    <p className="mx-3 text-red-600">{error.message}</p>
+                  )}
+                  <div class="flex items-center justify-center w-full">
+                    <label
+                      class={`flex flex-col w-full h-32 border-4 border-dashed ${
+                        error.status && "border-red-600"
+                      } hover:bg-gray-100 hover:border-gray-300`}
+                    >
+                      <div class="flex flex-col items-center justify-center pt-7">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-12 h-12 text-gray-400 group-hover:text-gray-600"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <p class="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">
+                          Select a photo
+                        </p>
+                      </div>
+                      <input
+                        onChange={handleImage}
+                        type="file"
+                        class="opacity-0"
+                      />
+                    </label>
+                  </div>
+                </div>
+                <img
+                  src={
+                    profileImage
+                      ? URL.createObjectURL(profileImage)
+                      : userData.avatar
+                  }
+                  alt="profile"
+                  className="mx-auto w-[100px] h-[100px]"
+                />
+                <div class="flex justify-center p-2 my-2 space-x-4">
+                  {loading ? (
+                    <span className="px-4  text-white bg-dark rounded shadow-xl">
+                      <ClipLoader color="#ffff" size={20} />
+                    </span>
+                  ) : (
+                    <button
+                      onClick={handleProfileChange}
+                      className="px-4  text-white bg-dark rounded shadow-xl"
+                    >
+                      upload
+                    </button>
+                  )}
                 </div>
               </div>
-              <img
-                src={
-                  profileImage
-                    ? URL.createObjectURL(profileImage)
-                    : userData.avatar
-                }
-                alt="profile"
-                className="mx-auto w-[100px] h-[100px]"
-              />
-              <div class="flex justify-center p-2 my-2 space-x-4">
-                {loading ? (
-                  <span className="px-4  text-white bg-dark rounded shadow-xl">
-                    <ClipLoader color="#ffff" size={20} />
-                  </span>
-                ) : (
-                  <button
-                    onClick={handleProfileChange}
-                    className="px-4  text-white bg-dark rounded shadow-xl"
-                  >
-                    upload
-                  </button>
-                )}
-              </div>
             </div>
-          </div>
-        </Modal>
-        
+          </Modal>
         </>
       )}
     </>

@@ -11,6 +11,7 @@ import ViewService from "../components/User/Services/ViewService";
 import Booking from "../components/User/Booking";
 import ViewBooking from "../components/User/Profile/ViewBooking";
 import PaymentSuccessPage from "../components/User/PaymentSuccessPage";
+import PageNotfound from "../components/UI/PageNotfound";
 function UserRoute() {
   return (
     <>
@@ -27,7 +28,7 @@ function UserRoute() {
             <Route path="/bookings" element={<ViewBooking />} />
             <Route path="/payment/success" element={<PaymentSuccessPage/>} />
           </Route>
-          <Route path={"*"} element={<h1>not found</h1>} />
+          <Route path={"*"} element={<PageNotfound redirect={'/'}/>} />
         </Route>
       </Routes>
     </>

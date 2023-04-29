@@ -132,7 +132,7 @@ function AddExpert({ fetchExperts, setfetchExperts }) {
               name="city"
               className=" py-2  w-auto mx-2  border-slate-300 focus:outline-slate-300   text-gray-700 bg-white border rounded-md "
             >
-              {locations.map((location) => {
+              {locations?.map((location) => {
                 return (
                   !location.isBlocked && (
                     <option key={location._id} value={location._id}>

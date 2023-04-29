@@ -29,12 +29,12 @@ function ChatModal({ open }) {
 
 
   useEffect(() => {
-    socket.current.emit("addUsers", {userId:user._id,role:'user'});
+    socket.current.emit("addUsers", {userId:user?._id,role:'user'});
     socket.current.on("getUsers", (data) => {});
   }, []);
 
   useEffect(() => {
-    fetchConversationsApi(user._id)
+    fetchConversationsApi(user?._id)
       .then(({ data }) => {
         if (data.result[0].conversation) {
           setConversations(data.result[0].conversation);
@@ -78,6 +78,8 @@ function ChatModal({ open }) {
   useEffect(()=>{
    arrivalMessage && setConversations((prev)=>[...prev,{sender:arrivalMessage.sender,message:arrivalMessage.message}])
   },[arrivalMessage])
+
+  
   if (!open) return null;
   return (
     <div className="chat-container z-20 rounded-lg fixed bottom-24 right-3 md:right-10 md:w-[380px] bg-[#F9FAFB]  shadow-sm  items-center">

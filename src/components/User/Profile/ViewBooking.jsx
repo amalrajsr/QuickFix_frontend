@@ -21,7 +21,7 @@ function ViewBooking({ expert }) {
   useEffect(() => {
     console.log("useEffect");
     if (!expert) {
-      viewBookings(role._id)
+      viewBookings(role?._id)
         .then(({ data }) => {
           if (data.success) {
             setBookings(data.bookings);

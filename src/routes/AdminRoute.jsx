@@ -11,6 +11,7 @@ import ExpetManagement from "../pages/Admin/ExpetManagement";
 import ReviewManagement from "../pages/Admin/ReviewManagement";
 import DashboardPage from "../pages/Admin/DashboardPage";
 import ChatPage from "../pages/Admin/ChatPage";
+import PageNotfound from "../components/UI/PageNotfound";
 function adminRoute() {
   return (
     <>
@@ -27,7 +28,7 @@ function adminRoute() {
             <Route path="/reviews" element={<ReviewManagement />} />
             <Route path="/chat" element={<ChatPage/>} />
           </Route>
-          <Route path={"*"} element={<h1>not found</h1>} />
+          <Route path={"*"} element={<PageNotfound redirect={'/admin/dashboard'}/>} />
         </Route>
       </Routes>
     </>

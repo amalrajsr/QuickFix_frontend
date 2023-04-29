@@ -7,7 +7,6 @@ import { fetchLocationApi } from "../../apis/admin";
 import { addBookingApi } from "../../apis/user";
 import { useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
 import fireToast from "../../utils/fireToast";
 function Booking() {
   const userData = useSelector((state) => state.user.value);
@@ -18,11 +17,12 @@ function Booking() {
   const service = location?.state?.data;
   const [error, setError] = useState({ zipcode: false, date: false });
   const [blockSlot, setblockSlot] = useState({
+    // state to remove slots based on current time
     morning: true,
     afternoon: true,
     evening: true,
-  }); // state to remove slots based on current time
-  const [address, setAddress] = useState(false);
+  });
+  const [address, setAddress] = useState(true);
   const [booking, setBooking] = useState({
     user: userData._id,
     address: null,
@@ -30,7 +30,7 @@ function Booking() {
     type: false,
     duration: false,
     estimatedCharge: 0,
-    date: new Date(),
+    date: null,
     slot: null,
     detail: null,
   });
@@ -58,6 +58,7 @@ function Booking() {
       });
   }, []);
 
+  // useEffect for showing estimated amount
   useEffect(() => {
     if (booking.type && booking.duration) {
       switch (booking.type) {
@@ -156,55 +157,39 @@ function Booking() {
 
   // function to verify and update date
   const handleDate = (e) => {
-    console.log(e.target.value);
+   
     const enteredDate = new Date(e.target.value);
     const currentDate = new Date();
-
-    console.log(currentDate.getFullYear());
-    console.log(enteredDate.getFullYear());
-    if (
-      currentDate.getFullYear() <= enteredDate.getFullYear() &&
-      currentDate.getMonth() <= enteredDate.getMonth() &&
-      currentDate.getDate() <= enteredDate.getDate()
-    ) {
+    if(enteredDate.toDateString() === currentDate.toDateString()){
+      const hourOfDay = currentDate.getHours();
+      if(hourOfDay<=5){
       setblockSlot({ morning: false, afternoon: false, evening: false });
-      setError({ ...error, date: false });
+      }
+     else if (hourOfDay >= 5 && hourOfDay < 12) {
+      setblockSlot({ morning: true, afternoon: false, evening: false });
+
+      } else if (hourOfDay >= 12 && hourOfDay < 16) {
+        setblockSlot({ morning: true, afternoon: true, evening: false });
+
+      } else {
+        setblockSlot({ morning: true, afternoon: true, evening: true });
+        setError({...error,date:true})
+      }
+    }else{
+      setblockSlot({ morning: false, afternoon: false, evening: false });
+      setError({...error,date:false})
+
+    }
+    
+    if(!error.date) {
       setBooking({ ...booking, date: enteredDate });
 
-      if (
-        currentDate.getMonth() === enteredDate.getMonth() &&
-        currentDate.getDate() === enteredDate.getDate()
-      ) {
-        const hour = currentDate.getHours();
-        switch (true) {
-          case hour < 11:
-            setblockSlot({ morning: false, afternoon: false, evening: false });
-            break;
-          case hour > 11 && hour < 14:
-            setblockSlot({ morning: true, afternoon: false, evening: false });
-            break;
-          case hour > 14 && hour < 18:
-            setblockSlot({ morning: true, afternoon: true, evening: false });
-            break;
-          case hour > 18:
-            setError({ ...error, date: true });
-            setBooking({ ...booking, date: null });
-            setblockSlot({ morning: true, afternoon: true, evening: true });
-            break;
-          default:
-            setError({ ...error, date: true });
-            setBooking({ ...booking, date: null });
-            setblockSlot({ morning: true, afternoon: true, evening: true });
-        }
-      }
-    } else {
-      setError({ ...error, date: true });
-      setblockSlot({ morning: true, afternoon: true, evening: true });
     }
+
   };
 
   // handle booking
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (
       booking.address &&
       booking.estimatedCharge &&
@@ -214,35 +199,39 @@ function Booking() {
       booking.type &&
       booking.slot
     ) {
-      setLoading(true);
-      addBookingApi(booking)
-        .then(({ data }) => {
-          setLoading(false);
+      try {
+        setLoading(true);
+        const { data } = await addBookingApi(booking);
+        setLoading(false);
+        if (data.success) {
+          fireToast("success", "booking successfull");
+          reset();
+          setAddress(false);
+          setblockSlot({ morning: false, afternoon: false, evening: false });
+          setBooking({
+            user: userData._id,
+            address: null,
+            service: service.service,
+            type: false,
+            duration: false,
+            estimatedCharge: 0,
+            date: null,
+            slot: null,
+            detail: null,
+          });
+          navigate("/bookings");
+        }
+      } catch (error) {
+        console.log("error");
+        setLoading(false);
+        fireToast("error", error.response.data.error.message);
+      }
 
-          if (data.success) {
-            fireToast("success", "booking successfull");
-            reset();
-            setAddress(false);
-            setblockSlot({ morning: false, afternoon: false, evening: false });
-            setBooking({
-              user: userData._id,
-              address: null,
-              service: service.service,
-              type: false,
-              duration: false,
-              estimatedCharge: 0,
-              date: null,
-              slot: null,
-              detail: null,
-            });
-
-            navigate("/bookings");
-          }
-        })
-        .then((error) => {
-          setLoading(false);
-          console.log(error);
-        });
+      // .then((error) => {
+      //   console.log('error')
+      //   setLoading(false);
+      //   fireToast('error',error.response.data.error.message)
+      //  });
     }
   };
 
@@ -455,6 +444,8 @@ function Booking() {
               <input
                 type="date"
                 name="date"
+                value={ new Date(booking.date).toISOString().split('T')[0]}
+                min={new Date().toISOString().split('T')[0]}
                 onChange={handleDate}
                 placeholder="zip-code"
                 className={`py-1 my-auto focus:outline focus:outline-slate-400  border-[1px] 
