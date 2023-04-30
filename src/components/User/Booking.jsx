@@ -3,8 +3,7 @@ import { addressSchema } from "../../validations/Validation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useLocation, useNavigate } from "react-router-dom";
-import { fetchLocationApi } from "../../apis/admin";
-import { addBookingApi } from "../../apis/user";
+import { addBookingApi, bookingLocationApi } from "../../apis/user";
 import { useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import fireToast from "../../utils/fireToast";
@@ -16,13 +15,14 @@ function Booking() {
   const [locations, setLocations] = useState([]);
   const service = location?.state?.data;
   const [error, setError] = useState({ zipcode: false, date: false });
+  
   const [blockSlot, setblockSlot] = useState({
     // state to remove slots based on current time
     morning: true,
     afternoon: true,
     evening: true,
   });
-  const [address, setAddress] = useState(true);
+  const [address, setAddress] = useState(false);
   const [booking, setBooking] = useState({
     user: userData._id,
     address: null,
@@ -39,9 +39,8 @@ function Booking() {
     if (!location.state) {
       navigate("/");
     }
-    fetchLocationApi()
+    bookingLocationApi()
       .then(({ data }) => {
-        console.log(data);
         data.locations.forEach((location) => {
           for (let i in location) {
             if (i === "pincode") {
@@ -144,6 +143,7 @@ function Booking() {
 
   // function to handle zipcode
   const handelZipcode = (value) => {
+ 
     const pincode = parseInt(value);
 
     setError({ ...error, zipcode: false });

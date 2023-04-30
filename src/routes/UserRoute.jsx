@@ -24,7 +24,7 @@ function UserRoute() {
           <Route path="/services/:name" element={<ViewService />} />
           <Route element={<ProtectedRoute type={"user"} redirect={"/login"} />}>
             <Route path="/profile" element={<Profile />} />
-            <Route path="/booking" element={<Booking />} />
+            <Route path="/:name/booking" element={<Booking />} />
             <Route path="/bookings" element={<ViewBooking />} />
             <Route path="/payment/success" element={<PaymentSuccessPage/>} />
           </Route>

@@ -23,7 +23,7 @@ function Services() {
       </div>
         <div className='grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 '>
           {
-            services.map((service)=>{
+            services?.map((service)=>{
                if(!service.isDeleted){
                 return  <SingleService data={service} key={service._id} image={service.image} title={service.service} />
                }

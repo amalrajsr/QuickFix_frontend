@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { sendConverstaionsApi } from "../../../apis/chat";
 import { AiOutlineSend } from "react-icons/ai";
-import { chatSchema } from "../../../validations/Validation";
 import { SOCKET_URL } from "../../../config/socket";
 import { io } from "socket.io-client";
-import fireToast from "../../../utils/fireToast";
 function ChatSection({ user, conversations }) {
   const [currentChat, setcurrentChat] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import axios from "../config/axios";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,6 @@ import { removeExpert } from "../store/slices/expertSlice";
 import fireToast from "./fireToast";
 function ProtectedRoute({ type, redirect }) {
   const [auth, setAuth] = useState(null);
-  const location = useLocation();
   const token = localStorage.getItem(type);
   const navigate = useNavigate();
   const dispatch = useDispatch();

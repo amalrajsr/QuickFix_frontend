@@ -39,7 +39,7 @@ function Table({fetchlocation, setfetchlocation}) {
   const blockLocation = async (id) => {
  
     try {
-      const { data } = await blockLocationApi(id);
+      await blockLocationApi(id);
       getLocations();
     } catch (error) {
       if (error.response?.data?.error?.tokenExpired) {

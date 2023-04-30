@@ -6,8 +6,6 @@ import {  Navigate, useLocation, useNavigate } from "react-router-dom";
 import { otpSchema } from "../../validations/Validation";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../store/slices/userSlice";
-import axios from "../../config/axios";
-import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { registerOtpApi, resendOtpApi } from "../../apis/user";

@@ -40,6 +40,7 @@ function Table({ bookingStatus }) {
       });
   }, [fetchBooking]);
 
+  console.log(experts)
   const assignExpert = async (bookingId) => {
     if (expert.length > 0) {
       setLoading(true);

@@ -72,7 +72,7 @@ function ViewService() {
 
   // book now
   const handeBookNow = () => {
-    navigate("/booking", { state: { data: service[0] } });
+    navigate(`/${service[0]?.service?.toLocaleLowerCase()}/booking`, { state: { data: service[0] } });
   };
 
   //fetching latest 4 reviews

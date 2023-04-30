@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
 import { deleteReviewApi, fetchReviewsApi } from "../../apis/admin";
 import confirmToast from "../../utils/confirmToast";
 import { AiFillDelete } from "react-icons/ai";

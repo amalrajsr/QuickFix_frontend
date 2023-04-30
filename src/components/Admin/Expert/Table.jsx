@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import { blockUnblockExpertApi, fetchExpertApi } from "../../../apis/admin";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
-import { useDispatch } from "react-redux";
-import { addExperts } from "../../../store/slices/expertsSlice";
 import confirmToast from "../../../utils/confirmToast";
 import fireToast from "../../../utils/fireToast";
 
 function Table({fetchExperts}) {
   const navigate = useNavigate();
   const [experts, setExperts] = useState([]);
-  const dispatch=useDispatch()
   useEffect(() => {
     getExperts();
   }, [fetchExperts]);
@@ -19,7 +16,6 @@ function Table({fetchExperts}) {
     fetchExpertApi()
       .then(({ data }) => {
         setExperts(data.result);
-        // dispatch(addExperts(data.result))
       })
       .catch((error) => {
         console.log(error);

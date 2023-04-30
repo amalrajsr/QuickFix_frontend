@@ -199,7 +199,7 @@ function Profile({ expert }) {
                         // onChange={(e) => setUser({ ...user, mobile: e.target.value })}
                         type="text"
                         disabled
-                        className="py-2 focus:border-0 focus:outline-none  rounded-md px-10 "
+                        className="py-2 focus:border-0 focus:outline-none bg-none rounded-md px-10 "
                       />{" "}
                       <VscVerifiedFilled className="my-auto mx-auto text-green-700 text-2xl" />
                     </div>

@@ -28,7 +28,7 @@ function Sidebar() {
     <>
       <aside
         id="separator-sidebar"
-        className=" w-16 md:w-52 h-screen "
+        className=" w-16 md:w-52 z-10 h-full fixed  "
         aria-label="Sidebar"
       >
         <div className="h-full flex flex-col justify-between px-3 py-4 overflow-y-auto bg-gray-50">

@@ -42,6 +42,7 @@ export const trendingServicesApi=()=>axios.get('user/trending-services')
 
 // booking
 export const addBookingApi=(booking)=> axios.post('user/bookings',booking,getToken('raw'))
+export const bookingLocationApi=()=>axios.get('user/booking/locations',getToken('raw'))
 export const viewBookings=(id)=>axios.get(`user/bookings/${id}`,getToken('raw'))
 export const cancelBooking=(id)=>axios.patch(`user/bookings/${id}`,{},getToken('raw'))
 

@@ -36,7 +36,7 @@ function ChatModal({ open }) {
   useEffect(() => {
     fetchConversationsApi(user?._id)
       .then(({ data }) => {
-        if (data.result[0].conversation) {
+        if (data?.result[0]?.conversation) {
           setConversations(data.result[0].conversation);
         }
       })

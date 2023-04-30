@@ -177,10 +177,9 @@ export const addressSchema=yup.object().shape({
   )
   .matches(/^[a-zA-Z\s]+$/, "Only alphabets are allowed"),
 
-  zipcode: yup.string()
-  .matches(/^\d{6}$/, "zip code is not valid")
-  .typeError("mobile is required")
-  .required('mobile is required'),
+  zipcode: yup.number()
+  .typeError("zipcode is required")
+  .required('zipcode is required'),
 
 })
 
