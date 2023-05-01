@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import React, { useRef, useState } from "react";
 import { BsFillTelephoneForwardFill } from "react-icons/bs";
 import { updatePaymentApi, updatePaymentStatusApi } from "../../apis/expert";
 import confirmToast from "../../utils/confirmToast";
 import fireToast from "../../utils/fireToast";
 function Works({ booking, fetchBooking, setFetchBooking }) {
+
+  const totalRef=useRef()
   const [loading, setLoading] = useState(false);
   const [payment, setPayment] = useState();
+  const [totalChargeError, setTotalChargeError] = useState(false);
   const updatePayment = async (bookinId) => {
     try {
       const { data } = await updatePaymentApi(bookinId, {
@@ -23,20 +25,30 @@ function Works({ booking, fetchBooking, setFetchBooking }) {
 
   // function to update payment status if user choose cod option
   const updatePaymentStatus = async () => {
-    try {
-      setLoading(true);
-      const { data } = await updatePaymentStatusApi(booking?._id);
-      setLoading(false);
+    if (!booking.totalCharge) {
+      totalRef.current?.focus()
+      setTotalChargeError(true);
+    } else {
+      try {
+        setLoading(true);
+        const { data } = await updatePaymentStatusApi(booking?._id);
+        setLoading(false);
 
-      if (data.success) {
-        fireToast("success", "updated successfully");
-        setFetchBooking(!fetchBooking);
+        if (data.success) {
+          fireToast("success", "updated successfully");
+          setFetchBooking(!fetchBooking);
+        }
+      } catch (error) {
+        setLoading(false);
+        fireToast("error", error.response?.data?.error.message);
       }
-    } catch (error) {
-      setLoading(false);
-      fireToast("error", error.response?.data?.error.message);
     }
   };
+
+  const handleTotalCharge=(e)=>{
+    setPayment(e.target.value)
+    setTotalChargeError(false)
+  }
   return (
     <div
       key={booking?._id}
@@ -75,9 +87,12 @@ function Works({ booking, fetchBooking, setFetchBooking }) {
           ) : (
             <>
               <input
+              ref={totalRef}
                 value={payment}
-                onChange={(e) => setPayment(e.target.value)}
-                className="bg-white border-[1px] border-slate-300 rounded-sm oultine outline-0 shadow-sm max-w-[80px]"
+                onChange={(e) => handleTotalCharge(e)}
+                className={`bg-white border-[1px] ${
+                  totalChargeError ? "border-red-600" : "border-slate-300"
+                } rounded-sm oultine outline-0 shadow-sm max-w-[80px]`}
                 type="number"
               />
               <button

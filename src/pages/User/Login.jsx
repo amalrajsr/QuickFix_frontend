@@ -48,6 +48,7 @@ function Login() {
           setOtp(true);
         }
       } catch (error) {
+        console.log(error)
         setLoading(false);
         fireToast("error", error.response?.data?.error.message);
       }

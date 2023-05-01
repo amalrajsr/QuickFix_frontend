@@ -12,11 +12,12 @@ import {
 } from "../../../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../UI/Modal";
-import { updateExpertProfileApi } from "../../../apis/expert";
+import { getExpertProfileApi, updateExpertProfileApi } from "../../../apis/expert";
 import { removeExpert, updateExpert } from "../../../store/slices/expertSlice";
 import fireToast from "../../../utils/fireToast";
 import { HiArrowLongRight } from "react-icons/hi2";
 import ResetPassword from "../../Expert/ResetPassword";
+
 function Profile({ expert }) {
   const navigate = useNavigate();
   // state to handle modal
@@ -38,11 +39,19 @@ function Profile({ expert }) {
   const onOpenModal = () => setOpen(true);
   const [user, setUser] = useState({ id: null, name: null });
   const [profileImage, setProfileImage] = useState(null);
+  const [expertMonthlyWorks,setExpertMonthlyWorks]=useState(0)
   const userData = useSelector((state) =>
     expert ? state.expert.value : state.user.value
   );
 
   useEffect(() => {
+    if(expert){
+      getExpertProfileApi(userData?._id).then(({data})=>{
+        if(data.success && data.result){
+           setExpertMonthlyWorks(data.result.length)
+        }
+      })
+    }
     setUser({ name: userData?.name }); //mobile: data.mobile
   }, []);
 
@@ -79,6 +88,7 @@ function Profile({ expert }) {
       });
   };
 
+  //check the type of file user uploaded
   const handleImage = (e) => {
     const file = e.target.files[0];
 
@@ -92,6 +102,7 @@ function Profile({ expert }) {
     }
   };
 
+  // backend call for updating profile image
   const handleProfileChange = () => {
     if (profileImage) {
       setLoading(true);
@@ -120,12 +131,16 @@ function Profile({ expert }) {
       setError({ status: true, message: "please select an image" });
     }
   };
+
+
   return (
     <>
       <div
-        className={`h-[550px] mb-72 md:mb-32  ${expert ? "mt-14" : "mt-20"}`}
+        className={`h-[550px]  ${expert ? "mb-96" : "mb-64 "} md:mb-32  ${
+          expert ? "mt-14" : "mt-20"
+        }`}
       >
-        <div className="bg-light flex justify-center items-center h-1/3">
+        <div className="bg-light flex flex-col md:flex-row justify-evenly items-center h-1/3">
           <h1 className="text-3xl">My Profile</h1>
         </div>
         <div className="flex  justify-end h-2/3">
@@ -150,14 +165,19 @@ function Profile({ expert }) {
                     </h1>
                     <h1 className="text-center mt-2 font-medium text-md">
                       Service: {userData?.service}{" "}
-                      <span className="text-gray-500">|</span> Total works:
-                      {userData?.works?.length}
+                    </h1>
+                    <h1 className="text-center mt-1">
+                      <span>
+                        <span className="mx-1">Total Works :</span>
+                        {userData?.works?.length}
+                      </span>{" "}
+                      |<span className="mx-1">Monthly Works :</span>{expertMonthlyWorks}
                     </h1>
                   </>
                 ) : (
                   <>
                     <h1 className="text-center mt-2 font-medium text-md">
-                     Total Bookings: {userData.booking?.length}{" "}
+                      Total Bookings: {userData.booking?.length}{" "}
                     </h1>
                     <p className="text-center mt-6 mb-2">
                       <button
@@ -228,7 +248,6 @@ function Profile({ expert }) {
                       onClick={() => setpasswordModal(true)}
                       className="flex justify-end cursor-pointer text-slate-500"
                     >
-                      {" "}
                       <HiArrowLongRight className="mt-1 mr-1 " /> Reset Password
                     </p>
                   )}

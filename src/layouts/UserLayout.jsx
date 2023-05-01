@@ -13,7 +13,7 @@ function UserLayout() {
   return (
     <>
       <Navbar />
-      <Outlet />
+    <div>  <Outlet /></div>
       <ChatModal  open={open}/>
      {user && <div className="flex justify-end fixed bottom-10 rounded-md right-0 md:right-10 z-10">
         <button onClick={()=>setOpen(open ?false :true)} className="px-5 py-3  shadow shadow-slate-500 rounded-full bg-dark mx-5">

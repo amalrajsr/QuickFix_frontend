@@ -12,6 +12,7 @@ const getToken = () => {
 
 export const expertLoginApi=(data)=>axios.post('expert/login',data)
 export const updateExpertProfileApi=(expertId,data)=>axios.patch(`expert/profile/${expertId}`,data,getToken())
+export const getExpertProfileApi=(expertId)=>axios.get(`expert/profile/${expertId}`,getToken())
 
 //work section
 export const viewWorksApi=(expertId)=>axios.get(`expert/works/${expertId}`,getToken())

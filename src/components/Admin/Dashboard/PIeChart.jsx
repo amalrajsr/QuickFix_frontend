@@ -1,18 +1,17 @@
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-function PIeChart({bookingDetails}) {
-
-
+function PIeChart({ bookingDetails }) {
+  
   ChartJS.register(ArcElement, Tooltip, Legend);
   const data = {
-    labels: bookingDetails?.map((data)=>{
-      return data._id 
+    labels: bookingDetails?.map((data) => {
+      return data._id;
     }),
     datasets: [
       {
-        data:  bookingDetails?.map((data)=>{
-          return data.count 
+        data: bookingDetails?.map((data) => {
+          return data.count;
         }),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",

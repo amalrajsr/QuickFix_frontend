@@ -74,7 +74,7 @@ function Chat() {
                        {data?.user?.name}
                       </span>
                       <span className="block ml-2 text-sm text-gray-600">
-                        25 minutes
+                     
                       </span>
                     </div>
                     {/* <span className="block ml-2 text-sm text-gray-600">bye</span> */}

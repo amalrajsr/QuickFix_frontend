@@ -40,7 +40,6 @@ function Table({ bookingStatus }) {
       });
   }, [fetchBooking]);
 
-  console.log(experts)
   const assignExpert = async (bookingId) => {
     if (expert.length > 0) {
       setLoading(true);
@@ -60,26 +59,27 @@ function Table({ bookingStatus }) {
     }
   };
 
-  const changeExpert =async(e,bookingId,oldExpert)=>{
-  
-      try {
-        setLoading(true);
-        const { data } = await changeExpertApi(bookingId, {newExpert:e.target.value,oldExpert});
+  const changeExpert = async (e, bookingId, oldExpert) => {
+    try {
+      setLoading(true);
+      const { data } = await changeExpertApi(bookingId, {
+        newExpert: e.target.value,
+        oldExpert,
+      });
 
-        setLoading(false);
-        if (data.success) {
-          setFetchBooking(!fetchBooking);
-          fireToast("success", "updated successfully");
-        }
-      } catch (error) {
-        fireToast("error", error.response?.data?.error.message);
-
-        setLoading(false);
+      setLoading(false);
+      if (data.success) {
+        setFetchBooking(!fetchBooking);
+        fireToast("success", "updated successfully");
       }
-    
-  }
+    } catch (error) {
+      fireToast("error", error.response?.data?.error.message);
+
+      setLoading(false);
+    }
+  };
   const columns = [
-     ['active','completed'].includes(bookingStatus)  && {
+    ["active", "completed"].includes(bookingStatus) && {
       name: "Expert",
       selector: (row) => row.expert[0]?.name,
     },
@@ -107,7 +107,6 @@ function Table({ bookingStatus }) {
       selector: (row) => <span>₹ {row.estimatedCharge}</span>,
       grow: 4,
     },
-
     (bookingStatus === "pending" || bookingStatus === "active") && {
       name: bookingStatus === "pending" ? "Assign Expert" : "Change Expert",
       grow: 4,
@@ -118,7 +117,11 @@ function Table({ bookingStatus }) {
           name="expert"
           id="expert"
           value={expert}
-          onChange={(e) =>bookingStatus==='active'? changeExpert(e,row._id,row.expert[0]?._id): setExpert(e.target.value)}
+          onChange={(e) =>
+            bookingStatus === "active"
+              ? changeExpert(e, row._id, row.expert[0]?._id)
+              : setExpert(e.target.value)
+          }
         >
           <option value="">
             {bookingStatus === "active"
@@ -127,10 +130,12 @@ function Table({ bookingStatus }) {
           </option>
           {experts?.map((expert) => {
             return (
-            
-              !expert?.isBlocked &&
+              !expert?.isBlocked && expert.name !== row.expert[0]?.name &&
               expert.serviceDetails[0].service === row.service &&
-              expert.city[0].pincode === row.address?.zipcode && (
+              expert.city[0].pincode === row.address?.zipcode &&
+              expert?.works?.every(
+                (work) => new Date(work.date).getTime() !== new Date(row.date).getTime() // checking avalilable worker
+              ) && (
                 <option key={expert?._id} id={expert?._id} value={expert?._id}>
                   {expert?.name}
                 </option>
@@ -141,7 +146,7 @@ function Table({ bookingStatus }) {
       ),
     },
 
-    ['active','completed'].includes(bookingStatus) && {
+    ["active", "completed"].includes(bookingStatus) && {
       name: "Total Charge",
       selector: (row) => <span>₹ {row?.totalCharge}</span>,
       grow: 3,
@@ -151,25 +156,26 @@ function Table({ bookingStatus }) {
       selector: (row) => <span>{row.payment ? "completed" : "pending"}</span>,
       grow: 2,
     },
-    bookingStatus === "pending" && {
+     bookingStatus==='pending' &&{
       name: null,
       cell: (row) => (
         <button
           disabled={loading}
           onClick={() => assignExpert(row._id)}
-          className={`bg-dark hover:bg-gray-700 rounded-lg text-white px-3 py-1`}
+          className={`bg-dark hover:bg-gray-700 z-20 rounded-lg text-white px-3 py-1`}
         >
           {loading ? <ClipLoader /> : "Approve"}
         </button>
       ),
       grow: 3,
     },
+    
   ];
   const data = bookings?.filter((booking) => {
     return (
       booking?.status === bookingStatus && {
         service: booking.service,
-        date: booking.date.split("T")[0],
+        date: booking.date,
         slot: booking.slot,
         type: booking.type,
         estimatedCharge: booking.estimatedCharge,
