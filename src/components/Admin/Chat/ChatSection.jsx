@@ -14,14 +14,14 @@ function ChatSection({ user, conversations }) {
   useEffect(() => {
     socket.current = io(SOCKET_URL);
     socket.current?.on("getMessage", ({ senderId, message, sender }) => {
-      if(user._id===senderId){
+      //  if(user._id===senderId && sender!=='admin'){
       setArrivalMessage({
         senderId,
         message,
         sender,
         date: Date.now(),
       });
-    }
+    //  }
     });
   }, []);
 
@@ -32,10 +32,11 @@ function ChatSection({ user, conversations }) {
   useEffect(() => {
     inputRef.current?.focus();
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [user]);
+  }, [arrivalMessage,currentChat,user]);
 
   const sendMessage = () => {
     if (currentChat.length > 0) {
+      
       socket.current?.emit("send-message", {
         userId: user?._id,
         message: currentChat,

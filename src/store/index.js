@@ -5,7 +5,6 @@ import { userReducer } from "./slices/userSlice";
 import { serviceReducer } from "./slices/serviceSlice";
 import { locationReducer } from "./slices/locationSlice";
 import { expertReducer } from "./slices/expertSlice";
-import { bookingReducer } from "./slices/bookingSlice";
 const persistConfig = {
   key: "root",
   version: 1,
@@ -17,7 +16,6 @@ const reducer = combineReducers({
   service: serviceReducer,
   location: locationReducer,
   expert: expertReducer,
-  booking:bookingReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

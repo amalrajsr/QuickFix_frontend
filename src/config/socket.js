@@ -1,2 +1,3 @@
 
-export const SOCKET_URL = process.env.REACT_APP_ORIGIN_URL
+export const SOCKET_URL = 'http://localhost:7889'
+

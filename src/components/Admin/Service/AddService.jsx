@@ -1,96 +1,92 @@
-import {  useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { serviceSchema } from "../../../validations/Validation";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
-import Modal from '../../UI/Modal'
+import Modal from "../../UI/Modal";
 import { addServiceApi } from "../../../apis/admin";
 import { ServiceContext } from "../../../context/serviceContext";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import fireToast from "../../../utils/fireToast";
 function AddService() {
-  const navigate=useNavigate()
-  const {updateTable,setUpdateTable}= useContext(ServiceContext)
-
+  const navigate = useNavigate();
+  const { updateTable, setUpdateTable } = useContext(ServiceContext);
   const [error, setError] = useState(false);
   const [image, setImage] = useState(null);
   const [largeImage, setlargeImage] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  //fetching services from redux
+  const services = useSelector((state) => state.service.value);
   // state to handle modal
   const [open, setOpen] = useState(false);
   const onCloseModal = () => setOpen(false);
-  const onOpenModal = () =>{ 
-    setOpen(true)
-    reset()
-  }
+  const onOpenModal = () => {
+    setOpen(true);
+    reset();
+  };
   // form validation using useForm
   const {
     register,
     handleSubmit,
-    reset ,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(serviceSchema),
   });
-  
+
   // form submit handler
   const onHandleSubmit = async (serviceData) => {
-    setLoading(true);
-    const service = new FormData();
-    service.append("service", serviceData.service);
-    service.append("file", image);
-     service.append("file", largeImage);
-    service.append(
-      "installationCharge1Hour",
-      serviceData.installationCharge1Hour
+    const serviceExist = services.some(
+      (data) => data.service === serviceData.service.toUpperCase()
     );
-    service.append(
-      "installationChargeLatelyHours",
-      serviceData.installationChargeLatelyHours
-    );
-    service.append("repairCharge1Hour", serviceData.repairCharge1Hour);
-    service.append(
-      "repairChargeLatelyHours",
-      serviceData.repairChargeLatelyHours
-    );
+    if (serviceExist) fireToast("error", "service already exist");
+    else {
+      setLoading(true);
+      const service = new FormData();
+      service.append("service", serviceData.service);
+      service.append("file", image);
+      service.append("file", largeImage);
+      service.append(
+        "installationCharge1Hour",
+        serviceData.installationCharge1Hour
+      );
+      service.append(
+        "installationChargeLatelyHours",
+        serviceData.installationChargeLatelyHours
+      );
+      service.append("repairCharge1Hour", serviceData.repairCharge1Hour);
+      service.append(
+        "repairChargeLatelyHours",
+        serviceData.repairChargeLatelyHours
+      );
 
-    // api call
-    try {
-      const { data } = await addServiceApi(service);
+      // api call
+      try {
+        const { data } = await addServiceApi(service);
 
-      if (data.success) {
+        if (data.success) {
+          setLoading(false);
+          fireToast("success", "added successfully");
+
+          setUpdateTable(!updateTable);
+
+          onCloseModal();
+          reset();
+          setImage(null);
+        }
+      } catch (error) {
+        if (error.response?.data?.error?.tokenExpired) {
+          localStorage.removeItem("admin");
+          navigate("/admin/login");
+        }
         setLoading(false);
-        toast.success("successfully added", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        setUpdateTable(!updateTable)
-       
-        onCloseModal();
-        reset()
-        setImage(null)
+        fireToast("error", error.response?.data?.error.message);
+
+        reset();
       }
-    } catch (error) {
-      if(error.response?.data?.error?.tokenExpired){
-        localStorage.removeItem('admin')
-        navigate('/admin/login')
-      }
-      setLoading(false);
-      toast.error(error.response?.data?.error.message, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      reset()
     }
   };
 
@@ -101,37 +97,36 @@ function AddService() {
     if (!allowedExtensions.exec(file.name)) {
       setError(true);
     } else {
-    setImage(file)
-     
+      setImage(file);
+
       setError(false);
     }
   };
 
-    // function to validate Large Image
-    const handleLargeImageChange = (e) => {
-      const file = e.target.files[0];
-      const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/;
-      if (!allowedExtensions.exec(file.name)) {
-        setError(true);
-      } else {
-      setlargeImage(file)
-       
-        setError(false);
-      }
-    };
-  
+  // function to validate Large Image
+  const handleLargeImageChange = (e) => {
+    const file = e.target.files[0];
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/;
+    if (!allowedExtensions.exec(file.name)) {
+      setError(true);
+    } else {
+      setlargeImage(file);
+
+      setError(false);
+    }
+  };
+
   return (
     <>
-      
-        <button
-          onClick={onOpenModal}
-          className="bg-slate-100 mx-auto px-2 rounded-lg"
-          data-modal-target="authentication-modal"
-          data-modal-toggle="authentication-modal"
-        >
-          add service
-        </button>
-      
+      <button
+        onClick={onOpenModal}
+        className="bg-slate-100 mx-auto px-2 rounded-lg"
+        data-modal-target="authentication-modal"
+        data-modal-toggle="authentication-modal"
+      >
+        add service
+      </button>
+
       <Modal open={open} onClose={onCloseModal}>
         <h3 className="text-center text-2xl">Add Service</h3>
         <form onSubmit={handleSubmit(onHandleSubmit)}>
@@ -139,7 +134,6 @@ function AddService() {
             <label className="mx-3">Service</label>
             <input
               type="text"
-             
               name="service"
               className="py-2  focus:outline-slate-300 bg-slate-100 rounded-md w-auto  mx-3"
               {...register("service")}
@@ -159,7 +153,11 @@ function AddService() {
               multiple
               required
             />
-                    <img src={image?URL.createObjectURL(image): ''} className='w-[50px] mx-3' alt=" " />
+            <img
+              src={image ? URL.createObjectURL(image) : ""}
+              className="w-[50px] mx-3"
+              alt=" "
+            />
 
             {error && (
               <p className="mx-3 text-slate-400">
@@ -179,7 +177,11 @@ function AddService() {
               multiple
               required
             />
-                    <img src={largeImage?URL.createObjectURL(largeImage): ''} className='w-[50px] mx-3' alt=" " />
+            <img
+              src={largeImage ? URL.createObjectURL(largeImage) : ""}
+              className="w-[50px] mx-3"
+              alt=" "
+            />
 
             {error && (
               <p className="mx-3 text-slate-400">

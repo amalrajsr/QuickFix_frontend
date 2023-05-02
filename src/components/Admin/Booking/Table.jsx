@@ -10,7 +10,6 @@ import DataTable from "react-data-table-component";
 import ClipLoader from "react-spinners/ClipLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 import fireToast from "../../../utils/fireToast";
-import { useSelector } from "react-redux";
 function Table({ bookingStatus }) {
   const [pending, setPending] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -21,12 +20,11 @@ function Table({ bookingStatus }) {
   const navigate = useNavigate();
 
 
-const reloadBooking=useSelector((state)=>state.booking)
 
   useEffect(() => {
     fetchExpertApi().then(({ data }) => {
       if (data.result) {
-
+        setExperts(data.result)
       }
     });
   }, []);
@@ -45,7 +43,7 @@ const reloadBooking=useSelector((state)=>state.booking)
           navigate("/admin/login");
         }
       });
-  }, [fetchBooking,reloadBooking]);
+  }, [fetchBooking]);
 
   const assignExpert = async (bookingId) => {
     if (expert.length > 0) {
@@ -85,6 +83,8 @@ const reloadBooking=useSelector((state)=>state.booking)
       setLoading(false);
     }
   };
+
+
   const columns = [
     ["active", "completed"].includes(bookingStatus) && {
       name: "Expert",

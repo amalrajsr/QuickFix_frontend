@@ -9,11 +9,12 @@ import ProtectedRoute from "../utils/ProtectedRoute";
 import ViewService from "../components/User/Services/ViewService";
 import Booking from "../components/User/Booking";
 import ViewBooking from "../components/User/Profile/ViewBooking";
-import PaymentSuccessPage from "../components/User/PaymentSuccessPage";
 import { Suspense } from "react";
 import  ClipLoader  from "react-spinners/ClipLoader";
+
 const PageNotFound = lazy(() => import("../components/UI/PageNotfound"));
 const Register=lazy(()=>import("../pages/User/Register"))
+const PaymentSuccessPage=lazy(()=>import('../components/User/PaymentSuccessPage'))
 function UserRoute() {
   return (
     <>
@@ -28,7 +29,7 @@ function UserRoute() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/:name/booking" element={<Booking />} />
             <Route path="/bookings" element={<ViewBooking />} />
-            <Route path="/payment/success" element={<PaymentSuccessPage />} />
+            <Route path="/payment/success"element={<Suspense fallback={<ClipLoader/>}><PaymentSuccessPage /></Suspense>} />
           </Route>
           <Route
             path={"*"}

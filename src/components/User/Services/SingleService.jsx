@@ -1,7 +1,7 @@
 import React from 'react'
 import {  useNavigate } from 'react-router-dom'
 
-function SingleService({data, image, title }) {
+function SingleService({ image, title }) {
      const service=title.toLowerCase()
       const navigate=useNavigate()
     const handleClick=()=>{

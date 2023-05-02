@@ -18,7 +18,7 @@ function ChatModal({ open }) {
 
   useEffect(() => {
     if (user) {
-      socket.current = io(process.env.REACT_APP_SOCKET_URL);
+      socket.current = io(SOCKET_URL);
       socket.current?.on("getMessage", ({ senderId, message, sender }) => {
         setArrivalMessage({
           senderId,
@@ -49,7 +49,8 @@ function ChatModal({ open }) {
   }, []);
 
   // socket call for sending message
-  const sendMessage = () => {
+  const sendMessage = (e) => {
+    e.preventDefault()
     socket.current?.emit("send-message", {
       userId: user._id,
       message: currentChat,
@@ -121,6 +122,7 @@ function ChatModal({ open }) {
         </ul>
       </div>
       <div className="chat-footer  flex justify-between bg-white shadow-md p-3 rounded   ">
+        <form onSubmit={sendMessage} className="w-full">
         <input
           ref={inputRef}
           type="text"
@@ -128,13 +130,16 @@ function ChatModal({ open }) {
           placeholder="type here"
           value={currentChat}
           onChange={(e) => setcurrentChat(e.target.value)}
-          className="focus:outline-none w-3/4 focus:border-0 "
+          className="focus:outline-none w-11/12 focus:border-0 "
           id=""
         />
+        <button>
         <AiOutlineSend
-          onClick={sendMessage}
+         
           className="my-auto  text-dark text-xl"
         />
+        </button>
+        </form>
       </div>
     </div>
   );

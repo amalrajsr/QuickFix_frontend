@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import confirmToast from "../../../utils/confirmToast";
 import BeatLoader from "react-spinners/BeatLoader";
 
-function Table({fetchlocation, setfetchlocation,searchTerm}) {
+function Table({fetchlocation, setFetchlocation,searchTerm}) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); 
   const [pending, setPending] = useState(true);
@@ -43,7 +43,7 @@ function Table({fetchlocation, setfetchlocation,searchTerm}) {
  
     try {
       await blockLocationApi(id);
-      setfetchlocation(!fetchlocation)
+      setFetchlocation(!fetchlocation)
     } catch (error) {
       if (error.response?.data?.error?.tokenExpired) {
         localStorage.removeItem("admin");

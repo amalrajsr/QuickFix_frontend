@@ -91,7 +91,7 @@ function ViewService() {
   return (
     <>
       {/* banner section */}
-      <div className="w-full mt-16 bg-lightpurple ">
+      <div className="w-full mt-16 bg-lightpurple  py-1">
         <div className=" containter  mt-10 flex flex-col md:flex-row md:justify-between mb-12 w-3/4 mx-auto">
           <div className="flex flex-col my-2 md:my-auto">
             <h1 className="text-center md:text-start md:mx-3 my-2 text-3xl text-dark font-bold">
@@ -116,11 +116,11 @@ function ViewService() {
               </div>
             </div>
           </div>
-          <div className="">
+          <div >
             <img
               src={service?.[0]?.largeImage}
-              alt=""
-              className=" w-[350px] mt-4 sm:mt-0 mx-auto sm:w-[450px] rounded-lg  h-3/4 md:h-[250px]"
+              alt="service"
+              className=" w-[350px] mt-4 sm:mt-0 mx-auto  sm:w-[450px] rounded-lg  h-3/4 md:h-[250px]"
             />
           </div>
         </div>

@@ -184,7 +184,7 @@ const handleEdit=(singleService)=>{
         <Modal open={open} onClose={onCloseModal}>
           <ServiceCharge charge={charge}/>
           </Modal>
-   {toggle && <EditService toggle={toggle} data={edit}/>}
+   {toggle && <EditService toggle={toggle} services={services} data={edit}/>}
       <DataTable
       
         columns={columns}
