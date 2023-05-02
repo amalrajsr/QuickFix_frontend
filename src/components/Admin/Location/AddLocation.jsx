@@ -19,7 +19,7 @@ function AddLocation({fetchlocation, setFetchlocation}) {
     try{
   
         const {data}=await addLocationApi(addLocation)
-          console.log(data)
+  
          if(data.success){
           setLoading(false);
          

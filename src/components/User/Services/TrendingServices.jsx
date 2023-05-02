@@ -3,16 +3,19 @@ import Trending from "./Trending";
 import { trendingServicesApi } from "../../../apis/user";
 
 function TrendingServices() {
+
+
   const [trending, setTrending] = useState([]);
   useEffect(() => {
     trendingServicesApi()
       .then(({ data }) => {
+      
         if (data.trending) {
           setTrending(data.trending);
         }
       })
       .catch((error) => {
-        console.log(error);
+
       });
   }, []);
   return (
@@ -23,11 +26,13 @@ function TrendingServices() {
       <div className="flex flex-wrap gap-3 justify-evenly my-3">
         {trending.map((trending) => {
           return (
+            <div key={trending._id}>
             <Trending
               id={trending._id}
               image={trending?.image}
               title={trending?.service}
             />
+            </div>
           );
         })}
       </div>

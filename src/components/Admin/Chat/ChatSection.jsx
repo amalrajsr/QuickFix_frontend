@@ -14,13 +14,14 @@ function ChatSection({ user, conversations }) {
   useEffect(() => {
     socket.current = io(SOCKET_URL);
     socket.current?.on("getMessage", ({ senderId, message, sender }) => {
-      console.log(message);
+      if(user._id===senderId){
       setArrivalMessage({
         senderId,
         message,
         sender,
         date: Date.now(),
       });
+    }
     });
   }, []);
 
@@ -44,6 +45,7 @@ function ChatSection({ user, conversations }) {
       sendConverstaionsApi("admin", user?._id, {
         sender: "admin",
         message: currentChat,
+        time: Date.now(),
       })
         .then(({ data }) => {
           if (data.updated) {
@@ -52,7 +54,7 @@ function ChatSection({ user, conversations }) {
           }
         })
         .catch((error) => {
-          console.log(error);
+       
         });
     }
   };
@@ -73,10 +75,10 @@ function ChatSection({ user, conversations }) {
     }
   };
   return (
-    <div className="hidden md:col-span-2 md:block">
+    <div className=" md:col-span-2 my-4 md:my-0">
       <div className="w-full ">
-        <div className="relative flex items-center p-3 border-b border-gray-300">
-          {user && (
+        {user && (
+          <div className="relative flex items-center p-3 border-b border-gray-300">
             <>
               <img
                 className="object-cover w-10 h-10 rounded-full"
@@ -88,8 +90,8 @@ function ChatSection({ user, conversations }) {
               </span>
               {/* <span className="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span> */}
             </>
-          )}
-        </div>
+          </div>
+        )}
         <div className="relative w-full p-6 overflow-y-scroll h-[28rem]">
           {!user ? (
             <div className="flex justify-center  items-center h-full">
@@ -123,8 +125,8 @@ function ChatSection({ user, conversations }) {
           )}
         </div>
 
-        <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
-          {user && (
+        {user && (
+          <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
             <>
               <input
                 ref={inputRef}
@@ -141,8 +143,8 @@ function ChatSection({ user, conversations }) {
                 className="my-auto  text-dark text-xl"
               />
             </>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,19 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import store from './store/index'
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { persistStore } from 'redux-persist'
-const root = ReactDOM.createRoot(document.getElementById('root'));
-const persistor=persistStore(store)
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import store from "./store/index";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import ErrorBoundary from "./utils/ErrorBoundary";
+import ErrorPage from "./components/UI/ErrorPage";
+const root = ReactDOM.createRoot(document.getElementById("root"));
+const persistor = persistStore(store);
+
 root.render(
   <Provider store={store}>
- <PersistGate persistor={persistor}>
-    <App/>
- </PersistGate>
+    <PersistGate persistor={persistor}>
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <App />
+      </ErrorBoundary>
+    </PersistGate>
   </Provider>
 );
 

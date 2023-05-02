@@ -4,7 +4,7 @@ import { forgotPasswordSchema } from "../../validations/Validation";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../UI/Button";
-import { forgotPasswordResetApi, resetPasswordApi } from "../../apis/expert";
+import { forgotPasswordResetApi, } from "../../apis/expert";
 import fireToast from "../../utils/fireToast";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
@@ -46,7 +46,7 @@ function ForgotPasswordReset() {
       }
     }
   };
-console.log(expertID)
+
   return !expertID ? (
     <Navigate to={"/expert/login"} />
   ) : (

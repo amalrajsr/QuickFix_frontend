@@ -10,7 +10,9 @@ import { addSerivces } from "../../../store/slices/serviceSlice";
 import { useNavigate } from "react-router-dom";
 import ServiceCharge from "./ServiceCharge";
 import confirmToast from "../../../utils/confirmToast";
-function Table() {
+import BeatLoader from "react-spinners/BeatLoader";
+
+function Table({searchTerm}) {
 
   const dispatch=useDispatch()
   const navigate=useNavigate()
@@ -19,6 +21,7 @@ function Table() {
   const [charge,setCharge]=useState(null) // for displaying service rate on modal
   const [edit,setEdit]=useState(null) // hold service to be edited
   const [toggle,setToggle]=useState(false)
+  const [pending, setPending] = useState(true);
 
 
   // modal handler
@@ -41,6 +44,7 @@ function Table() {
       if(data.services){
       setServices(data.services);
       dispatch(addSerivces(data.services)) // adding services to redux
+      setPending(false) // changing loader to false
       }
     }catch(error){
       if(error.response.data.error.tokenExpired){
@@ -74,17 +78,24 @@ const handleEdit=(singleService)=>{
     {
       name: "Service",
       selector: (row) => row.service,
+      sortable: true,
+
     },
     {
       name: "Image",
       cell: (row) => (
         <img src={row.imageUrl} className="w-[50px]" alt={row.name} />
+        
       ),
+      sortable: true,
+
     },  {
       name: "largeImage",
       cell: (row) => (
         <img src={row.largeImage} className="w-[100px] mx-0" alt={row.name} />
       ),
+      sortable: true,
+
     },
     {
       name: "Charge",
@@ -98,6 +109,8 @@ const handleEdit=(singleService)=>{
           </button>
         </>
       ),
+      sortable: true,
+
     },
     {
       name: null,
@@ -111,6 +124,8 @@ const handleEdit=(singleService)=>{
           {row.isDeleted ? "unlist" : "list"}
         </button>
       ),
+      sortable: true,
+
     },
     {
       name: null,
@@ -119,6 +134,8 @@ const handleEdit=(singleService)=>{
         <i className="fa-regular fa-pen-to-square fa-md"></i>
         </span>
       ),
+      sortable: true,
+      
     },
   ];
 
@@ -171,11 +188,15 @@ const handleEdit=(singleService)=>{
       <DataTable
       
         columns={columns}
-        data={data}
+        data={data.filter((row) =>
+          row.service.toLowerCase().includes(searchTerm.toLowerCase())
+        )}
         fixedHeader
         fixedHeaderScrollHeight="450px"
         customStyles={customStyles}
-        
+        progressPending={pending}
+        progressComponent={<BeatLoader/>}
+        pagination
       />
     </>
   );

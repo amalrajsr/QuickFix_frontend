@@ -8,8 +8,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import ClipLoader from "react-spinners/ClipLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 import fireToast from "../../../utils/fireToast";
+import { useSelector } from "react-redux";
 function Table({ bookingStatus }) {
+  const [pending, setPending] = useState(true);
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState(null);
   const [fetchBooking, setFetchBooking] = useState(false);
@@ -17,10 +20,13 @@ function Table({ bookingStatus }) {
   const [experts, setExperts] = useState([]); // state to store experts
   const navigate = useNavigate();
 
+
+const reloadBooking=useSelector((state)=>state.booking)
+
   useEffect(() => {
     fetchExpertApi().then(({ data }) => {
       if (data.result) {
-        setExperts(data.result);
+
       }
     });
   }, []);
@@ -28,6 +34,7 @@ function Table({ bookingStatus }) {
   useEffect(() => {
     fetchBookingApi()
       .then(({ data }) => {
+        setPending(false)
         if (data.bookings) {
           setBookings(data.bookings);
         }
@@ -38,7 +45,7 @@ function Table({ bookingStatus }) {
           navigate("/admin/login");
         }
       });
-  }, [fetchBooking]);
+  }, [fetchBooking,reloadBooking]);
 
   const assignExpert = async (bookingId) => {
     if (expert.length > 0) {
@@ -171,23 +178,7 @@ function Table({ bookingStatus }) {
     },
     
   ];
-  const data = bookings?.filter((booking) => {
-    return (
-      booking?.status === bookingStatus && {
-        service: booking.service,
-        date: booking.date,
-        slot: booking.slot,
-        type: booking.type,
-        estimatedCharge: booking.estimatedCharge,
-        userName: booking?.user[0]?.name,
-        expertName: booking?.expert[0]?.name,
-        _id: booking._id,
-        totalCharge: booking?.totalCharge,
-        payment: booking?.payment,
-        status: booking.status,
-      }
-    );
-  });
+
 
   const customStyles = {
     width: "750px",
@@ -214,15 +205,35 @@ function Table({ bookingStatus }) {
       style: {},
     },
   };
-
+  const data = bookings?.filter((booking) => {
+    return (
+      booking?.status === bookingStatus && {
+        service: booking.service,
+        date: booking.date,
+        slot: booking.slot,
+        type: booking.type,
+        estimatedCharge: booking.estimatedCharge,
+        userName: booking?.user[0]?.name,
+        expertName: booking?.expert[0]?.name,
+        _id: booking._id,
+        totalCharge: booking?.totalCharge,
+        payment: booking?.payment,
+        status: booking.status,
+      }
+    );
+  });
   return (
     <DataTable
       className="min-w-[900px]"
       columns={columns}
       data={data}
+      progressPending={pending}
+      progressComponent={<BeatLoader />}
       fixedHeader
       fixedHeaderScrollHeight="450px"
       customStyles={customStyles}
+      pagination
+     
     />
   );
 }

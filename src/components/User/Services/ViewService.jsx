@@ -8,6 +8,7 @@ import {
   fetchReviewsByServiceApi,
 } from "../../../apis/user";
 import ReactStars from "react-rating-stars-component";
+import fireToast from "../../../utils/fireToast";
 
 function ViewService() {
   const [count, setCount] = useState({ experts: 0, workscompelted: 0 });
@@ -72,7 +73,11 @@ function ViewService() {
 
   // book now
   const handeBookNow = () => {
+    if(count.experts<1){
+       fireToast('success','sorry currently this service is not available')
+    }else{
     navigate(`/${service[0]?.service?.toLocaleLowerCase()}/booking`, { state: { data: service[0] } });
+    }
   };
 
   //fetching latest 4 reviews

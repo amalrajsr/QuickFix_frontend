@@ -3,6 +3,11 @@ import AddLocation from '../../components/Admin/Location/AddLocation'
 import Table from '../../components/Admin/Location/Table'
 function LocationMangement() {
   const [fetchlocation,setFetchlocation]=useState(false)
+  const [searchTerm, setSearchTerm] = useState("");
+  function handleSearch(event) {
+    const term = event.target.value;
+    setSearchTerm(term);
+  }
   return (
     <div className="w-full  mx-3">
     <div className="mx-10 mt-5">
@@ -15,10 +20,12 @@ function LocationMangement() {
           id="table-search"
           className="block  p-2 pl-4 outline-none focus:outline-gray-300 text-sm text-gray-900  border-gray-300 rounded-lg w-40 md:w-60 bg-gray-50 "
           placeholder="Search here"
+          value={searchTerm}
+          onChange={(e)=>handleSearch(e)}
         />
        <AddLocation fetchlocation={fetchlocation} setFetchlocation={setFetchlocation}/>
       </div>
-      <Table fetchlocation={fetchlocation} setFetchlocation={setFetchlocation}/>
+      <Table  searchTerm={searchTerm} fetchlocation={fetchlocation} setFetchlocation={setFetchlocation}/>
     </div>
   </div> 
   )

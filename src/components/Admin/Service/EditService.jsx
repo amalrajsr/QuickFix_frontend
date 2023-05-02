@@ -34,7 +34,7 @@ function EditService({ data,toggle }) {
       // function to validate Large Image
       const handleLargeImageChange = (e) => {
         const file = e.target.files[0];
-      console.log();
+
         const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/;
         if (!allowedExtensions.exec(file.name)) {
           setError(true);

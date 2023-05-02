@@ -25,8 +25,7 @@ function Login() {
     }
   }, []);
 
-  console.log(process.env.REACT_APP_SOCKET_URL)
-  console.log('env')
+
   // changing schema based on condition
   const schema = otp ? otpSchema : userLoginSchema;
 

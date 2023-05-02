@@ -222,16 +222,12 @@ function Booking() {
           navigate("/bookings");
         }
       } catch (error) {
-        console.log("error");
+   
         setLoading(false);
         fireToast("error", error.response.data.error.message);
       }
 
-      // .then((error) => {
-      //   console.log('error')
-      //   setLoading(false);
-      //   fireToast('error',error.response.data.error.message)
-      //  });
+
     }
   };
 

@@ -15,25 +15,27 @@ function ChatModal({ open }) {
   const socket = useRef();
 
   // creating web socket connection
+
   useEffect(() => {
-    socket.current = io(SOCKET_URL);
-    socket.current?.on("getMessage", ({ senderId, message,sender }) => {
-      setArrivalMessage({
-        senderId,
-        message,
-        sender,
-        date: Date.now(),
+    if (user) {
+      socket.current = io(process.env.REACT_APP_SOCKET_URL);
+      socket.current?.on("getMessage", ({ senderId, message, sender }) => {
+        setArrivalMessage({
+          senderId,
+          message,
+          sender,
+          date: Date.now(),
+        });
       });
-    });
-  }, []);
-
-
-  useEffect(() => {
-    socket.current.emit("addUsers", {userId:user?._id,role:'user'});
-    socket.current.on("getUsers", (data) => {});
+    }
   }, []);
 
   useEffect(() => {
+  user &&  socket.current.emit("addUsers", { userId: user?._id, role: "user" });
+  }, []);
+
+  useEffect(() => {
+    if(user){
     fetchConversationsApi(user?._id)
       .then(({ data }) => {
         if (data?.result[0]?.conversation) {
@@ -41,8 +43,9 @@ function ChatModal({ open }) {
         }
       })
       .catch((error) => {
-        console.log(error);
+   
       });
+    }
   }, []);
 
   // socket call for sending message
@@ -50,7 +53,7 @@ function ChatModal({ open }) {
     socket.current?.emit("send-message", {
       userId: user._id,
       message: currentChat,
-      sender:'user'
+      sender: "user",
     });
 
     //api for saving messages in database
@@ -64,7 +67,7 @@ function ChatModal({ open }) {
         }
       })
       .catch((error) => {
-        console.log(error);
+  
       });
   };
 
@@ -75,11 +78,14 @@ function ChatModal({ open }) {
   }, [conversations, open]);
 
   //to update conversation array
-  useEffect(()=>{
-   arrivalMessage && setConversations((prev)=>[...prev,{sender:arrivalMessage.sender,message:arrivalMessage.message}])
-  },[arrivalMessage])
+  useEffect(() => {
+    arrivalMessage &&
+      setConversations((prev) => [
+        ...prev,
+        { sender: arrivalMessage.sender, message: arrivalMessage.message },
+      ]);
+  }, [arrivalMessage]);
 
-  
   if (!open) return null;
   return (
     <div className="chat-container z-20 rounded-lg fixed bottom-24 right-3 md:right-10 md:w-[380px] bg-[#F9FAFB]  shadow-sm  items-center">
@@ -103,7 +109,9 @@ function ChatModal({ open }) {
                   }`}
                 >
                   <div className=" mx-2 relative max-w-xl px-4 my-2 bg-light py-2 text-gray-700 rounded ">
-                    <span className="block max-w-[200px] break-words">{conversation.message}</span>
+                    <span className="block max-w-[200px] break-words">
+                      {conversation.message}
+                    </span>
                   </div>
                 </li>
               </div>

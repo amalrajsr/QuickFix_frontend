@@ -8,7 +8,6 @@ function UserManagement() {
   useEffect(() => {
     fetchUsers();
   }, [blockStatus]);
-console.log('sdfs');
   const fetchUsers = async () => {
     const { data } = await  getusersApi()
     setUsers(data.users);

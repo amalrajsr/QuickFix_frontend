@@ -14,55 +14,7 @@ function Review({fetchReviews,setfetchReviews}) {
     });
   }, [fetchReviews]);
 
-  //   const customStyles = {
-  //     rows: {
-  //       style: {
-  //         minHeight: "72px",
-  //         fontSize: "15px",
-  //       },
-  //     },
-  //     headCells: {
-  //       style: {
-  //         fontWeight: "bold",
-  //         fontSize: "18px",
-  //         textColor: "gray",
-  //         backgroundColor: "#F9FAFB",
-  //       },
-  //     },
-  //     cells: {
-  //       style: {},
-  //     },
-  //   };
-
-  //   // data table cloumns
-  //   const columns = [
-  //     {
-  //       name: "User",
-  //       selector: (row) => row.user,
-  //     },
-  //     {
-  //       name: "Service",
-  //       selector: (row) => row.service,
-  //     },
-  //     {
-  //       name: "Date",
-  //       selector: (row) => row.date,
-  //     },
-  //     {
-  //       name: "Review",
-  //       selector: (row) => <p className="break-words">{row.message}</p>,
-  //       grow:3
-  //     },
-  //   ];
-  //   const data = reviews.map((review) => {
-  //     return {
-  //       _id: review?._id,
-  //       user: review?.user.name,
-  //       service: review?.service.service,
-  //       date: review?.date.split("T")[0],
-  //       message: review?.review,
-  //     };
-  //   });
+ 
 
   const deleteReview =  (reviewId) => {
     
@@ -77,11 +29,11 @@ function Review({fetchReviews,setfetchReviews}) {
     })
   };
   return (
-    <table className=" overflow-x-scroll mt-10 text-sm text-left text-gray-500 ">
+    <table className="md:min-w-full overflow-x-scroll mt-10 text-sm text-left text-gray-500 ">
       <thead className="text-xs  text-gray-700 uppercase bg-gray-50  ">
         {["USER", "SERVICE", "DATE", "REVIEW"].map((heading) => {
           return (
-            <th scope="col" className="text-lg px-4 md:px-4 py-3">
+            <th scope="col" className="text-lg px-4 md:px-2 py-3">
               {heading}
             </th>
           );

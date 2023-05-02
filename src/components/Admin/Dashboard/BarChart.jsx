@@ -36,6 +36,7 @@ function BarChart({ revenueDetails }) {
     revenueDetails.forEach((data) => {
       if (i === data.day) {
         exists = true;
+        return
       }
     });
 

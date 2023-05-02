@@ -32,7 +32,7 @@ function AddExpert({ fetchExperts, setfetchExperts }) {
   });
 
   const onHandleSubmit = async (expertData) => {
-    console.log(expertData);
+
     setLoading(true);
 
     try {

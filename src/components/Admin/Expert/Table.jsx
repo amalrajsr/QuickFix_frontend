@@ -4,12 +4,18 @@ import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import confirmToast from "../../../utils/confirmToast";
 import fireToast from "../../../utils/fireToast";
+import BeatLoader from "react-spinners/BeatLoader";
 
-function Table({fetchExperts}) {
+function Table({fetchExperts,searchTerm}) {
   const navigate = useNavigate();
+  const [pending, setPending] = useState(true);
+
   const [experts, setExperts] = useState([]);
+
+  
   useEffect(() => {
     getExperts();
+    setPending(false)
   }, [fetchExperts]);
 
   const getExperts = () => {
@@ -18,7 +24,7 @@ function Table({fetchExperts}) {
         setExperts(data.result);
       })
       .catch((error) => {
-        console.log(error);
+        
         if (error.response?.data?.error?.tokenExpired) {
           localStorage.removeItem("admin");
           navigate("/admin/login");
@@ -57,6 +63,7 @@ function Table({fetchExperts}) {
       style: {},
     },
   };
+
 
   // data table cloumns
   const columns = [
@@ -122,10 +129,17 @@ function Table({fetchExperts}) {
   return (
     <DataTable
       columns={columns}
-      data={data}
+      data={data.filter((row) =>
+        row.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )}
       fixedHeader
       fixedHeaderScrollHeight="450px"
       customStyles={customStyles}
+      progressPending={pending}
+      progressComponent={<BeatLoader />}
+      pagination
+   
+      
     />
   );
 }

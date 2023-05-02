@@ -4,6 +4,7 @@ import { fetchServiceApi } from '../../../apis/user'
 import { addSerivces } from '../../../store/slices/serviceSlice'
 import { useDispatch } from 'react-redux'
 function Services() {
+
    const dispatch=useDispatch()
   const [services,setServices]= useState([])  
   useEffect(()=>{

@@ -8,12 +8,12 @@ import {
 import fireToast from "../../../utils/fireToast";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../UI/Modal";
 import PastBooking from "./PastBooking";
 import Review from "./Review";
 import confirmToast from "../../../utils/confirmToast";
-
+import { updateBooking } from "../../../store/slices/bookingSlice";
 function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
   const user = useSelector((state) => state.user.value);
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
   const [reviewModal, setReviewModal] = useState(false);
   const [review, setReview] = useState({exist:false,message:'',id:null,rating:0});
  const [reload,setReload]=useState(false)
+ const dispatch=useDispatch()
   const handleCancel = (id) => {
     setLoading(true);
     cancelBooking(id)
@@ -30,6 +31,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
         if (data.success) {
           fireToast("success", "booking cancelled");
           setFetchBooking(!fetchBooking);
+          dispatch(updateBooking())
         }
       })
       .catch((error) => {
@@ -73,7 +75,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
           name: "QuickFix",
 
           handler: async function (response) {
-          console.log(response)
+       
             const paymentData = {
               orderCreationId: data.order.id,
               razorpayPaymentId: response.razorpay_payment_id,
@@ -90,7 +92,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
                 setFetchBooking(!fetchBooking);
               }
             } catch (error) {
-              console.log(1)
+             
 
             }
           },
@@ -104,10 +106,9 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
       } catch (error) {
-        console.log(2)
+   
       }
     } catch (error) {
-      console.log(3);
     }
   };
 

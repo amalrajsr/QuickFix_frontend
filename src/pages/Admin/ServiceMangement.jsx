@@ -4,6 +4,11 @@ import { ServiceContext } from "../../context/serviceContext";
 import { useState } from "react";
 function ServiceMangement() {
   const [updateTable,setUpdateTable]=useState(false)
+  const [searchTerm, setSearchTerm] = useState("");
+  function handleSearch(event) {
+    const term = event.target.value;
+    setSearchTerm(term);
+  }
   return (    
     <ServiceContext.Provider value={{updateTable,setUpdateTable}}>
       <div className="w-full  mx-3">
@@ -17,10 +22,12 @@ function ServiceMangement() {
               id="table-search"
               className="block  p-2 pl-4 outline-none focus:outline-gray-300 text-sm text-gray-900  border-gray-300 rounded-lg w-40 md:w-60 bg-gray-50 "
               placeholder="Search here"
+              value={searchTerm}
+              onChange={(e)=>handleSearch(e)}
             />
            <AddService/>
           </div>
-          <Table/>
+          <Table searchTerm={searchTerm}/>
         </div>
       </div> 
       </ServiceContext.Provider>  

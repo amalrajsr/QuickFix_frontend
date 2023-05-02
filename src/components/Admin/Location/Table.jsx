@@ -9,13 +9,15 @@ import { blockLocationApi, editLocationApi, fetchLocationApi } from "../../../ap
 import { addlocations } from "../../../store/slices/locationSlice";
 import { useDispatch } from "react-redux";
 import confirmToast from "../../../utils/confirmToast";
-function Table({fetchlocation, setfetchlocation}) {
+import BeatLoader from "react-spinners/BeatLoader";
+
+function Table({fetchlocation, setfetchlocation,searchTerm}) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); 
+  const [pending, setPending] = useState(true);
   const [locations, setLocations] = useState([]);
   const [open, setOpen] = useState(false);
   const [editLocation,setEditLocation]=useState({id:null,place:null,pincode:null})
-  const [error,setError]=useState({placeError:false,pincodeError:false})
   const dispatch=useDispatch()
   useEffect(() => {
     getLocations();
@@ -27,6 +29,7 @@ function Table({fetchlocation, setfetchlocation}) {
       if (data.locations) {
         setLocations(data.locations);
         dispatch(addlocations(data.locations))
+        setPending(false)
       }
     } catch (error) {
       if (error.response?.data?.error?.tokenExpired) {
@@ -40,7 +43,7 @@ function Table({fetchlocation, setfetchlocation}) {
  
     try {
       await blockLocationApi(id);
-      getLocations();
+      setfetchlocation(!fetchlocation)
     } catch (error) {
       if (error.response?.data?.error?.tokenExpired) {
         localStorage.removeItem("admin");
@@ -57,19 +60,6 @@ function Table({fetchlocation, setfetchlocation}) {
   const handleSubmit=async(e)=>{
     e.preventDefault()
     setLoading(false);
-    // const palceValidation=/^[a-zA-Z\s]+$/
-    // if(!palceValidation.exec(editLocation.place)){
-    //     setError({...error,placeError:true})
-    // }
-    // // if((value) => value.trim().length > 0){
-
-    // // }
-
-    // const pincodeValidation=/^\d{6}$/
-    // if(!pincodeValidation.exec(editLocation.place)){
-    //     setError({...error,pincodeError:true})
-    // }
-
     try{
   
         const {data}=await editLocationApi(editLocation.id,editLocation)
@@ -188,7 +178,6 @@ function Table({fetchlocation, setfetchlocation}) {
               value={editLocation?.place}
               onChange={(e)=>setEditLocation({...editLocation,place:e.target.value})}
             />
-          {error.placeError &&  <p className="mx-3 text-slate-400">only alphabets are allowed</p>}
           </div>
           <div>
             <label className="mx-3 block">pincode</label>
@@ -200,7 +189,6 @@ function Table({fetchlocation, setfetchlocation}) {
               value={editLocation?.pincode}
               onChange={(e)=>setEditLocation({...editLocation,pincode:e.target.value})}
             />
-          {error.pincodeError &&  <p className="mx-3 text-slate-400">should contain 6 digits</p>}
           </div>
           <div className="flex justify-center mt-5">
           <button className="bg-black text-white px-5 py-1 rounded-md ">
@@ -211,10 +199,15 @@ function Table({fetchlocation, setfetchlocation}) {
       </Modal>
       <DataTable
         columns={columns}
-        data={data}
+        data={data.filter((row) =>
+          row.place.toLowerCase().includes(searchTerm.toLowerCase())
+        )}
         fixedHeader
         fixedHeaderScrollHeight="450px"
         customStyles={customStyles}
+        progressPending={pending}
+        progressComponent={<BeatLoader/>}
+        pagination
       />
     </>
   );

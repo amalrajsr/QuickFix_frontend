@@ -4,6 +4,21 @@ import { Pie } from "react-chartjs-2";
 function PIeChart({ bookingDetails }) {
   
   ChartJS.register(ArcElement, Tooltip, Legend);
+  const status=['pending','active','completed','cancelled']
+  status.forEach((status)=>{
+    let exists=false
+   bookingDetails.forEach((detail)=>{
+  
+     detail?._id=== status && (exists=true)
+   if(exists) return
+   })
+  
+  if(!exists){
+    bookingDetails.push({_id:status,total:0})
+  }
+
+})
+
   const data = {
     labels: bookingDetails?.map((data) => {
       return data._id;

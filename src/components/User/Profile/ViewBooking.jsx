@@ -19,7 +19,7 @@ function ViewBooking({ expert }) {
   );
   const [fetchBooking, setFetchBooking] = useState(false);
   useEffect(() => {
-    console.log("useEffect");
+
     if (!expert) {
       viewBookings(role?._id)
         .then(({ data }) => {

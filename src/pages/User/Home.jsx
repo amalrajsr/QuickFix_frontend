@@ -5,6 +5,7 @@ import Services from "../../components/User/Services/Services";
 import {GrStatusGood} from 'react-icons/gr'
 function Home() {
   const banner='https://assets.taskrabbit.com/v3/assets/homepage/tasker1-desktop.jpg'
+
   return (
     <>
       <Banner />

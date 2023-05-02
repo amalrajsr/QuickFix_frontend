@@ -35,7 +35,6 @@ function Login() {
           
             setLoading(true)
             const {data}=await adminLoginApi(adminData)
-            console.log(data);
             setLoading(false)
             if(data.admin && data.token){
                 localStorage.setItem('admin',data.token)
