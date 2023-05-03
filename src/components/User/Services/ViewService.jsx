@@ -9,10 +9,12 @@ import {
 } from "../../../apis/user";
 import ReactStars from "react-rating-stars-component";
 import fireToast from "../../../utils/fireToast";
+import { useRef } from "react";
 
 function ViewService() {
   const [count, setCount] = useState({ experts: 0, workscompelted: 0 });
   const [reviews, setReviews] = useState([]);
+  const scrollref=useRef()
   useEffect(() => {
     fetchExpertsByService(service[0]._id, service[0].service).then(
       ({ data }) => {
@@ -88,10 +90,14 @@ function ViewService() {
       }
     });
   }, []);
+    //use Effect for scrolling to the to while loading the page
+    useEffect(() => {
+      scrollref.current?.scrollIntoView({ behavior: "smooth" });
+    }, []);
   return (
     <>
       {/* banner section */}
-      <div className="w-full mt-16 bg-lightpurple  py-1">
+      <div ref={scrollref} className="w-full mt-16 bg-lightpurple  py-1">
         <div className=" containter  mt-10 flex flex-col md:flex-row md:justify-between mb-12 w-3/4 mx-auto">
           <div className="flex flex-col my-2 md:my-auto">
             <h1 className="text-center md:text-start md:mx-3 my-2 text-3xl text-dark font-bold">

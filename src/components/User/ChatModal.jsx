@@ -31,32 +31,30 @@ function ChatModal({ open }) {
   }, []);
 
   useEffect(() => {
-  user &&  socket.current.emit("addUsers", { userId: user?._id, role: "user" });
+    user &&
+      socket.current.emit("addUsers", { userId: user?._id, role: "user" });
   }, []);
 
   useEffect(() => {
-    if(user){
-    fetchConversationsApi(user?._id)
-      .then(({ data }) => {
-        if (data?.result[0]?.conversation) {
-          setConversations(data.result[0].conversation);
-        }
-      })
-      .catch((error) => {
-   
-      });
+    if (user) {
+      fetchConversationsApi(user?._id)
+        .then(({ data }) => {
+          if (data?.result[0]?.conversation) {
+            setConversations(data.result[0].conversation);
+          }
+        })
+        .catch((error) => {});
     }
   }, []);
 
   // socket call for sending message
   const sendMessage = (e) => {
-
+    e.preventDefault();
     socket.current?.emit("send-message", {
       userId: user._id,
       message: currentChat,
       sender: "user",
     });
-
     //api for saving messages in database
     sendConverstaionsApi("user", user?._id, {
       sender: "user",
@@ -68,7 +66,7 @@ function ChatModal({ open }) {
         }
       })
       .catch((error) => {
-  
+        setcurrentChat("");
       });
   };
 
@@ -121,24 +119,25 @@ function ChatModal({ open }) {
           })}
         </ul>
       </div>
-      <div className="chat-footer  flex justify-between bg-white shadow-md p-3 rounded   ">
-        <input
-          ref={inputRef}
-          type="text"
-          name=""
-          placeholder="type here"
-          value={currentChat}
-          onChange={(e) => setcurrentChat(e.target.value)}
-          className="focus:outline-none w-11/12 focus:border-0 "
-          id=""
-        />
-       
-        <AiOutlineSend
-          onClick={sendMessage}
-          className="my-auto  text-dark text-xl"
-        />
-      
-      </div>
+      <form onSubmit={sendMessage}>
+        <div className="chat-footer  flex justify-between bg-white shadow-md p-3 rounded   ">
+          <input
+            ref={inputRef}
+            type="text"
+            name=""
+            placeholder="type here"
+            value={currentChat}
+            onChange={(e) => setcurrentChat(e.target.value)}
+            className="focus:outline-none w-11/12 focus:border-0 "
+            id=""
+          />
+
+          <AiOutlineSend
+            onClick={sendMessage}
+            className="my-auto  text-dark text-xl"
+          />
+        </div>
+      </form>
     </div>
   );
 }

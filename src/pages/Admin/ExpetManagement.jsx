@@ -9,11 +9,11 @@ function ExpetManagement() {
     setSearchTerm(term);
   }
   return (
-    <div className="w-full  mx-3">
+    <div className="w-full  ml-6">
       <div className="mx-10 mt-5">
         <span className="text-2xl">Expert Management</span>
       </div>
-      <div className=" w-3/4 mt-12 mx-10 overflow-x-auto">
+      <div className=" w-3/4 mt-12  overflow-x-auto">
         <div className="mx-1 flex  my-4">
           <input
             type="text"

@@ -88,30 +88,30 @@ function Table({ bookingStatus }) {
   const columns = [
     ["active", "completed"].includes(bookingStatus) && {
       name: "Expert",
-      selector: (row) => row.expert[0]?.name,
+      selector: (row) => row?.expert[0]?.name,
     },
     {
       name: "User",
-      selector: (row) => row.user[0].name,
+      selector: (row) => row?.user[0]?.name,
     },
     {
       name: "Service",
-      selector: (row) => row.service,
+      selector: (row) => row?.service,
       grow: 3,
     },
     {
       name: "Slot",
-      selector: (row) => row.slot,
+      selector: (row) => row?.slot,
       grow: 2,
     },
     {
       name: "Type",
-      selector: (row) => row.type,
+      selector: (row) => row?.type,
       grow: 3,
     },
     {
       name: "Estimated Charge",
-      selector: (row) => <span>₹ {row.estimatedCharge}</span>,
+      selector: (row) => <span>₹ {row?.estimatedCharge}</span>,
       grow: 4,
     },
     (bookingStatus === "pending" || bookingStatus === "active") && {
