@@ -13,17 +13,18 @@ function ChatSection({ user, conversations }) {
 
   useEffect(() => {
     socket.current = io(SOCKET_URL);
-    socket.current?.on("getMessage", ({ senderId, message, sender }) => {
-      //  if(user._id===senderId && sender!=='admin'){
+  }, []);
+
+  socket.current?.on("getMessage", ({ senderId, message, sender }) => {
+   
       setArrivalMessage({
         senderId,
         message,
         sender,
         date: Date.now(),
       });
-    //  }
-    });
-  }, []);
+  
+  });
 
   useEffect(() => {
     socket.current.emit("addUsers", { role: "admin" });
@@ -32,11 +33,10 @@ function ChatSection({ user, conversations }) {
   useEffect(() => {
     inputRef.current?.focus();
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [arrivalMessage,currentChat,user]);
+  }, [arrivalMessage, currentChat, user]);
 
   const sendMessage = () => {
     if (currentChat.length > 0) {
-      
       socket.current?.emit("send-message", {
         userId: user?._id,
         message: currentChat,
@@ -54,9 +54,7 @@ function ChatSection({ user, conversations }) {
             setReload(!reload);
           }
         })
-        .catch((error) => {
-       
-        });
+        .catch((error) => {});
     }
   };
   //to update conversation array
@@ -103,9 +101,9 @@ function ChatSection({ user, conversations }) {
               {conversations.length > 0 &&
                 conversations.map((conversation, i) => {
                   return (
-                    <div key={conversation._id || i}>
+                    <div   key={conversation._id || i}>
                       <li
-                        ref={scrollRef}
+                       
                         key={conversation?._id}
                         className={`flex  ${
                           conversation?.sender === "admin"
@@ -113,7 +111,7 @@ function ChatSection({ user, conversations }) {
                             : "justify-start"
                         } `}
                       >
-                        <div className="relative max-w-xl    px-4 my-2 py-2 text-gray-700 rounded shadow">
+                        <div ref={scrollRef} className="relative max-w-xl    px-4 my-2 py-2 text-gray-700 rounded shadow">
                           <span className="block max-w-[400px] break-words">
                             {conversation?.message}
                           </span>

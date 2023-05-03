@@ -48,12 +48,7 @@ function EditService({ services, data, toggle }) {
   // handling form submission
   const onHandleSubmit = async (e) => {
     e.preventDefault();
-    //checking if service already exists or not
-    const serviceExist = services.some(
-      (data) => data.service === serviceData.service.toUpperCase()
-    );
-    if (serviceExist) fireToast('error','service already exist')
-    else {
+   
       setLoading(true);
       const service = new FormData();
       service.append("service", serviceData?.service);
@@ -90,7 +85,7 @@ function EditService({ services, data, toggle }) {
         }
         fireToast("error", error.response?.data?.error.message);
       }
-    }
+    
   };
 
   return (

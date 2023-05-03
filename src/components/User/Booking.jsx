@@ -190,6 +190,7 @@ function Booking() {
 
   // handle booking
   const handleBooking = async () => {
+    
     if (
       booking.address &&
       booking.estimatedCharge &&
@@ -228,6 +229,8 @@ function Booking() {
       }
 
 
+    }else{
+      fireToast('warn','please complete the form')
     }
   };
 
@@ -366,16 +369,18 @@ function Booking() {
                       setBooking({ ...booking, type: "installation" })
                     }
                     name="type"
+                    id="install"
                   />
-                  <span className="text-dark text-md">Installation</span>
+                  <label htmlFor="install" className="text-dark text-md">Installation</label>
                 </div>
                 <div>
                   <input
                     type="radio"
                     name="type"
+                    id="repair"
                     onClick={() => setBooking({ ...booking, type: "repair" })}
                   />
-                  <span className="text-dark text-md">Repair</span>
+                  <label htmlFor="repair" className="text-dark text-md">Repair</label>
                 </div>
               </div>
 
@@ -388,31 +393,31 @@ function Booking() {
                     <input
                       type="radio"
                       name="duration"
-                      id="time"
+                      id="small"
                       onClick={() => setBooking({ ...booking, duration: 1 })}
                     />
-                    <span className="text-dark text-md">small- Est 1 hr</span>
+                    <label htmlFor="small" className="text-dark text-md">small- Est 1 hr</label>
                   </div>
                   <div className="my-2 md:my-auto">
                     <input
                       type="radio"
                       name="duration"
-                      id="time"
+                      id="medium"
                       onClick={() => setBooking({ ...booking, duration: 3 })}
                     />
-                    <span className="text-dark text-md">
+                    <label htmlFor="medium" className="text-dark text-md">
                       medium- Est 2-3 hrs
-                    </span>
+                    </label>
                   </div>
                 </div>
                 <div className="my-2 md:my-auto">
                   <input
                     type="radio"
                     name="duration"
-                    id="time"
+                    id="large"
                     onClick={() => setBooking({ ...booking, duration: 6 })}
                   />
-                  <span className="text-dark text-md">large- Est 4+ hrs</span>
+                  <label htmlFor="large" className="text-dark text-md">large- Est 4+ hrs</label>
                 </div>
               </div>
             </div>
@@ -452,7 +457,7 @@ function Booking() {
                 <button
                   onClick={() => setBooking({ ...booking, slot: "morning" })}
                   className={`rounded-lg  border-[1px] ${
-                    booking.slot === "morning" ? "bg-slate-300" : "bg-slate-200"
+                    booking.slot === "morning" ? "bg-slate-400" : "bg-slate-200"
                   } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
                 >
                   Morning
@@ -463,7 +468,7 @@ function Booking() {
                   onClick={() => setBooking({ ...booking, slot: "afternoon" })}
                   className={`rounded-lg  border-[1px] ${
                     booking.slot === "afternoon"
-                      ? "bg-slate-300"
+                      ? "bg-slate-400"
                       : "bg-slate-200"
                   } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
                 >
@@ -474,7 +479,7 @@ function Booking() {
                 <button
                   onClick={() => setBooking({ ...booking, slot: "evening" })}
                   className={`rounded-lg  border-[1px] ${
-                    booking.slot === "evening" ? "bg-slate-300" : "bg-slate-200"
+                    booking.slot === "evening" ? "bg-slate-400" : "bg-slate-200"
                   } border-slate-300 px-3 my-2 h-1/2 md:my-auto mx-1 py-1`}
                 >
                   Evening

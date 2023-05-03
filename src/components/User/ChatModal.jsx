@@ -50,7 +50,7 @@ function ChatModal({ open }) {
 
   // socket call for sending message
   const sendMessage = (e) => {
-    e.preventDefault()
+
     socket.current?.emit("send-message", {
       userId: user._id,
       message: currentChat,
@@ -122,7 +122,6 @@ function ChatModal({ open }) {
         </ul>
       </div>
       <div className="chat-footer  flex justify-between bg-white shadow-md p-3 rounded   ">
-        <form onSubmit={sendMessage} className="w-full">
         <input
           ref={inputRef}
           type="text"
@@ -133,13 +132,12 @@ function ChatModal({ open }) {
           className="focus:outline-none w-11/12 focus:border-0 "
           id=""
         />
-        <button>
+       
         <AiOutlineSend
-         
+          onClick={sendMessage}
           className="my-auto  text-dark text-xl"
         />
-        </button>
-        </form>
+      
       </div>
     </div>
   );

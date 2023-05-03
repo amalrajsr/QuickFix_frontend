@@ -8,7 +8,7 @@ import {
 import fireToast from "../../../utils/fireToast";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import Modal from "../../UI/Modal";
 import PastBooking from "./PastBooking";
 import Review from "./Review";
