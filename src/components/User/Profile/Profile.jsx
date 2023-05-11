@@ -72,13 +72,7 @@ function Profile({ expert }) {
             fireToast("success", "successfully updated");
           }
         } catch (error) {
-          if (error.response?.data?.error?.tokenExpired) {
-            expert ? dispatch(removeExpert()) : dispatch(removeUser());
-            localStorage.removeItem(expert ? "expert" : "user");
-            navigate(expert ? "/expert/login" : "/login", {
-              state: { tokenExpired: true },
-            });
-          }
+        
           fireToast("error", error.response?.data?.error.message);
         }
       })

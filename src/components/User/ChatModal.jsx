@@ -49,25 +49,27 @@ function ChatModal({ open }) {
 
   // socket call for sending message
   const sendMessage = (e) => {
-    e.preventDefault();
-    socket.current?.emit("send-message", {
-      userId: user._id,
-      message: currentChat,
-      sender: "user",
-    });
-    //api for saving messages in database
-    sendConverstaionsApi("user", user?._id, {
-      sender: "user",
-      message: currentChat,
-    })
-      .then(({ data }) => {
-        if (data.updated) {
-          setcurrentChat("");
-        }
-      })
-      .catch((error) => {
-        setcurrentChat("");
+    if (currentChat.trim().length > 1) {
+      e.preventDefault();
+      socket.current?.emit("send-message", {
+        userId: user._id,
+        message: currentChat,
+        sender: "user",
       });
+      //api for saving messages in database
+      sendConverstaionsApi("user", user?._id, {
+        sender: "user",
+        message: currentChat,
+      })
+        .then(({ data }) => {
+          if (data.updated) {
+            setcurrentChat("");
+          }
+        })
+        .catch((error) => {
+          setcurrentChat("");
+        });
+    }
   };
 
   //use Effect for scrolling to last message and focusing input
@@ -87,9 +89,9 @@ function ChatModal({ open }) {
 
   if (!open) return null;
   return (
-    <div className="chat-container z-20 rounded-lg fixed bottom-24 right-3 md:right-10 md:w-[380px] bg-[#F9FAFB]  shadow-sm  items-center">
-      <div className="chat-header bg-slate-300 t h-1/6">
-        <p className="text-center">
+    <div className="chat-container z-20 rounded-xl fixed bottom-24 right-3 md:right-10 md:w-[380px] bg-[#F9FAFB]  shadow-sm  items-center">
+      <div className="chat-header bg-dark rounded-t-md h-full">
+        <p className="text-center text-white">
           We are live and ready to chat with you now. <br /> Say something to
           start a live chat.
         </p>

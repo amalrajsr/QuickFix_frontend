@@ -10,20 +10,19 @@ function ChatSection({ user, conversations }) {
   const inputRef = useRef();
   const scrollRef = useRef();
   const socket = useRef();
-
   useEffect(() => {
-    socket.current = io(SOCKET_URL);
+    const admin = localStorage.getItem("admin");
+
+    if (admin) socket.current = io(SOCKET_URL);
   }, []);
 
   socket.current?.on("getMessage", ({ senderId, message, sender }) => {
-   
-      setArrivalMessage({
-        senderId,
-        message,
-        sender,
-        date: Date.now(),
-      });
-  
+    setArrivalMessage({
+      senderId,
+      message,
+      sender,
+      date: Date.now(),
+    });
   });
 
   useEffect(() => {
@@ -35,8 +34,9 @@ function ChatSection({ user, conversations }) {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [arrivalMessage, currentChat, user]);
 
-  const sendMessage = () => {
-    if (currentChat.length > 0) {
+  const sendMessage = (e) => {
+    e.preventDefault();
+    if (currentChat.trim().length > 0) {
       socket.current?.emit("send-message", {
         userId: user?._id,
         message: currentChat,
@@ -68,11 +68,6 @@ function ChatSection({ user, conversations }) {
     setReload(!reload);
   }, [arrivalMessage]);
 
-  const setMessage = (e) => {
-    if (e.target.value.trim() !== " ") {
-      setcurrentChat(e.target.value);
-    }
-  };
   return (
     <div className=" md:col-span-2 my-4 md:my-0">
       <div className="w-full ">
@@ -101,9 +96,8 @@ function ChatSection({ user, conversations }) {
               {conversations.length > 0 &&
                 conversations.map((conversation, i) => {
                   return (
-                    <div   key={conversation._id || i}>
+                    <div key={conversation._id || i}>
                       <li
-                       
                         key={conversation?._id}
                         className={`flex  ${
                           conversation?.sender === "admin"
@@ -111,7 +105,10 @@ function ChatSection({ user, conversations }) {
                             : "justify-start"
                         } `}
                       >
-                        <div ref={scrollRef} className="relative max-w-xl    px-4 my-2 py-2 text-gray-700 rounded shadow">
+                        <div
+                          ref={scrollRef}
+                          className="relative max-w-xl    px-4 my-2 py-2 text-gray-700 rounded shadow"
+                        >
                           <span className="block max-w-[400px] break-words">
                             {conversation?.message}
                           </span>
@@ -126,7 +123,7 @@ function ChatSection({ user, conversations }) {
 
         {user && (
           <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
-            <>
+            <form onSubmit={sendMessage} className="w-full flex">
               <input
                 ref={inputRef}
                 type="text"
@@ -134,14 +131,14 @@ function ChatSection({ user, conversations }) {
                 className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
                 name="message"
                 value={currentChat}
-                onChange={(e) => setMessage(e)}
+                onChange={(e) => setcurrentChat(e.target.value)}
                 required
               />
               <AiOutlineSend
                 onClick={sendMessage}
                 className="my-auto  text-dark text-xl"
               />
-            </>
+            </form>
           </div>
         )}
       </div>
