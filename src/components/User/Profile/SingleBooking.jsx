@@ -69,7 +69,7 @@ function SingleBooking({ booking, fetchBooking, setFetchBooking }) {
         const { data } = await paymentApi(booking?._id);
 
         const options = {
-          key: "rzp_test_UQ0IUFijfyeO1v",
+          key: process.env.REACT_APP_RAZOR_API_KEY,
           currency: data.order.currency,
           amount: data.order.amount.toString(),
           order_id: data.order.id,
